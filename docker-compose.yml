@@ -1,14 +1,11 @@
 services:
   jupyter:
     build: .
-    container_name: mspr_bigdata
+    container_name: mspr_python
     ports:
       - "8888:8888"
     volumes:
       - ./data:/app/data
       - ./notebooks:/app/notebooks
       - ./outputs:/app/outputs
-    environment:
-      - PYSPARK_PYTHON=python3
-      - PYSPARK_DRIVER_PYTHON=python3
     restart: unless-stopped
