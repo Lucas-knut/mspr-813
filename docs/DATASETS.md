@@ -158,7 +158,7 @@ Filtrer les données pour :
 
 ### Format privilégié
 - CSV pour download
-- Parquet pour stockage Spark
+- Parquet pour stockage optimisé (pandas, compression)
 
 ### Période temporelle
 - Données électorales : 2017-2024

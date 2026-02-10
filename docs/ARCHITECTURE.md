@@ -46,10 +46,10 @@ graph LR
 **Petite Couronne (150 communes)** ← même code → **France entière (35K communes)**
 
 Grâce à :
-- **Apache Spark** : traitement distribué natif
+- **Pandas optimisé** : lecture efficace avec chunks si nécessaire
 - **Format Parquet** : lecture columnar optimisée
-- **Partitionnement** : division logique par département/région
-- **Lazy Evaluation Spark** : optimisation automatique requêtes
+- **Code modulaire** : fonctions réutilisables pour différents périmètres
+- **Gestion mémoire** : stratégies adaptées au volume de données
 
 ---
 
@@ -79,7 +79,7 @@ raw/
 
 #### `data/processed/` - Données Transformées
 
-Format Parquet optimisé pour Spark :
+Format Parquet optimisé :
 
 ```
 processed/
@@ -126,10 +126,10 @@ output/
 
 | Notebook | Rôle | Input | Output | État |
 |----------|------|-------|--------|------|
-| `00_setup_spark.ipynb` | Validation environnement | - | Logs validation | ✅ Terminé |
+| `00_setup.ipynb` | Validation environnement | - | Logs validation | ✅ Terminé |
 | `01_data_download.ipynb` | Téléchargement datasets | URLs | data/raw/*.csv | ✅ Terminé |
-| `02_exploration.ipynb` | EDA - Analyse exploratoire | raw/ | Insights + doc | 🔜 À créer |
-| `03_etl_spark.ipynb` | Pipeline ETL PySpark | raw/ | processed/*.parquet | 🔜 À créer |
+| `02_exploration.ipynb` | EDA - Analyse exploratoire | raw/ | Insights + doc | ✅ Terminé |
+| `03_etl.ipynb` | Pipeline ETL pandas | raw/ | processed/*.parquet | 🔜 À créer |
 | `04_feature_engineering.ipynb` | Création features | processed/ | features.parquet | 🔜 À créer |
 | `05_modeling.ipynb` | Entraînement ML | features.parquet | model.pkl | 🔜 À créer |
 | `06_evaluation.ipynb` | Évaluation + viz | model.pkl | output/ + figures/ | 🔜 À créer |
@@ -140,33 +140,34 @@ output/
 
 ```python
 # 1. IMPORTS
-import pyspark
-from pyspark.sql import functions as F
+import pandas as pd
+import numpy as np
 
 # 2. CONFIGURATION
-spark = SparkSession.builder...
+pd.set_option('display.max_columns', None)
 
 # 3. LOADING DATA
-df = spark.read.parquet("data/processed/...")
+df = pd.read_parquet("data/processed/...")
 
 # 4. TRANSFORMATION
-df_transformed = df.filter(...).groupBy(...)
+df_transformed = df[df['column'] > value].groupby(...)
 
 # 5. VALIDATION
-assert df_transformed.count() > 0
+assert len(df_transformed) > 0
 
 # 6. SAVING
-df_transformed.write.parquet("data/processed/...")
+df_transformed.to_parquet("data/processed/...", index=False)
 
-# 7. CLEANUP
-spark.stop()
+# 7. CLEANUP (optionnel)
+import gc
+gc.collect()
 ```
 
 **Toujours inclure** :
 - ✅ Markdown explicatif au début
 - ✅ Assertions pour valider données
 - ✅ Prints de validation (count, columns, schema)
-- ✅ Cleanup ressources (spark.stop())
+- ✅ Gestion mémoire (gc.collect() si nécessaire)
 
 ---
 
@@ -197,16 +198,17 @@ outputs/
 
 ## 🔧 Choix Techniques Justifiés
 
-### Pourquoi Apache Spark (et pas Pandas) ?
+### Pourquoi Pandas (et pas Spark) ?
 
-| Critère | Pandas | PySpark | Décision |
-|---------|--------|---------|----------|
-| **Volume données** | < 10 GB RAM | Illimité (distribué) | ✅ Spark (2.4 GB → extensible 35K communes) |
-| **Scalabilité** | Single machine | Cluster | ✅ Spark (pensé pour extension) |
-| **Performance** | In-memory | Lazy + optimisations | ✅ Spark (Catalyst optimizer) |
-| **Compétence Big Data** | Standard | **Requis MSPR** | ✅ Spark (objectif pédagogique) |
+| Critère | Pandas | Spark | Décision |
+|---------|--------|-------|----------|
+| **Volume données** | < 10 GB RAM | Distribué (>100 GB) | ✅ Pandas (2.4 GB largement gérable) |
+| **Simplicité** | API intuitive | Complexe (JVM, config) | ✅ Pandas (développement rapide) |
+| **Performance** | Excellent <10GB | Overhead petits datasets | ✅ Pandas (optimal pour notre volume) |
+| **Écosystème** | Rich (sklearn, viz) | MLlib limité | ✅ Pandas (meilleure intégration ML) |
+| **Sujet MSPR** | **Mentionné** | Non requis | ✅ Pandas (selon consignes) |
 
-→ **Choix Spark démontré dans soutenance** : "Architecture pensée Big Data dès POC"
+→ **Choix Pandas justifié** : "Données <10GB, sujet mentionne Python et pandas, architecture scalable avec code modulaire"
 
 ### Pourquoi Docker ?
 
@@ -217,8 +219,8 @@ outputs/
 ```dockerfile
 # Dockerfile garantit :
 - Python 3.11 exact
-- Spark 3.5.0 précis
-- Java 21 (requis pour Spark)
+- Pandas 2.1.4 précis
+- Openpyxl pour lecture Excel
 - Toutes dépendances figées
 ```
 
