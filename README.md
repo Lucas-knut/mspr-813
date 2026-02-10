@@ -1,7 +1,7 @@
 # MSPR Big Data - Prédiction Électorale
 
 **Projet EPSI - BLOC 3 RNCP35584**  
-Analyse prédictive des tendances électorales avec Apache Spark
+Analyse prédictive des tendances électorales avec Python et Pandas
 
 ## 📊 Objectif
 
@@ -10,7 +10,7 @@ Développer un modèle prédictif pour anticiper les résultats électoraux à 1
 ## 🎯 Périmètre
 
 **Zone géographique :** Petite Couronne parisienne (Paris 75, Hauts-de-Seine 92, Seine-Saint-Denis 93, Val-de-Marne 94)  
-**Volume :** ~150 communes  
+**Volume :** ~150 communes (~2.4 GB de données)  
 **Extensible :** Architecture scalable pour toute la France (~35,000 communes)
 
 ## 📁 Structure du Projet
@@ -27,7 +27,7 @@ mspr-813/
 │   │   ├── csp_actifs_2554/                    # 28.5 MB - Catégories socio-pro
 │   │   └── ...autres datasets Phase 2...
 │   │
-│   ├── processed/                     # Données transformées (Parquet optimisé Spark)
+│   ├── processed/                     # Données transformées (Parquet)
 │   │   ├── elections_clean.parquet            # Élections nettoyées + filtrées
 │   │   ├── socio_eco_features.parquet         # Features engineerées
 │   │   └── master_dataset.parquet             # Dataset final jointuré
@@ -37,10 +37,10 @@ mspr-813/
 │       └── model_metrics.json                 # Métriques de performance
 │
 ├── notebooks/                         # 📓 Notebooks Jupyter (développement interactif)
-│   ├── 00_setup_spark.ipynb           # ✅ Validation environnement Spark
+│   ├── 00_setup.ipynb                 # ✅ Validation environnement Python
 │   ├── 01_data_download.ipynb         # ⬇️ Téléchargement datasets (Phase 1 + Phase 2)
-│   ├── 02_exploration.ipynb           # 🔍 EDA - Analyse exploratoire (À CRÉER)
-│   ├── 03_etl_spark.ipynb             # 🔄 Pipeline ETL avec PySpark (À CRÉER)
+│   ├── 02_exploration.ipynb           # 🔍 EDA - Analyse exploratoire
+│   ├── 03_etl.ipynb                   # 🔄 Pipeline ETL avec pandas (À CRÉER)
 │   ├── 04_feature_engineering.ipynb   # 🛠️ Création features prédictives (À CRÉER)
 │   ├── 05_modeling.ipynb              # 🤖 Entraînement modèles ML (À CRÉER)
 │   └── 06_evaluation.ipynb            # 📊 Évaluation et visualisations (À CRÉER)
@@ -57,9 +57,9 @@ mspr-813/
 │   ├── DOWNLOAD_PRIORITY.md           # Stratégie téléchargement par phases
 │   └── URLS_DATASETS.md               # URLs de téléchargement corrigées
 │
-├── Dockerfile                         # 🐳 Image Docker Python + Spark + Java 21
+├── Dockerfile                         # 🐳 Image Docker Python 3.11
 ├── docker-compose.yml                 # Orchestration conteneur Jupyter Lab
-├── requirements.txt                   # Dépendances Python (PySpark, scikit-learn, viz)
+├── requirements.txt                   # Dépendances Python (pandas, scikit-learn, viz)
 └── README.md                          # Ce fichier
 ```
 
@@ -72,13 +72,13 @@ Le projet suit une **architecture en couches** typique d'un projet Big Data :
 1. **Couche Données (`data/`)** : Séparation claire entre données brutes (immuables), transformées (optimisées), et résultats
 2. **Couche Traitement (`notebooks/`)** : Pipeline séquentiel de notebooks pour traçabilité et reproductibilité
 3. **Couche Présentation (`outputs/`)** : Exports prêts pour soutenance
-4. **Couche Infrastructure** : Docker pour isolation et reproductibilité environnement
+4. **Couche Infrastructure** : Docker pour isolation et reproductibilité
 
 ### Pourquoi cette structure ?
 
 #### ✅ **Séparation raw/processed/output**
 - **`raw/`** : Données sources **jamais modifiées** → reproductibilité garantie
-- **`processed/`** : Format **Parquet** → 10x plus rapide que CSV avec Spark, compression efficace
+- **`processed/`** : Format **Parquet** → lecture optimisée, compression efficace
 - **`output/`** : Résultats finaux **isolés** pour faciliter export/partage
 
 #### ✅ **Notebooks numérotés**
@@ -87,11 +87,11 @@ Le projet suit une **architecture en couches** typique d'un projet Big Data :
 - **Développement itératif** : retour en arrière facile
 - **Documentation intégrée** : code + explications + résultats
 
-#### ✅ **Format Parquet pour Big Data**
+#### ✅ **Format Parquet**
 - **Columnar storage** : lecture optimisée pour analyses (vs CSV row-based)
 - **Compression automatique** : 5-10x moins d'espace disque
 - **Types de données préservés** : pas de parsing à chaque lecture
-- **Partitionnement possible** : scalabilité 150 communes → 35K communes
+- **Compatible pandas** : lecture/écriture native avec `pd.read_parquet()`
 
 ### Approche Progressive : Phase 1 → Phase 2
 
@@ -103,7 +103,7 @@ Le projet est conçu pour **progression par étapes** :
 | **Phase 2 - Extension** | France entière (35K communes) | + Territorial (finances, environnement) | +140 MB | Démontrer scalabilité |
 
 **Phase 1** = Développement rapide avec variables de référence (revenus, CSP, diplômes)  
-**Phase 2** = Extension testée pour soutenance ("architecture pensée Big Data")
+**Phase 2** = Extension testée pour soutenance (architecture scalable)
 
 📖 **Pour plus de détails** : voir [ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
@@ -128,10 +128,10 @@ docker-compose up -d
 Exécuter dans l'ordre :
 
 ```
-00_setup_spark.ipynb        → Valider installation Spark ✅
-01_data_download.ipynb      → Télécharger datasets Phase 1 (+ Phase 2 si besoin)
-02_exploration.ipynb        → Explorer et comprendre les données
-03_etl_spark.ipynb          → Nettoyer, transformer, joindre avec PySpark
+00_setup.ipynb              → Valider environnement Python + pandas ✅
+01_data_download.ipynb      → Télécharger datasets Phase 1 (+ Phase 2 si besoin) ✅
+02_exploration.ipynb        → Explorer et comprendre les données ✅
+03_etl.ipynb                → Nettoyer, transformer, joindre avec pandas
 04_feature_engineering.ipynb → Créer variables prédictives
 05_modeling.ipynb           → Entraîner modèles ML
 06_evaluation.ipynb         → Évaluer performance et visualiser
@@ -145,13 +145,13 @@ docker-compose down
 
 ## 🛠️ Stack Technique
 
-- **Big Data :** Apache Spark (PySpark 3.5.0)
-- **ML :** Scikit-learn + Spark MLlib
+- **Analyse de données :** Pandas 2.1.4, NumPy 1.26.2
+- **Lecture Excel :** openpyxl 3.1.2
+- **Machine Learning :** Scikit-learn 1.3.2
 - **Visualisation :** Matplotlib, Seaborn, Plotly
-- **Format :** Parquet (optimisé Big Data)
+- **Format :** Parquet (lecture/écriture optimisée)
 - **Orchestration :** Docker + Jupyter Lab
 - **Langage :** Python 3.11
-- **Runtime :** Java 21 (requis pour Spark)
 
 ## 📦 Datasets et Stratégie de Données
 
