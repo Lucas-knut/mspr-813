@@ -1,0 +1,691 @@
+REG;Région;DEP;CODCOM;Commune;CODFRAC_CAN;FRAC_CAN;Fraction cantonale;PMUN;PCAP;PTOT
+84;Auvergne-Rhône-Alpes;01;053;Bourg-en-Bresse;05;0105305;Bourg-en-Bresse-1;28631;1069;29700
+84;Auvergne-Rhône-Alpes;01;053;Bourg-en-Bresse;06;0105306;Bourg-en-Bresse-2;12894;616;13510
+32;Hauts-de-France;02;408;Laon;09;0240809;Laon-1;8605;161;8766
+32;Hauts-de-France;02;408;Laon;10;0240810;Laon-2;15416;484;15900
+32;Hauts-de-France;02;691;Saint-Quentin;13;0269113;Saint-Quentin-1;18684;470;19154
+32;Hauts-de-France;02;691;Saint-Quentin;14;0269114;Saint-Quentin-2;18172;497;18669
+32;Hauts-de-France;02;691;Saint-Quentin;15;0269115;Saint-Quentin-3;16102;241;16343
+32;Hauts-de-France;02;722;Soissons;16;0272216;Soissons-1;11156;155;11311
+32;Hauts-de-France;02;722;Soissons;17;0272217;Soissons-2;17549;507;18056
+84;Auvergne-Rhône-Alpes;03;185;Montluçon;09;0318509;Montluçon-1;3603;72;3675
+84;Auvergne-Rhône-Alpes;03;185;Montluçon;10;0318510;Montluçon-2;11013;510;11523
+84;Auvergne-Rhône-Alpes;03;185;Montluçon;11;0318511;Montluçon-3;9504;218;9722
+84;Auvergne-Rhône-Alpes;03;185;Montluçon;12;0318512;Montluçon-4;9222;236;9458
+84;Auvergne-Rhône-Alpes;03;190;Moulins;13;0319013;Moulins-1;10404;356;10760
+84;Auvergne-Rhône-Alpes;03;190;Moulins;14;0319014;Moulins-2;8939;170;9109
+84;Auvergne-Rhône-Alpes;03;310;Vichy;17;0331017;Vichy-1;12423;120;12543
+84;Auvergne-Rhône-Alpes;03;310;Vichy;18;0331018;Vichy-2;13366;182;13548
+93;Provence-Alpes-Côte d'Azur;04;070;Digne-les-Bains;04;0407004;Digne-les-Bains-1;10427;570;10997
+93;Provence-Alpes-Côte d'Azur;04;070;Digne-les-Bains;05;0407005;Digne-les-Bains-2;6765;362;7127
+93;Provence-Alpes-Côte d'Azur;04;112;Manosque;07;0411207;Manosque-1;8339;132;8471
+93;Provence-Alpes-Côte d'Azur;04;112;Manosque;08;0411208;Manosque-2;6832;197;7029
+93;Provence-Alpes-Côte d'Azur;04;112;Manosque;09;0411209;Manosque-3;7755;317;8072
+93;Provence-Alpes-Côte d'Azur;05;023;Briançon;02;0502302;Briançon-1;1934;52;1986
+93;Provence-Alpes-Côte d'Azur;05;023;Briançon;03;0502303;Briançon-2;8627;262;8889
+93;Provence-Alpes-Côte d'Azur;05;061;Gap;06;0506106;Gap-1;10350;233;10583
+93;Provence-Alpes-Côte d'Azur;05;061;Gap;07;0506107;Gap-2;10237;563;10800
+93;Provence-Alpes-Côte d'Azur;05;061;Gap;08;0506108;Gap-3;10349;249;10598
+93;Provence-Alpes-Côte d'Azur;05;061;Gap;09;0506109;Gap-4;9564;390;9954
+93;Provence-Alpes-Côte d'Azur;06;004;Antibes;01;0600401;Antibes-1;11460;118;11578
+93;Provence-Alpes-Côte d'Azur;06;004;Antibes;02;0600402;Antibes-2;30422;253;30675
+93;Provence-Alpes-Côte d'Azur;06;004;Antibes;03;0600403;Antibes-3;26870;379;27249
+93;Provence-Alpes-Côte d'Azur;06;027;Cagnes-sur-Mer;05;0602705;Cagnes-sur-Mer-1;43861;338;44199
+93;Provence-Alpes-Côte d'Azur;06;027;Cagnes-sur-Mer;06;0602706;Cagnes-sur-Mer-2;8719;116;8835
+93;Provence-Alpes-Côte d'Azur;06;030;Le Cannet;07;0603007;Cannes-1;14224;132;14356
+93;Provence-Alpes-Côte d'Azur;06;029;Cannes;07;0602907;Cannes-1;33881;261;34142
+93;Provence-Alpes-Côte d'Azur;06;029;Cannes;08;0602908;Cannes-2;39374;474;39848
+93;Provence-Alpes-Côte d'Azur;06;030;Le Cannet;09;0603009;Le Cannet;27373;240;27613
+93;Provence-Alpes-Côte d'Azur;06;069;Grasse;11;0606911;Grasse-1;18590;271;18861
+93;Provence-Alpes-Côte d'Azur;06;069;Grasse;12;0606912;Grasse-2;29733;569;30302
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;15;0608815;Nice-1;43804;414;44218
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;16;0608816;Nice-2;49222;427;49649
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;17;0608817;Nice-3;26309;255;26564
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;18;0608818;Nice-4;41751;354;42105
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;19;0608819;Nice-5;46963;295;47258
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;20;0608820;Nice-6;41919;605;42524
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;21;0608821;Nice-7;25714;132;25846
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;22;0608822;Nice-8;39946;161;40107
+93;Provence-Alpes-Côte d'Azur;06;088;Nice;23;0608823;Nice-9;32457;283;32740
+93;Provence-Alpes-Côte d'Azur;06;004;Antibes;25;0600425;Valbonne;6378;267;6645
+84;Auvergne-Rhône-Alpes;07;010;Annonay;01;0701001;Annonay-1;10008;337;10345
+84;Auvergne-Rhône-Alpes;07;010;Annonay;02;0701002;Annonay-2;6865;229;7094
+84;Auvergne-Rhône-Alpes;07;019;Aubenas;03;0701903;Aubenas-1;7112;404;7516
+84;Auvergne-Rhône-Alpes;07;019;Aubenas;04;0701904;Aubenas-2;5248;376;5624
+44;Grand Est;08;105;Charleville-Mézières;04;0810504;Charleville-Mézières-1;10253;171;10424
+44;Grand Est;08;105;Charleville-Mézières;05;0810505;Charleville-Mézières-2;8990;182;9172
+44;Grand Est;08;105;Charleville-Mézières;06;0810506;Charleville-Mézières-3;14307;516;14823
+44;Grand Est;08;105;Charleville-Mézières;07;0810507;Charleville-Mézières-4;12848;158;13006
+44;Grand Est;08;409;Sedan;14;0840914;Sedan-1;5257;155;5412
+44;Grand Est;08;409;Sedan;15;0840915;Sedan-2;4968;114;5082
+44;Grand Est;08;409;Sedan;16;0840916;Sedan-3;6383;64;6447
+76;Occitanie;09;225;Pamiers;07;0922507;Pamiers-1;6098;145;6243
+76;Occitanie;09;225;Pamiers;08;0922508;Pamiers-2;10296;368;10664
+44;Grand Est;10;387;Troyes;12;1038712;Troyes-1;20744;309;21053
+44;Grand Est;10;387;Troyes;13;1038713;Troyes-2;7421;61;7482
+44;Grand Est;10;387;Troyes;14;1038714;Troyes-3;9101;363;9464
+44;Grand Est;10;387;Troyes;15;1038715;Troyes-4;6948;26;6974
+44;Grand Est;10;387;Troyes;16;1038716;Troyes-5;18568;342;18910
+76;Occitanie;11;069;Carcassonne;02;1106902;Carcassonne-1;14594;406;15000
+76;Occitanie;11;069;Carcassonne;03;1106903;Carcassonne-2;14409;422;14831
+76;Occitanie;11;069;Carcassonne;04;1106904;Carcassonne-3;17215;299;17514
+76;Occitanie;11;262;Narbonne;11;1126211;Narbonne-1;21671;324;21995
+76;Occitanie;11;262;Narbonne;12;1126212;Narbonne-2;16392;463;16855
+76;Occitanie;11;262;Narbonne;13;1126213;Narbonne-3;18332;389;18721
+76;Occitanie;12;145;Millau;11;1214511;Millau-1;11314;465;11779
+76;Occitanie;12;145;Millau;12;1214512;Millau-2;10398;222;10620
+76;Occitanie;12;202;Rodez;16;1220216;Rodez-1;11906;938;12844
+76;Occitanie;12;202;Rodez;17;1220217;Rodez-2;10168;859;11027
+76;Occitanie;12;202;Rodez;18;1220218;Rodez-Onet;2133;33;2166
+93;Provence-Alpes-Côte d'Azur;13;001;Aix-en-Provence;01;1300101;Aix-en-Provence-1;73059;2068;75127
+93;Provence-Alpes-Côte d'Azur;13;001;Aix-en-Provence;02;1300102;Aix-en-Provence-2;74419;1095;75514
+93;Provence-Alpes-Côte d'Azur;13;205;Marseille 5e Arrondissement;12;1320512;Marseille-1;6113;41;6154
+93;Provence-Alpes-Côte d'Azur;13;204;Marseille 4e Arrondissement;12;1320412;Marseille-1;24318;178;24496
+93;Provence-Alpes-Côte d'Azur;13;203;Marseille 3e Arrondissement;12;1320312;Marseille-1;5934;6;5940
+93;Provence-Alpes-Côte d'Azur;13;203;Marseille 3e Arrondissement;13;1320313;Marseille-2;47181;129;47310
+93;Provence-Alpes-Côte d'Azur;13;215;Marseille 15e Arrondissement;14;1321514;Marseille-3;48469;170;48639
+93;Provence-Alpes-Côte d'Azur;13;215;Marseille 15e Arrondissement;15;1321515;Marseille-4;31187;90;31277
+93;Provence-Alpes-Côte d'Azur;13;214;Marseille 14e Arrondissement;15;1321415;Marseille-4;27701;95;27796
+93;Provence-Alpes-Côte d'Azur;13;214;Marseille 14e Arrondissement;16;1321416;Marseille-5;32247;133;32380
+93;Provence-Alpes-Côte d'Azur;13;204;Marseille 4e Arrondissement;16;1320416;Marseille-5;17686;67;17753
+93;Provence-Alpes-Côte d'Azur;13;213;Marseille 13e Arrondissement;16;1321316;Marseille-5;19299;240;19539
+93;Provence-Alpes-Côte d'Azur;13;213;Marseille 13e Arrondissement;17;1321317;Marseille-6;72962;463;73425
+93;Provence-Alpes-Côte d'Azur;13;211;Marseille 11e Arrondissement;18;1321118;Marseille-7;15513;208;15721
+93;Provence-Alpes-Côte d'Azur;13;212;Marseille 12e Arrondissement;18;1321218;Marseille-7;59647;552;60199
+93;Provence-Alpes-Côte d'Azur;13;204;Marseille 4e Arrondissement;18;1320418;Marseille-7;8064;63;8127
+93;Provence-Alpes-Côte d'Azur;13;212;Marseille 12e Arrondissement;19;1321219;Marseille-8;3461;9;3470
+93;Provence-Alpes-Côte d'Azur;13;210;Marseille 10e Arrondissement;19;1321019;Marseille-8;26696;260;26956
+93;Provence-Alpes-Côte d'Azur;13;211;Marseille 11e Arrondissement;19;1321119;Marseille-8;42411;231;42642
+93;Provence-Alpes-Côte d'Azur;13;209;Marseille 9e Arrondissement;20;1320920;Marseille-9;47803;419;48222
+93;Provence-Alpes-Côte d'Azur;13;208;Marseille 8e Arrondissement;20;1320820;Marseille-9;27904;649;28553
+93;Provence-Alpes-Côte d'Azur;13;209;Marseille 9e Arrondissement;21;1320921;Marseille-10;29303;201;29504
+93;Provence-Alpes-Côte d'Azur;13;210;Marseille 10e Arrondissement;21;1321021;Marseille-10;19719;67;19786
+93;Provence-Alpes-Côte d'Azur;13;208;Marseille 8e Arrondissement;21;1320821;Marseille-10;29521;443;29964
+93;Provence-Alpes-Côte d'Azur;13;205;Marseille 5e Arrondissement;22;1320522;Marseille-11;39336;231;39567
+93;Provence-Alpes-Côte d'Azur;13;206;Marseille 6e Arrondissement;22;1320622;Marseille-11;22842;202;23044
+93;Provence-Alpes-Côte d'Azur;13;210;Marseille 10e Arrondissement;22;1321022;Marseille-11;12587;40;12627
+93;Provence-Alpes-Côte d'Azur;13;206;Marseille 6e Arrondissement;23;1320623;Marseille-12;16805;149;16954
+93;Provence-Alpes-Côte d'Azur;13;208;Marseille 8e Arrondissement;23;1320823;Marseille-12;25184;206;25390
+93;Provence-Alpes-Côte d'Azur;13;103;Salon-de-Provence;26;1310326;Salon-de-Provence-1;18891;238;19129
+93;Provence-Alpes-Côte d'Azur;13;103;Salon-de-Provence;27;1310327;Salon-de-Provence-2;25840;321;26161
+28;Normandie;14;027;Les Monts d'Aunay;01;1402701;Les Monts d’Aunay;4233;57;4290
+28;Normandie;14;118;Caen;05;1411805;Caen-1;18165;318;18483
+28;Normandie;14;118;Caen;06;1411806;Caen-2;19726;228;19954
+28;Normandie;14;118;Caen;07;1411807;Caen-3;25796;982;26778
+28;Normandie;14;118;Caen;08;1411808;Caen-4;27967;433;28400
+28;Normandie;14;118;Caen;09;1411809;Caen-5;16546;196;16742
+28;Normandie;14;027;Les Monts d'Aunay;10;1402710;Condé-en-Normandie;321;7;328
+84;Auvergne-Rhône-Alpes;15;014;Aurillac;02;1501402;Aurillac-1;6021;169;6190
+84;Auvergne-Rhône-Alpes;15;014;Aurillac;03;1501403;Aurillac-2;9646;836;10482
+84;Auvergne-Rhône-Alpes;15;014;Aurillac;04;1501404;Aurillac-3;10148;286;10434
+84;Auvergne-Rhône-Alpes;15;187;Saint-Flour;11;1518711;Saint-Flour-1;1705;112;1817
+84;Auvergne-Rhône-Alpes;15;187;Saint-Flour;12;1518712;Saint-Flour-2;4718;427;5145
+75;Nouvelle-Aquitaine;16;015;Angoulême;01;1601501;Angoulême-1;14734;405;15139
+75;Nouvelle-Aquitaine;16;015;Angoulême;02;1601502;Angoulême-2;13597;557;14154
+75;Nouvelle-Aquitaine;16;015;Angoulême;03;1601503;Angoulême-3;12755;667;13422
+75;Nouvelle-Aquitaine;16;192;Terres-de-Haute-Charente;06;1619206;Charente-Bonnieure;3105;57;3162
+75;Nouvelle-Aquitaine;16;192;Terres-de-Haute-Charente;10;1619210;Charente-Vienne;724;60;784
+75;Nouvelle-Aquitaine;16;102;Cognac;11;1610211;Cognac-1;8588;222;8810
+75;Nouvelle-Aquitaine;16;102;Cognac;12;1610212;Cognac-2;9860;181;10041
+75;Nouvelle-Aquitaine;17;300;La Rochelle;14;1730014;La Rochelle-1;26301;358;26659
+75;Nouvelle-Aquitaine;17;300;La Rochelle;15;1730015;La Rochelle-2;26110;978;27088
+75;Nouvelle-Aquitaine;17;300;La Rochelle;16;1730016;La Rochelle-3;26124;739;26863
+24;Centre-Val de Loire;18;033;Bourges;03;1803303;Bourges-1;17905;485;18390
+24;Centre-Val de Loire;18;033;Bourges;04;1803304;Bourges-2;15343;179;15522
+24;Centre-Val de Loire;18;033;Bourges;05;1803305;Bourges-3;13697;544;14241
+24;Centre-Val de Loire;18;033;Bourges;06;1803306;Bourges-4;16757;813;17570
+24;Centre-Val de Loire;18;279;Vierzon;18;1827918;Vierzon-1;14925;310;15235
+24;Centre-Val de Loire;18;279;Vierzon;19;1827919;Vierzon-2;10423;150;10573
+75;Nouvelle-Aquitaine;19;031;Brive-la-Gaillarde;03;1903103;Brive-la-Gaillarde-1;11978;367;12345
+75;Nouvelle-Aquitaine;19;031;Brive-la-Gaillarde;04;1903104;Brive-la-Gaillarde-2;12709;377;13086
+75;Nouvelle-Aquitaine;19;031;Brive-la-Gaillarde;05;1903105;Brive-la-Gaillarde-3;8612;145;8757
+75;Nouvelle-Aquitaine;19;031;Brive-la-Gaillarde;06;1903106;Brive-la-Gaillarde-4;13300;357;13657
+27;Bourgogne-Franche-Comté;21;231;Dijon;08;2123108;Dijon-1;25234;557;25791
+27;Bourgogne-Franche-Comté;21;231;Dijon;09;2123109;Dijon-2;28913;477;29390
+27;Bourgogne-Franche-Comté;21;231;Dijon;10;2123110;Dijon-3;24338;592;24930
+27;Bourgogne-Franche-Comté;21;231;Dijon;11;2123111;Dijon-4;29395;608;30003
+27;Bourgogne-Franche-Comté;21;231;Dijon;12;2123112;Dijon-5;26260;625;26885
+27;Bourgogne-Franche-Comté;21;231;Dijon;13;2123113;Dijon-6;25206;445;25651
+53;Bretagne;22;093;Lamballe-Armor;06;2209306;Lamballe-Armor;14635;442;15077
+53;Bretagne;22;093;Lamballe-Armor;17;2209317;Pléneuf-Val-André;2210;40;2250
+53;Bretagne;22;278;Saint-Brieuc;24;2227824;Saint-Brieuc-1;22023;656;22679
+53;Bretagne;22;278;Saint-Brieuc;25;2227825;Saint-Brieuc-2;22201;734;22935
+75;Nouvelle-Aquitaine;23;096;Guéret;12;2309612;Guéret-1;5234;87;5321
+75;Nouvelle-Aquitaine;23;096;Guéret;13;2309613;Guéret-2;7606;526;8132
+75;Nouvelle-Aquitaine;24;037;Bergerac;01;2403701;Bergerac-1;17743;561;18304
+75;Nouvelle-Aquitaine;24;037;Bergerac;02;2403702;Bergerac-2;8580;189;8769
+75;Nouvelle-Aquitaine;24;026;Bassillac et Auberoche;05;2402605;Le Haut-Périgord Noir;1779;26;1805
+75;Nouvelle-Aquitaine;24;026;Bassillac et Auberoche;07;2402607;Isle-Manoire;2584;57;2641
+75;Nouvelle-Aquitaine;24;312;Sanilhac;07;2431207;Isle-Manoire;4402;99;4501
+75;Nouvelle-Aquitaine;24;312;Sanilhac;12;2431212;Périgord Central;272;2;274
+75;Nouvelle-Aquitaine;24;322;Périgueux;14;2432214;Périgueux-1;15405;863;16268
+75;Nouvelle-Aquitaine;24;322;Périgueux;15;2432215;Périgueux-2;14111;682;14793
+27;Bourgogne-Franche-Comté;25;056;Besançon;04;2505604;Besançon-1;22221;424;22645
+27;Bourgogne-Franche-Comté;25;056;Besançon;05;2505605;Besançon-2;18079;512;18591
+27;Bourgogne-Franche-Comté;25;056;Besançon;06;2505606;Besançon-3;22524;830;23354
+27;Bourgogne-Franche-Comté;25;056;Besançon;07;2505607;Besançon-4;24610;468;25078
+27;Bourgogne-Franche-Comté;25;056;Besançon;08;2505608;Besançon-5;10922;361;11283
+27;Bourgogne-Franche-Comté;25;056;Besançon;09;2505609;Besançon-6;20842;670;21512
+84;Auvergne-Rhône-Alpes;26;281;Romans-sur-Isère;01;2628101;Bourg-de-Péage;16775;474;17249
+84;Auvergne-Rhône-Alpes;26;198;Montélimar;08;2619808;Montélimar-1;21208;655;21863
+84;Auvergne-Rhône-Alpes;26;198;Montélimar;09;2619809;Montélimar-2;19191;471;19662
+84;Auvergne-Rhône-Alpes;26;281;Romans-sur-Isère;11;2628111;Romans-sur-Isère;16136;198;16334
+84;Auvergne-Rhône-Alpes;26;362;Valence;15;2636215;Valence-1;5659;54;5713
+84;Auvergne-Rhône-Alpes;26;362;Valence;16;2636216;Valence-2;16387;420;16807
+84;Auvergne-Rhône-Alpes;26;362;Valence;17;2636217;Valence-3;14535;282;14817
+84;Auvergne-Rhône-Alpes;26;362;Valence;18;2636218;Valence-4;27902;489;28391
+28;Normandie;27;679;Verneuil d'Avre et d'Iton;06;2767906;Breteuil;1158;21;1179
+28;Normandie;27;198;Mesnils-sur-Iton;06;2719806;Breteuil;920;12;932
+28;Normandie;27;229;Évreux;09;2722909;Évreux-1;17402;734;18136
+28;Normandie;27;229;Évreux;10;2722910;Évreux-2;18241;315;18556
+28;Normandie;27;229;Évreux;11;2722911;Évreux-3;11646;227;11873
+28;Normandie;27;679;Verneuil d'Avre et d'Iton;22;2767922;Verneuil d'Avre et d'Iton;6147;321;6468
+28;Normandie;27;198;Mesnils-sur-Iton;22;2719822;Verneuil d'Avre et d'Iton;5225;202;5427
+24;Centre-Val de Loire;28;085;Chartres;04;2808504;Chartres-1;16380;399;16779
+24;Centre-Val de Loire;28;085;Chartres;05;2808505;Chartres-2;9897;215;10112
+24;Centre-Val de Loire;28;085;Chartres;06;2808506;Chartres-3;12170;386;12556
+24;Centre-Val de Loire;28;134;Dreux;08;2813408;Dreux-1;10545;133;10678
+24;Centre-Val de Loire;28;134;Dreux;09;2813409;Dreux-2;20334;350;20684
+53;Bretagne;29;019;Brest;01;2901901;Brest-1;31519;453;31972
+53;Bretagne;29;019;Brest;02;2901902;Brest-2;35577;484;36061
+53;Bretagne;29;019;Brest;03;2901903;Brest-3;18783;413;19196
+53;Bretagne;29;019;Brest;04;2901904;Brest-4;17276;255;17531
+53;Bretagne;29;019;Brest;05;2901905;Brest-5;36464;1010;37474
+53;Bretagne;29;232;Quimper;23;2923223;Quimper-1;24114;814;24928
+53;Bretagne;29;232;Quimper;24;2923224;Quimper-2;39528;1419;40947
+94;Corse;2A;004;Ajaccio;01;2A00401;Ajaccio-1;17439;179;17618
+94;Corse;2A;004;Ajaccio;02;2A00402;Ajaccio-2;14229;159;14388
+94;Corse;2A;004;Ajaccio;03;2A00403;Ajaccio-3;17483;169;17652
+94;Corse;2A;004;Ajaccio;04;2A00404;Ajaccio-4;14553;190;14743
+94;Corse;2A;004;Ajaccio;05;2A00405;Ajaccio-5;10118;113;10231
+94;Corse;2A;247;Porto-Vecchio;06;2A24706;Bavella;5969;91;6060
+94;Corse;2A;247;Porto-Vecchio;07;2A24707;Grand Sud;5260;62;5322
+94;Corse;2B;033;Bastia;01;2B03301;Bastia-1;10056;134;10190
+94;Corse;2B;033;Bastia;02;2B03302;Bastia-2;13707;187;13894
+94;Corse;2B;033;Bastia;03;2B03303;Bastia-3;15248;53;15301
+94;Corse;2B;033;Bastia;04;2B03304;Bastia-4;9757;234;9991
+76;Occitanie;30;007;Alès;02;3000702;Alès-1;13561;281;13842
+76;Occitanie;30;007;Alès;03;3000703;Alès-2;13582;137;13719
+76;Occitanie;30;007;Alès;04;3000704;Alès-3;16749;145;16894
+76;Occitanie;30;189;Nîmes;10;3018910;Nîmes-1;37674;720;38394
+76;Occitanie;30;189;Nîmes;11;3018911;Nîmes-2;37538;422;37960
+76;Occitanie;30;189;Nîmes;12;3018912;Nîmes-3;35921;475;36396
+76;Occitanie;30;189;Nîmes;13;3018913;Nîmes-4;36519;606;37125
+76;Occitanie;30;189;Nîmes;19;3018919;Saint-Gilles;452;8;460
+76;Occitanie;31;555;Toulouse;15;3155515;Toulouse-1;60318;719;61037
+76;Occitanie;31;555;Toulouse;16;3155516;Toulouse-2;57892;397;58289
+76;Occitanie;31;555;Toulouse;17;3155517;Toulouse-3;51263;613;51876
+76;Occitanie;31;555;Toulouse;18;3155518;Toulouse-4;52380;560;52940
+76;Occitanie;31;555;Toulouse;19;3155519;Toulouse-5;47096;302;47398
+76;Occitanie;31;555;Toulouse;20;3155520;Toulouse-6;59140;446;59586
+76;Occitanie;31;555;Toulouse;21;3155521;Toulouse-7;9898;72;9970
+76;Occitanie;31;555;Toulouse;22;3155522;Toulouse-8;69362;667;70029
+76;Occitanie;31;555;Toulouse;23;3155523;Toulouse-9;34162;409;34571
+76;Occitanie;31;555;Toulouse;24;3155524;Toulouse-10;24251;536;24787
+76;Occitanie;31;555;Toulouse;25;3155525;Toulouse-11;38316;401;38717
+76;Occitanie;32;013;Auch;04;3201304;Auch-1;7084;556;7640
+76;Occitanie;32;013;Auch;05;3201305;Auch-2;6202;355;6557
+76;Occitanie;32;013;Auch;06;3201306;Auch-3;9755;163;9918
+75;Nouvelle-Aquitaine;33;063;Bordeaux;02;3306302;Bordeaux-1;45731;473;46204
+75;Nouvelle-Aquitaine;33;063;Bordeaux;03;3306303;Bordeaux-2;49492;1119;50611
+75;Nouvelle-Aquitaine;33;063;Bordeaux;04;3306304;Bordeaux-3;48684;821;49505
+75;Nouvelle-Aquitaine;33;063;Bordeaux;05;3306305;Bordeaux-4;63808;525;64333
+75;Nouvelle-Aquitaine;33;063;Bordeaux;06;3306306;Bordeaux-5;54089;513;54602
+75;Nouvelle-Aquitaine;33;281;Mérignac;18;3328118;Mérignac-1;41123;418;41541
+75;Nouvelle-Aquitaine;33;281;Mérignac;19;3328119;Mérignac-2;34606;385;34991
+75;Nouvelle-Aquitaine;33;318;Pessac;23;3331823;Pessac-1;33438;421;33859
+75;Nouvelle-Aquitaine;33;318;Pessac;24;3331824;Pessac-2;33322;341;33663
+75;Nouvelle-Aquitaine;33;039;Bègles;31;3303931;Talence;6636;49;6685
+75;Nouvelle-Aquitaine;33;039;Bègles;33;3303933;Villenave-d'Ornon;24177;299;24476
+76;Occitanie;34;032;Béziers;02;3403202;Béziers-1;19541;208;19749
+76;Occitanie;34;032;Béziers;03;3403203;Béziers-2;38996;449;39445
+76;Occitanie;34;032;Béziers;04;3403204;Béziers-3;21804;458;22262
+76;Occitanie;34;172;Montpellier;15;3417215;Montpellier-1;46572;350;46922
+76;Occitanie;34;172;Montpellier;16;3417216;Montpellier-2;55897;453;56350
+76;Occitanie;34;172;Montpellier;17;3417217;Montpellier-3;53665;994;54659
+76;Occitanie;34;172;Montpellier;18;3417218;Montpellier-4;67298;376;67674
+76;Occitanie;34;172;Montpellier;19;3417219;Montpellier-5;53273;580;53853
+76;Occitanie;34;172;Montpellier;20;3417220;Montpellier - Castelnau-le-Lez;25749;536;26285
+53;Bretagne;35;115;Fougères;08;3511508;Fougères-1;6245;272;6517
+53;Bretagne;35;115;Fougères;09;3511509;Fougères-2;14408;322;14730
+53;Bretagne;35;238;Rennes;18;3523818;Rennes-1;41163;777;41940
+53;Bretagne;35;238;Rennes;19;3523819;Rennes-2;43087;1119;44206
+53;Bretagne;35;238;Rennes;20;3523820;Rennes-3;33683;335;34018
+53;Bretagne;35;238;Rennes;21;3523821;Rennes-4;37019;599;37618
+53;Bretagne;35;238;Rennes;22;3523822;Rennes-5;34472;745;35217
+53;Bretagne;35;238;Rennes;23;3523823;Rennes-6;35657;522;36179
+53;Bretagne;35;288;Saint-Malo;25;3528825;Saint-Malo-1;30831;944;31775
+53;Bretagne;35;288;Saint-Malo;26;3528826;Saint-Malo-2;16492;342;16834
+24;Centre-Val de Loire;36;202;Saint-Maur;04;3620204;Buzançais;3192;65;3257
+24;Centre-Val de Loire;36;044;Châteauroux;05;3604405;Châteauroux-1;9270;317;9587
+24;Centre-Val de Loire;36;044;Châteauroux;06;3604406;Châteauroux-2;16008;679;16687
+24;Centre-Val de Loire;36;044;Châteauroux;07;3604407;Châteauroux-3;17690;596;18286
+24;Centre-Val de Loire;36;202;Saint-Maur;10;3620210;Levroux;449;4;453
+24;Centre-Val de Loire;37;261;Tours;15;3726115;Tours-1;42379;834;43213
+24;Centre-Val de Loire;37;261;Tours;16;3726116;Tours-2;31296;400;31696
+24;Centre-Val de Loire;37;261;Tours;17;3726117;Tours-3;31355;697;32052
+24;Centre-Val de Loire;37;261;Tours;18;3726118;Tours-4;32628;527;33155
+84;Auvergne-Rhône-Alpes;38;169;Fontaine;06;3816906;Fontaine-Seyssinet;11361;108;11469
+84;Auvergne-Rhône-Alpes;38;169;Fontaine;07;3816907;Fontaine-Vercors;11530;135;11665
+84;Auvergne-Rhône-Alpes;38;185;Grenoble;09;3818509;Grenoble-1;45199;837;46036
+84;Auvergne-Rhône-Alpes;38;185;Grenoble;10;3818510;Grenoble-2;20365;211;20576
+84;Auvergne-Rhône-Alpes;38;185;Grenoble;11;3818511;Grenoble-3;48689;750;49439
+84;Auvergne-Rhône-Alpes;38;185;Grenoble;12;3818512;Grenoble-4;43224;463;43687
+84;Auvergne-Rhône-Alpes;38;544;Vienne;27;3854427;Vienne-1;17165;170;17335
+84;Auvergne-Rhône-Alpes;38;544;Vienne;28;3854428;Vienne-2;13886;201;14087
+27;Bourgogne-Franche-Comté;39;198;Dole;05;3919805;Dole-1;13635;479;14114
+27;Bourgogne-Franche-Comté;39;198;Dole;06;3919806;Dole-2;10140;348;10488
+27;Bourgogne-Franche-Comté;39;300;Lons-le-Saunier;07;3930007;Lons-le-Saunier-1;7609;467;8076
+27;Bourgogne-Franche-Comté;39;300;Lons-le-Saunier;08;3930008;Lons-le-Saunier-2;9434;377;9811
+75;Nouvelle-Aquitaine;40;088;Dax;05;4008805;Dax-1;1824;30;1854
+75;Nouvelle-Aquitaine;40;088;Dax;06;4008806;Dax-2;19523;792;20315
+75;Nouvelle-Aquitaine;40;192;Mont-de-Marsan;10;4019210;Mont-de-Marsan-1;20017;923;20940
+75;Nouvelle-Aquitaine;40;192;Mont-de-Marsan;11;4019211;Mont-de-Marsan-2;10657;461;11118
+24;Centre-Val de Loire;41;018;Blois;02;4101802;Blois-1;21196;209;21405
+24;Centre-Val de Loire;41;018;Blois;03;4101803;Blois-2;14896;529;15425
+24;Centre-Val de Loire;41;018;Blois;04;4101804;Blois-3;8710;669;9379
+24;Centre-Val de Loire;41;059;Le Controis-en-Sologne;04;4105904;Blois-3;2218;68;2286
+24;Centre-Val de Loire;41;059;Le Controis-en-Sologne;07;4105907;Montrichard Val de Cher;4501;85;4586
+24;Centre-Val de Loire;41;018;Blois;15;4101815;Vineuil;2011;50;2061
+84;Auvergne-Rhône-Alpes;42;187;Roanne;11;4218711;Roanne-1;22236;576;22812
+84;Auvergne-Rhône-Alpes;42;187;Roanne;12;4218712;Roanne-2;12526;154;12680
+84;Auvergne-Rhône-Alpes;42;218;Saint-Étienne;14;4221814;Saint-Etienne-1;39296;440;39736
+84;Auvergne-Rhône-Alpes;42;218;Saint-Étienne;15;4221815;Saint-Etienne-2;16238;162;16400
+84;Auvergne-Rhône-Alpes;42;218;Saint-Étienne;16;4221816;Saint-Etienne-3;26135;264;26399
+84;Auvergne-Rhône-Alpes;42;218;Saint-Étienne;17;4221817;Saint-Etienne-4;28611;247;28858
+84;Auvergne-Rhône-Alpes;42;218;Saint-Étienne;18;4221818;Saint-Etienne-5;22557;134;22691
+84;Auvergne-Rhône-Alpes;42;218;Saint-Étienne;19;4221819;Saint-Etienne-6;39881;534;40415
+84;Auvergne-Rhône-Alpes;43;157;Le Puy-en-Velay;12;4315712;Le Puy-en-Velay-1;5258;68;5326
+84;Auvergne-Rhône-Alpes;43;157;Le Puy-en-Velay;13;4315713;Le Puy-en-Velay-2;4712;152;4864
+84;Auvergne-Rhône-Alpes;43;157;Le Puy-en-Velay;14;4315714;Le Puy-en-Velay-3;1802;158;1960
+84;Auvergne-Rhône-Alpes;43;157;Le Puy-en-Velay;15;4315715;Le Puy-en-Velay-4;6857;432;7289
+52;Pays de la Loire;44;005;Chaumes-en-Retz;10;4400510;Machecoul-Saint-Même;2750;41;2791
+52;Pays de la Loire;44;109;Nantes;11;4410911;Nantes-1;43957;955;44912
+52;Pays de la Loire;44;109;Nantes;12;4410912;Nantes-2;43074;741;43815
+52;Pays de la Loire;44;109;Nantes;13;4410913;Nantes-3;55429;779;56208
+52;Pays de la Loire;44;109;Nantes;14;4410914;Nantes-4;38865;616;39481
+52;Pays de la Loire;44;109;Nantes;15;4410915;Nantes-5;43001;414;43415
+52;Pays de la Loire;44;109;Nantes;16;4410916;Nantes-6;47769;746;48515
+52;Pays de la Loire;44;109;Nantes;17;4410917;Nantes-7;51109;689;51798
+52;Pays de la Loire;44;005;Chaumes-en-Retz;20;4400520;Pornic;4434;69;4503
+52;Pays de la Loire;44;143;Rezé;21;4414321;Rezé-1;5021;69;5090
+52;Pays de la Loire;44;143;Rezé;22;4414322;Rezé-2;37977;653;38630
+52;Pays de la Loire;44;162;Saint-Herblain;24;4416224;Saint-Herblain-1;25529;451;25980
+52;Pays de la Loire;44;162;Saint-Herblain;25;4416225;Saint-Herblain-2;24008;265;24273
+52;Pays de la Loire;44;184;Saint-Nazaire;26;4418426;Saint-Nazaire-1;49806;1373;51179
+52;Pays de la Loire;44;184;Saint-Nazaire;27;4418427;Saint-Nazaire-2;22251;330;22581
+24;Centre-Val de Loire;45;234;Orléans;05;4523405;La Ferté-Saint-Aubin;13563;175;13738
+24;Centre-Val de Loire;45;234;Orléans;13;4523413;Orléans-1;24171;319;24490
+24;Centre-Val de Loire;45;234;Orléans;14;4523414;Orléans-2;27260;794;28054
+24;Centre-Val de Loire;45;234;Orléans;15;4523415;Orléans-3;14522;200;14722
+24;Centre-Val de Loire;45;234;Orléans;16;4523416;Orléans-4;37101;960;38061
+76;Occitanie;46;042;Cahors;01;4604201;Cahors-1;7021;188;7209
+76;Occitanie;46;042;Cahors;02;4604202;Cahors-2;6338;560;6898
+76;Occitanie;46;042;Cahors;03;4604203;Cahors-3;6782;156;6938
+76;Occitanie;46;102;Figeac;07;4610207;Figeac-1;5541;357;5898
+76;Occitanie;46;102;Figeac;08;4610208;Figeac-2;4229;237;4466
+75;Nouvelle-Aquitaine;47;001;Agen;01;4700101;Agen-1;5993;57;6050
+75;Nouvelle-Aquitaine;47;001;Agen;02;4700102;Agen-2;1935;15;1950
+75;Nouvelle-Aquitaine;47;001;Agen;03;4700103;Agen-3;15565;443;16008
+75;Nouvelle-Aquitaine;47;001;Agen;04;4700104;Agen-4;8992;299;9291
+75;Nouvelle-Aquitaine;47;157;Marmande;13;4715713;Marmande-1;8423;290;8713
+75;Nouvelle-Aquitaine;47;157;Marmande;14;4715714;Marmande-2;8816;212;9028
+75;Nouvelle-Aquitaine;47;323;Villeneuve-sur-Lot;20;4732320;Villeneuve-sur-Lot-1;13932;333;14265
+75;Nouvelle-Aquitaine;47;323;Villeneuve-sur-Lot;21;4732321;Villeneuve-sur-Lot-2;7697;381;8078
+76;Occitanie;48;095;Mende;09;4809509;Mende-1;6216;453;6669
+76;Occitanie;48;095;Mende;10;4809510;Mende-2;6100;318;6418
+52;Pays de la Loire;49;007;Angers;01;4900701;Angers-1;43970;938;44908
+52;Pays de la Loire;49;007;Angers;02;4900702;Angers-2;31633;844;32477
+52;Pays de la Loire;49;007;Angers;03;4900703;Angers-3;24416;335;24751
+52;Pays de la Loire;49;200;Longuenée-en-Anjou;04;4920004;Angers-4;5613;157;5770
+52;Pays de la Loire;49;007;Angers;04;4900704;Angers-4;15111;430;15541
+52;Pays de la Loire;49;007;Angers;05;4900705;Angers-5;26165;467;26632
+52;Pays de la Loire;49;007;Angers;06;4900706;Angers-6;7616;102;7718
+52;Pays de la Loire;49;007;Angers;07;4900707;Angers-7;8264;145;8409
+52;Pays de la Loire;49;367;Erdre-en-Anjou;10;4936710;Chalonnes-sur-Loire;2008;27;2035
+52;Pays de la Loire;49;099;Cholet;12;4909912;Cholet-1;42330;1374;43704
+52;Pays de la Loire;49;099;Cholet;13;4909913;Cholet-2;11606;572;12178
+52;Pays de la Loire;49;050;Brissac Loire Aubance;14;4905014;Doué-en-Anjou;1326;28;1354
+52;Pays de la Loire;49;261;Gennes-Val-de-Loire;14;4926114;Doué-en-Anjou;5012;103;5115
+52;Pays de la Loire;49;261;Gennes-Val-de-Loire;15;4926115;Longué-Jumelles;3452;60;3512
+52;Pays de la Loire;49;050;Brissac Loire Aubance;17;4905017;Les Ponts-de-Cé;9569;252;9821
+52;Pays de la Loire;49;367;Erdre-en-Anjou;21;4936721;Tiercé;3772;52;3824
+52;Pays de la Loire;49;200;Longuenée-en-Anjou;21;4920021;Tiercé;721;15;736
+28;Normandie;50;025;Avranches;02;5002502;Avranches;7759;431;8190
+28;Normandie;50;099;Carentan-les-Marais;05;5009905;Carentan-les-Marais;9613;150;9763
+28;Normandie;50;129;Cherbourg-en-Cotentin;06;5012906;Cherbourg-en-Cotentin-1;16518;617;17135
+28;Normandie;50;129;Cherbourg-en-Cotentin;07;5012907;Cherbourg-en-Cotentin-2;15704;472;16176
+28;Normandie;50;129;Cherbourg-en-Cotentin;08;5012908;Cherbourg-en-Cotentin-3;8676;140;8816
+28;Normandie;50;129;Cherbourg-en-Cotentin;12;5012912;Cherbourg-en-Cotentin-4;15913;444;16357
+28;Normandie;50;129;Cherbourg-en-Cotentin;14;5012914;La Hague;4961;103;5064
+28;Normandie;50;025;Avranches;15;5002515;Isigny-le-Buat;2481;77;2558
+28;Normandie;50;099;Carentan-les-Marais;18;5009918;Pont-Hébert;607;6;613
+28;Normandie;50;502;Saint-Lô;22;5050222;Saint-Lô-1;7742;524;8266
+28;Normandie;50;502;Saint-Lô;23;5050223;Saint-Lô-2;11631;284;11915
+28;Normandie;50;129;Cherbourg-en-Cotentin;24;5012924;Cherbourg-en-Cotentin-5;16036;436;16472
+44;Grand Est;51;108;Châlons-en-Champagne;03;5110803;Châlons-en-Champagne-1;20194;284;20478
+44;Grand Est;51;108;Châlons-en-Champagne;04;5110804;Châlons-en-Champagne-2;17039;681;17720
+44;Grand Est;51;108;Châlons-en-Champagne;05;5110805;Châlons-en-Champagne-3;6644;86;6730
+44;Grand Est;51;230;Épernay;07;5123007;Épernay-1;7605;205;7810
+44;Grand Est;51;230;Épernay;08;5123008;Épernay-2;14396;279;14675
+44;Grand Est;51;454;Reims;11;5145411;Reims-1;26769;637;27406
+44;Grand Est;51;454;Reims;12;5145412;Reims-2;19807;296;20103
+44;Grand Est;51;454;Reims;13;5145413;Reims-3;22442;361;22803
+44;Grand Est;51;454;Reims;14;5145414;Reims-4;9934;83;10017
+44;Grand Est;51;454;Reims;15;5145415;Reims-5;13575;155;13730
+44;Grand Est;51;454;Reims;16;5145416;Reims-6;26627;264;26891
+44;Grand Est;51;454;Reims;17;5145417;Reims-7;28568;351;28919
+44;Grand Est;51;454;Reims;18;5145418;Reims-8;8893;41;8934
+44;Grand Est;51;454;Reims;19;5145419;Reims-9;22765;652;23417
+44;Grand Est;52;121;Chaumont;05;5212105;Chaumont-1;7871;215;8086
+44;Grand Est;52;121;Chaumont;06;5212106;Chaumont-2;6065;333;6398
+44;Grand Est;52;121;Chaumont;07;5212107;Chaumont-3;7763;622;8385
+44;Grand Est;52;448;Saint-Dizier;13;5244813;Saint-Dizier-1;4941;57;4998
+44;Grand Est;52;448;Saint-Dizier;14;5244814;Saint-Dizier-2;10524;261;10785
+44;Grand Est;52;448;Saint-Dizier;15;5244815;Saint-Dizier-3;7603;114;7717
+52;Pays de la Loire;53;062;Château-Gontier-sur-Mayenne;01;5306201;Château-Gontier-sur-Mayenne-1;5177;274;5451
+52;Pays de la Loire;53;062;Château-Gontier-sur-Mayenne;03;5306203;Château-Gontier-sur-Mayenne-2;11533;386;11919
+52;Pays de la Loire;53;130;Laval;10;5313010;Laval-1;19201;1124;20325
+52;Pays de la Loire;53;130;Laval;11;5313011;Laval-2;16311;669;16980
+52;Pays de la Loire;53;130;Laval;12;5313012;Laval-3;14145;729;14874
+44;Grand Est;54;329;Lunéville;08;5432908;Lunéville-1;11101;248;11349
+44;Grand Est;54;329;Lunéville;09;5432909;Lunéville-2;6654;48;6702
+44;Grand Est;54;395;Nancy;12;5439512;Nancy-1;35784;647;36431
+44;Grand Est;54;395;Nancy;13;5439513;Nancy-2;31962;476;32438
+44;Grand Est;54;395;Nancy;14;5439514;Nancy-3;36514;370;36884
+44;Grand Est;55;029;Bar-le-Duc;02;5502902;Bar-le-Duc-1;7073;223;7296
+44;Grand Est;55;029;Bar-le-Duc;03;5502903;Bar-le-Duc-2;7595;341;7936
+44;Grand Est;55;545;Verdun;16;5554516;Verdun-1;9533;621;10154
+44;Grand Est;55;545;Verdun;17;5554517;Verdun-2;7156;348;7504
+53;Bretagne;56;121;Lorient;08;5612108;Lorient-1;29554;983;30537
+53;Bretagne;56;121;Lorient;09;5612109;Lorient-2;28292;488;28780
+53;Bretagne;56;260;Vannes;19;5626019;Vannes-1;32692;1315;34007
+53;Bretagne;56;260;Vannes;20;5626020;Vannes-2;10612;347;10959
+53;Bretagne;56;260;Vannes;21;5626021;Vannes-3;11116;284;11400
+44;Grand Est;57;463;Metz;11;5746311;Metz-1;38866;540;39406
+44;Grand Est;57;463;Metz;12;5746312;Metz-2;40560;742;41302
+44;Grand Est;57;463;Metz;13;5746313;Metz-3;41448;558;42006
+44;Grand Est;57;672;Thionville;26;5767226;Thionville;40684;724;41408
+44;Grand Est;57;672;Thionville;27;5767227;Yutz;1479;27;1506
+27;Bourgogne-Franche-Comté;58;194;Nevers;11;5819411;Nevers-1;7419;311;7730
+27;Bourgogne-Franche-Comté;58;194;Nevers;12;5819412;Nevers-2;6104;73;6177
+27;Bourgogne-Franche-Comté;58;194;Nevers;13;5819413;Nevers-3;9069;196;9265
+27;Bourgogne-Franche-Comté;58;194;Nevers;14;5819414;Nevers-4;10238;415;10653
+32;Hauts-de-France;59;183;Dunkerque;16;5918316;Dunkerque-1;51340;501;51841
+32;Hauts-de-France;59;183;Dunkerque;17;5918317;Dunkerque-2;35234;732;35966
+32;Hauts-de-France;59;183;Dunkerque;20;5918320;Grande-Synthe;214;3;217
+32;Hauts-de-France;59;350;Lille;23;5935023;Lille-1;18652;131;18783
+32;Hauts-de-France;59;350;Lille;24;5935024;Lille-2;7377;59;7436
+32;Hauts-de-France;59;350;Lille;25;5935025;Lille-3;49874;302;50176
+32;Hauts-de-France;59;350;Lille;26;5935026;Lille-4;48387;391;48778
+32;Hauts-de-France;59;350;Lille;27;5935027;Lille-5;75171;686;75857
+32;Hauts-de-France;59;350;Lille;28;5935028;Lille-6;37249;263;37512
+32;Hauts-de-France;59;512;Roubaix;32;5951232;Roubaix-1;76618;271;76889
+32;Hauts-de-France;59;512;Roubaix;33;5951233;Roubaix-2;22274;151;22425
+32;Hauts-de-France;59;599;Tourcoing;37;5959937;Tourcoing-1;22211;92;22303
+32;Hauts-de-France;59;599;Tourcoing;38;5959938;Tourcoing-2;76800;576;77376
+32;Hauts-de-France;60;057;Beauvais;01;6005701;Beauvais-1;35640;695;36335
+32;Hauts-de-France;60;057;Beauvais;02;6005702;Beauvais-2;21037;745;21782
+32;Hauts-de-France;60;159;Compiègne;06;6015906;Compiègne-1;15276;459;15735
+32;Hauts-de-France;60;159;Compiègne;07;6015907;Compiègne-2;25118;565;25683
+28;Normandie;61;001;Alençon;02;6100102;Alençon-1;14917;577;15494
+28;Normandie;61;001;Alençon;03;6100103;Alençon-2;10638;185;10823
+28;Normandie;61;006;Argentan;04;6100604;Argentan-1;7638;226;7864
+28;Normandie;61;006;Argentan;05;6100605;Argentan-2;5653;142;5795
+28;Normandie;61;169;Flers;13;6116913;Flers-1;7038;124;7162
+28;Normandie;61;169;Flers;14;6116914;Flers-2;7444;215;7659
+32;Hauts-de-France;62;041;Arras;02;6204102;Arras-1;15157;211;15368
+32;Hauts-de-France;62;041;Arras;03;6204103;Arras-2;16681;435;17116
+32;Hauts-de-France;62;041;Arras;04;6204104;Arras-3;10762;125;10887
+32;Hauts-de-France;62;160;Boulogne-sur-Mer;13;6216013;Boulogne-sur-Mer-1;22673;140;22813
+32;Hauts-de-France;62;160;Boulogne-sur-Mer;14;6216014;Boulogne-sur-Mer-2;18237;260;18497
+32;Hauts-de-France;62;193;Calais;18;6219318;Calais-1;23307;237;23544
+32;Hauts-de-France;62;193;Calais;19;6219319;Calais-2;5915;33;5948
+32;Hauts-de-France;62;193;Calais;20;6219320;Calais-3;38158;352;38510
+32;Hauts-de-France;62;427;Hénin-Beaumont;27;6242727;Hénin-Beaumont-1;9024;113;9137
+32;Hauts-de-France;62;427;Hénin-Beaumont;28;6242728;Hénin-Beaumont-2;17011;248;17259
+84;Auvergne-Rhône-Alpes;63;113;Clermont-Ferrand;10;6311310;Clermont-Ferrand-1;21837;134;21971
+84;Auvergne-Rhône-Alpes;63;113;Clermont-Ferrand;11;6311311;Clermont-Ferrand-2;25119;413;25532
+84;Auvergne-Rhône-Alpes;63;113;Clermont-Ferrand;12;6311312;Clermont-Ferrand-3;24771;229;25000
+84;Auvergne-Rhône-Alpes;63;113;Clermont-Ferrand;13;6311313;Clermont-Ferrand-4;22407;258;22665
+84;Auvergne-Rhône-Alpes;63;113;Clermont-Ferrand;14;6311314;Clermont-Ferrand-5;26894;516;27410
+84;Auvergne-Rhône-Alpes;63;113;Clermont-Ferrand;15;6311315;Clermont-Ferrand-6;26299;953;27252
+75;Nouvelle-Aquitaine;64;024;Anglet;01;6402401;Anglet;25295;738;26033
+75;Nouvelle-Aquitaine;64;102;Bayonne;04;6410204;Bayonne-1;6332;201;6533
+75;Nouvelle-Aquitaine;64;024;Anglet;04;6402404;Bayonne-1;15858;337;16195
+75;Nouvelle-Aquitaine;64;102;Bayonne;05;6410205;Bayonne-2;20095;366;20461
+75;Nouvelle-Aquitaine;64;102;Bayonne;06;6410206;Bayonne-3;26322;713;27035
+75;Nouvelle-Aquitaine;64;422;Oloron-Sainte-Marie;14;6442214;Oloron-Sainte-Marie-1;6705;437;7142
+75;Nouvelle-Aquitaine;64;422;Oloron-Sainte-Marie;15;6442215;Oloron-Sainte-Marie-2;3911;220;4131
+75;Nouvelle-Aquitaine;64;445;Pau;18;6444518;Pau-1;25543;379;25922
+75;Nouvelle-Aquitaine;64;445;Pau;19;6444519;Pau-2;19098;244;19342
+75;Nouvelle-Aquitaine;64;445;Pau;20;6444520;Pau-3;14819;492;15311
+75;Nouvelle-Aquitaine;64;445;Pau;21;6444521;Pau-4;17606;194;17800
+76;Occitanie;65;286;Lourdes;05;6528605;Lourdes-1;6834;177;7011
+76;Occitanie;65;286;Lourdes;06;6528606;Lourdes-2;6675;118;6793
+76;Occitanie;65;440;Tarbes;10;6544010;Tarbes-1;14214;205;14419
+76;Occitanie;65;440;Tarbes;11;6544011;Tarbes-2;14390;139;14529
+76;Occitanie;65;440;Tarbes;12;6544012;Tarbes-3;15351;642;15993
+76;Occitanie;66;136;Perpignan;06;6613606;Perpignan-1;28203;275;28478
+76;Occitanie;66;136;Perpignan;07;6613607;Perpignan-2;14991;297;15288
+76;Occitanie;66;136;Perpignan;08;6613608;Perpignan-3;13487;230;13717
+76;Occitanie;66;136;Perpignan;09;6613609;Perpignan-4;24417;314;24731
+76;Occitanie;66;136;Perpignan;10;6613610;Perpignan-5;21898;223;22121
+76;Occitanie;66;136;Perpignan;11;6613611;Perpignan-6;16660;144;16804
+44;Grand Est;67;372;Val-de-Moder;02;6737202;Bouxwiller;133;1;134
+44;Grand Est;67;372;Val-de-Moder;13;6737213;Reichshoffen;4898;63;4961
+44;Grand Est;67;482;Strasbourg;17;6748217;Strasbourg-1;49456;375;49831
+44;Grand Est;67;482;Strasbourg;18;6748218;Strasbourg-2;44640;299;44939
+44;Grand Est;67;482;Strasbourg;19;6748219;Strasbourg-3;51537;282;51819
+44;Grand Est;67;482;Strasbourg;20;6748220;Strasbourg-4;44029;546;44575
+44;Grand Est;67;482;Strasbourg;21;6748221;Strasbourg-5;40433;693;41126
+44;Grand Est;67;482;Strasbourg;22;6748222;Strasbourg-6;61218;721;61939
+44;Grand Est;68;066;Colmar;04;6806604;Colmar-1;38046;532;38578
+44;Grand Est;68;066;Colmar;05;6806605;Colmar-2;29684;504;30188
+44;Grand Est;68;224;Mulhouse;10;6822410;Mulhouse-1;39859;471;40330
+44;Grand Est;68;224;Mulhouse;11;6822411;Mulhouse-2;40423;392;40815
+44;Grand Est;68;224;Mulhouse;12;6822412;Mulhouse-3;26059;358;26417
+27;Bourgogne-Franche-Comté;70;285;Héricourt;03;7028503;Héricourt-1;2390;51;2441
+27;Bourgogne-Franche-Comté;70;285;Héricourt;04;7028504;Héricourt-2;8088;246;8334
+27;Bourgogne-Franche-Comté;70;310;Lure;06;7031006;Lure-1;4578;117;4695
+27;Bourgogne-Franche-Comté;70;310;Lure;07;7031007;Lure-2;3340;68;3408
+27;Bourgogne-Franche-Comté;70;245;Fougerolles-Saint-Valbert;08;7024508;Luxeuil-les-Bains;249;4;253
+27;Bourgogne-Franche-Comté;70;245;Fougerolles-Saint-Valbert;13;7024513;Saint-Loup-sur-Semouse;3531;124;3655
+27;Bourgogne-Franche-Comté;70;550;Vesoul;15;7055015;Vesoul-1;5048;129;5177
+27;Bourgogne-Franche-Comté;70;550;Vesoul;16;7055016;Vesoul-2;10082;633;10715
+27;Bourgogne-Franche-Comté;71;014;Autun;01;7101401;Autun-1;7911;415;8326
+27;Bourgogne-Franche-Comté;71;014;Autun;02;7101402;Autun-2;5234;576;5810
+27;Bourgogne-Franche-Comté;71;076;Chalon-sur-Saône;05;7107605;Chalon-sur-Saône-1;11002;163;11165
+27;Bourgogne-Franche-Comté;71;076;Chalon-sur-Saône;06;7107606;Chalon-sur-Saône-2;21280;780;22060
+27;Bourgogne-Franche-Comté;71;076;Chalon-sur-Saône;07;7107607;Chalon-sur-Saône-3;12749;564;13313
+27;Bourgogne-Franche-Comté;71;153;Le Creusot;12;7115312;Le Creusot-1;11823;145;11968
+27;Bourgogne-Franche-Comté;71;153;Le Creusot;13;7115313;Le Creusot-2;8908;121;9029
+27;Bourgogne-Franche-Comté;71;270;Mâcon;21;7127021;Mâcon-1;14055;221;14276
+27;Bourgogne-Franche-Comté;71;270;Mâcon;22;7127022;Mâcon-2;20393;569;20962
+52;Pays de la Loire;72;181;Le Mans;10;7218110;Le Mans-1;20860;367;21227
+52;Pays de la Loire;72;181;Le Mans;11;7218111;Le Mans-2;16398;289;16687
+52;Pays de la Loire;72;181;Le Mans;12;7218112;Le Mans-3;30057;841;30898
+52;Pays de la Loire;72;181;Le Mans;13;7218113;Le Mans-4;21642;461;22103
+52;Pays de la Loire;72;181;Le Mans;14;7218114;Le Mans-5;24789;508;25297
+52;Pays de la Loire;72;181;Le Mans;15;7218115;Le Mans-6;22404;198;22602
+52;Pays de la Loire;72;181;Le Mans;16;7218116;Le Mans-7;8854;132;8986
+84;Auvergne-Rhône-Alpes;73;008;Aix-les-Bains;01;7300801;Aix-les-Bains-1;8868;161;9029
+84;Auvergne-Rhône-Alpes;73;008;Aix-les-Bains;02;7300802;Aix-les-Bains-2;23006;366;23372
+84;Auvergne-Rhône-Alpes;73;011;Albertville;03;7301103;Albertville-1;10644;321;10965
+84;Auvergne-Rhône-Alpes;73;011;Albertville;04;7301104;Albertville-2;9168;252;9420
+84;Auvergne-Rhône-Alpes;73;065;Chambéry;07;7306507;Chambéry-1;21274;659;21933
+84;Auvergne-Rhône-Alpes;73;065;Chambéry;08;7306508;Chambéry-2;19292;533;19825
+84;Auvergne-Rhône-Alpes;73;065;Chambéry;09;7306509;Chambéry-3;19290;363;19653
+84;Auvergne-Rhône-Alpes;74;010;Annecy;01;7401001;Annecy-1;26046;354;26400
+84;Auvergne-Rhône-Alpes;74;010;Annecy;02;7401002;Annecy-2;36250;970;37220
+84;Auvergne-Rhône-Alpes;74;010;Annecy;03;7401003;Annecy-3;27492;754;28246
+84;Auvergne-Rhône-Alpes;74;010;Annecy;16;7401016;Annecy-4;41927;945;42872
+28;Normandie;76;217;Dieppe;07;7621707;Dieppe-1;17677;338;18015
+28;Normandie;76;217;Dieppe;08;7621708;Dieppe-2;10681;117;10798
+28;Normandie;76;351;Le Havre;14;7635114;Le Havre-1;37753;385;38138
+28;Normandie;76;351;Le Havre;15;7635115;Le Havre-2;10134;93;10227
+28;Normandie;76;351;Le Havre;16;7635116;Le Havre-3;23500;102;23602
+28;Normandie;76;351;Le Havre;17;7635117;Le Havre-4;34560;245;34805
+28;Normandie;76;351;Le Havre;18;7635118;Le Havre-5;31357;580;31937
+28;Normandie;76;351;Le Havre;19;7635119;Le Havre-6;28754;375;29129
+28;Normandie;76;681;Sotteville-lès-Rouen;27;7668127;Le Petit-Quevilly;7619;205;7824
+28;Normandie;76;540;Rouen;28;7654028;Rouen-1;40670;609;41279
+28;Normandie;76;540;Rouen;29;7654029;Rouen-2;35185;626;35811
+28;Normandie;76;540;Rouen;30;7654030;Rouen-3;38228;321;38549
+28;Normandie;76;575;Saint-Étienne-du-Rouvray;31;7657531;Saint-Étienne-du-Rouvray;21696;172;21868
+28;Normandie;76;575;Saint-Étienne-du-Rouvray;34;7657534;Sotteville-lès-Rouen;6812;53;6865
+28;Normandie;76;681;Sotteville-lès-Rouen;34;7668134;Sotteville-lès-Rouen;21346;270;21616
+11;Île-de-France;78;646;Versailles;20;7864620;Versailles-1;62836;1488;64324
+11;Île-de-France;78;646;Versailles;21;7864621;Versailles-2;20751;332;21083
+75;Nouvelle-Aquitaine;79;191;Niort;10;7919110;Niort-1;20566;589;21155
+75;Nouvelle-Aquitaine;79;191;Niort;11;7919111;Niort-2;18982;680;19662
+75;Nouvelle-Aquitaine;79;191;Niort;12;7919112;Niort-3;19761;580;20341
+32;Hauts-de-France;80;001;Abbeville;01;8000101;Abbeville-1;12235;298;12533
+32;Hauts-de-France;80;001;Abbeville;02;8000102;Abbeville-2;10360;108;10468
+32;Hauts-de-France;80;021;Amiens;06;8002106;Amiens-1;26510;145;26655
+32;Hauts-de-France;80;021;Amiens;07;8002107;Amiens-2;15329;171;15500
+32;Hauts-de-France;80;021;Amiens;08;8002108;Amiens-3;17032;76;17108
+32;Hauts-de-France;80;021;Amiens;09;8002109;Amiens-4;12832;362;13194
+32;Hauts-de-France;80;021;Amiens;10;8002110;Amiens-5;20326;436;20762
+32;Hauts-de-France;80;021;Amiens;11;8002111;Amiens-6;23152;1098;24250
+32;Hauts-de-France;80;021;Amiens;12;8002112;Amiens-7;18444;352;18796
+76;Occitanie;81;004;Albi;01;8100401;Albi-1;15990;679;16669
+76;Occitanie;81;004;Albi;02;8100402;Albi-2;11833;378;12211
+76;Occitanie;81;004;Albi;03;8100403;Albi-3;9113;349;9462
+76;Occitanie;81;004;Albi;04;8100404;Albi-4;12778;197;12975
+76;Occitanie;81;060;Carmaux;05;8106005;Carmaux-1 Le Ségala;5909;93;6002
+76;Occitanie;81;060;Carmaux;06;8106006;Carmaux-2 Vallée du Cérou;3989;69;4058
+76;Occitanie;81;065;Castres;07;8106507;Castres-1;18163;490;18653
+76;Occitanie;81;065;Castres;08;8106508;Castres-2;9821;454;10275
+76;Occitanie;81;065;Castres;09;8106509;Castres-3;14688;445;15133
+76;Occitanie;81;163;Mazamet;16;8116316;Mazamet-1;2439;35;2474
+76;Occitanie;81;163;Mazamet;17;8116317;Mazamet-2 Vallée du Thoré;7625;372;7997
+76;Occitanie;82;121;Montauban;06;8212106;Montauban-1;20243;457;20700
+76;Occitanie;82;121;Montauban;07;8212107;Montauban-2;20082;562;20644
+76;Occitanie;82;121;Montauban;08;8212108;Montauban-3;21594;444;22038
+93;Provence-Alpes-Côte d'Azur;83;069;Hyères;02;8306902;La Crau;7742;78;7820
+93;Provence-Alpes-Côte d'Azur;83;061;Fréjus;05;8306105;Fréjus;44847;583;45430
+93;Provence-Alpes-Côte d'Azur;83;069;Hyères;08;8306908;Hyères;47361;809;48170
+93;Provence-Alpes-Côte d'Azur;83;061;Fréjus;14;8306114;Saint-Raphaël;12235;272;12507
+93;Provence-Alpes-Côte d'Azur;83;126;La Seyne-sur-Mer;16;8312616;La Seyne-sur-Mer-1;52854;589;53443
+93;Provence-Alpes-Côte d'Azur;83;126;La Seyne-sur-Mer;17;8312617;La Seyne-sur-Mer-2;9909;142;10051
+93;Provence-Alpes-Côte d'Azur;83;137;Toulon;19;8313719;Toulon-1;52363;360;52723
+93;Provence-Alpes-Côte d'Azur;83;137;Toulon;20;8313720;Toulon-2;45925;358;46283
+93;Provence-Alpes-Côte d'Azur;83;137;Toulon;21;8313721;Toulon-3;27087;444;27531
+93;Provence-Alpes-Côte d'Azur;83;137;Toulon;22;8313722;Toulon-4;55077;630;55707
+93;Provence-Alpes-Côte d'Azur;84;007;Avignon;02;8400702;Avignon-1;29223;398;29621
+93;Provence-Alpes-Côte d'Azur;84;007;Avignon;03;8400703;Avignon-2;32180;673;32853
+93;Provence-Alpes-Côte d'Azur;84;007;Avignon;04;8400704;Avignon-3;28927;477;29404
+52;Pays de la Loire;85;191;La Roche-sur-Yon;12;8519112;La Roche-sur-Yon-1;26092;1814;27906
+52;Pays de la Loire;85;191;La Roche-sur-Yon;13;8519113;La Roche-sur-Yon-2;28860;1058;29918
+75;Nouvelle-Aquitaine;86;066;Châtellerault;02;8606602;Châtellerault-1;8529;205;8734
+75;Nouvelle-Aquitaine;86;066;Châtellerault;03;8606603;Châtellerault-2;9389;215;9604
+75;Nouvelle-Aquitaine;86;066;Châtellerault;04;8606604;Châtellerault-3;13366;285;13651
+75;Nouvelle-Aquitaine;86;194;Poitiers;13;8619413;Poitiers-1;17713;489;18202
+75;Nouvelle-Aquitaine;86;194;Poitiers;14;8619414;Poitiers-2;16569;764;17333
+75;Nouvelle-Aquitaine;86;194;Poitiers;15;8619415;Poitiers-3;27098;634;27732
+75;Nouvelle-Aquitaine;86;194;Poitiers;16;8619416;Poitiers-4;16920;277;17197
+75;Nouvelle-Aquitaine;86;194;Poitiers;17;8619417;Poitiers-5;11940;109;12049
+75;Nouvelle-Aquitaine;87;085;Limoges;08;8708508;Limoges-1;19027;250;19277
+75;Nouvelle-Aquitaine;87;085;Limoges;09;8708509;Limoges-2;15286;113;15399
+75;Nouvelle-Aquitaine;87;085;Limoges;10;8708510;Limoges-3;16288;163;16451
+75;Nouvelle-Aquitaine;87;085;Limoges;11;8708511;Limoges-4;15916;122;16038
+75;Nouvelle-Aquitaine;87;085;Limoges;12;8708512;Limoges-5;7905;505;8410
+75;Nouvelle-Aquitaine;87;085;Limoges;13;8708513;Limoges-6;17400;324;17724
+75;Nouvelle-Aquitaine;87;085;Limoges;14;8708514;Limoges-7;13451;174;13625
+75;Nouvelle-Aquitaine;87;085;Limoges;15;8708515;Limoges-8;15715;294;16009
+75;Nouvelle-Aquitaine;87;085;Limoges;16;8708516;Limoges-9;8772;65;8837
+44;Grand Est;88;160;Épinal;05;8816005;Épinal-1;13031;455;13486
+44;Grand Est;88;160;Épinal;06;8816006;Épinal-2;19254;893;20147
+44;Grand Est;88;413;Saint-Dié-des-Vosges;13;8841313;Saint-Dié-des-Vosges-1;11342;234;11576
+44;Grand Est;88;413;Saint-Dié-des-Vosges;14;8841314;Saint-Dié-des-Vosges-2;7977;220;8197
+27;Bourgogne-Franche-Comté;89;024;Auxerre;01;8902401;Auxerre-1;8063;379;8442
+27;Bourgogne-Franche-Comté;89;024;Auxerre;02;8902402;Auxerre-2;6695;175;6870
+27;Bourgogne-Franche-Comté;89;024;Auxerre;03;8902403;Auxerre-3;8666;300;8966
+27;Bourgogne-Franche-Comté;89;024;Auxerre;04;8902404;Auxerre-4;11354;278;11632
+27;Bourgogne-Franche-Comté;89;387;Sens;16;8938716;Sens-1;16796;325;17121
+27;Bourgogne-Franche-Comté;89;387;Sens;17;8938717;Sens-2;10238;193;10431
+27;Bourgogne-Franche-Comté;90;010;Belfort;02;9001002;Belfort-1;15306;286;15592
+27;Bourgogne-Franche-Comté;90;010;Belfort;03;9001003;Belfort-2;15712;269;15981
+27;Bourgogne-Franche-Comté;90;010;Belfort;04;9001004;Belfort-3;14137;197;14334
+11;Île-de-France;91;421;Montgeron;06;9142106;Draveil;6095;106;6201
+11;Île-de-France;91;114;Brunoy;07;9111407;Épinay-sous-Sénart;5824;83;5907
+11;Île-de-France;91;421;Montgeron;19;9142119;Vigneux-sur-Seine;17705;168;17873
+11;Île-de-France;91;114;Brunoy;21;9111421;Yerres;19599;334;19933
+11;Île-de-France;92;004;Asnières-sur-Seine;02;9200402;Asnières-sur-Seine;73137;535;73672
+11;Île-de-France;92;012;Boulogne-Billancourt;04;9201204;Boulogne-Billancourt-1;65995;765;66760
+11;Île-de-France;92;012;Boulogne-Billancourt;05;9201205;Boulogne-Billancourt-2;53813;381;54194
+11;Île-de-France;92;025;Colombes;10;9202510;Colombes-1;74989;415;75404
+11;Île-de-France;92;025;Colombes;11;9202511;Colombes-2;13881;136;14017
+11;Île-de-France;92;004;Asnières-sur-Seine;12;9200412;Courbevoie-1;16525;162;16687
+11;Île-de-France;92;026;Courbevoie;12;9202612;Courbevoie-1;50706;425;51131
+11;Île-de-France;92;026;Courbevoie;13;9202613;Courbevoie-2;30810;204;31014
+11;Île-de-France;92;050;Nanterre;19;9205019;Nanterre-1;65810;381;66191
+11;Île-de-France;92;050;Nanterre;20;9205020;Nanterre-2;31541;263;31804
+11;Île-de-France;93;029;Drancy;04;9302904;Le Blanc-Mesnil;7863;21;7884
+11;Île-de-France;93;008;Bobigny;05;9300805;Bobigny;52286;132;52418
+11;Île-de-France;93;008;Bobigny;06;9300806;Bondy;2770;3;2773
+11;Île-de-France;93;029;Drancy;08;9302908;Drancy;63500;235;63735
+11;Île-de-France;93;031;Épinay-sur-Seine;09;9303109;Épinay-sur-Seine;22339;66;22405
+11;Île-de-France;93;048;Montreuil;12;9304812;Montreuil-1;46624;241;46865
+11;Île-de-France;93;048;Montreuil;13;9304813;Montreuil-2;64831;331;65162
+11;Île-de-France;93;066;Saint-Denis;16;9306616;Saint-Denis-1;71977;239;72216
+11;Île-de-France;93;066;Saint-Denis;17;9306617;Saint-Denis-2;41965;601;42566
+11;Île-de-France;93;031;Épinay-sur-Seine;18;9303118;Saint-Ouen-sur-Seine;31150;82;31232
+11;Île-de-France;94;017;Champigny-sur-Marne;03;9401703;Champigny-sur-Marne-1;51710;219;51929
+11;Île-de-France;94;017;Champigny-sur-Marne;04;9401704;Champigny-sur-Marne-2;26014;88;26102
+11;Île-de-France;94;052;Nogent-sur-Marne;05;9405205;Charenton-le-Pont;1118;11;1129
+11;Île-de-France;94;078;Villeneuve-Saint-Georges;06;9407806;Choisy-le-Roi;22390;67;22457
+11;Île-de-France;94;028;Créteil;07;9402807;Créteil-1;47213;187;47400
+11;Île-de-France;94;028;Créteil;08;9402808;Créteil-2;45776;238;46014
+11;Île-de-France;94;080;Vincennes;09;9408009;Fontenay-sous-Bois;9211;70;9281
+11;Île-de-France;94;052;Nogent-sur-Marne;14;9405214;Nogent-sur-Marne;32354;235;32589
+11;Île-de-France;94;068;Saint-Maur-des-Fossés;17;9406817;Saint-Maur-des-Fossés-1;62385;700;63085
+11;Île-de-France;94;068;Saint-Maur-des-Fossés;18;9406818;Saint-Maur-des-Fossés-2;13056;162;13218
+11;Île-de-France;94;078;Villeneuve-Saint-Georges;21;9407821;Villeneuve-Saint-Georges;13102;37;13139
+11;Île-de-France;94;080;Vincennes;23;9408023;Vincennes;39587;388;39975
+11;Île-de-France;94;081;Vitry-sur-Seine;24;9408124;Vitry-sur-Seine-1;48533;268;48801
+11;Île-de-France;94;081;Vitry-sur-Seine;25;9408125;Vitry-sur-Seine-2;47672;233;47905
+11;Île-de-France;95;018;Argenteuil;01;9501801;Argenteuil-1;11469;38;11507
+11;Île-de-France;95;018;Argenteuil;02;9501802;Argenteuil-2;60792;190;60982
+11;Île-de-France;95;018;Argenteuil;03;9501803;Argenteuil-3;34960;218;35178
+11;Île-de-France;95;127;Cergy;04;9512704;Cergy-1;48978;233;49211
+11;Île-de-France;95;127;Cergy;05;9512705;Cergy-2;19370;197;19567
+01;Guadeloupe;971;101;Les Abymes;01;9710101;Les Abymes-1;15276;104;15380
+01;Guadeloupe;971;101;Les Abymes;02;9710102;Les Abymes-2;20859;232;21091
+01;Guadeloupe;971;101;Les Abymes;03;9710103;Les Abymes-3;15983;132;16115
+01;Guadeloupe;971;113;Le Gosier;03;9711303;Les Abymes-3;3772;23;3795
+01;Guadeloupe;971;103;Baie-Mahault;04;9710304;Baie-Mahault-1;19172;245;19417
+01;Guadeloupe;971;118;Petit-Bourg;05;9711805;Baie-Mahault-2;12437;196;12633
+01;Guadeloupe;971;103;Baie-Mahault;05;9710305;Baie-Mahault-2;11737;216;11953
+01;Guadeloupe;971;113;Le Gosier;08;9711308;Le Gosier;23412;230;23642
+01;Guadeloupe;971;118;Petit-Bourg;13;9711813;Petit-Bourg;11835;92;11927
+01;Guadeloupe;971;128;Sainte-Anne;16;9712816;Saint-François;3630;56;3686
+01;Guadeloupe;971;128;Sainte-Anne;17;9712817;Sainte-Anne;20651;181;20832
+01;Guadeloupe;971;106;Bouillante;18;9710618;Sainte-Rose-1;2622;47;2669
+01;Guadeloupe;971;129;Sainte-Rose;18;9712918;Sainte-Rose-1;2805;57;2862
+01;Guadeloupe;971;129;Sainte-Rose;19;9712919;Sainte-Rose-2;14825;191;15016
+01;Guadeloupe;971;106;Bouillante;21;9710621;Vieux-Habitants;4012;48;4060
+04;La Réunion;974;413;Saint-Leu;01;9741301;L'Étang-Salé;4783;60;4843
+04;La Réunion;974;409;Saint-André;04;9740904;Saint-André-1;9737;73;9810
+04;La Réunion;974;409;Saint-André;05;9740905;Saint-André-2;38030;336;38366
+04;La Réunion;974;409;Saint-André;06;9740906;Saint-André-3;9383;67;9450
+04;La Réunion;974;410;Saint-Benoît;07;9741007;Saint-Benoît-1;20946;168;21114
+04;La Réunion;974;410;Saint-Benoît;08;9741008;Saint-Benoît-2;16077;110;16187
+04;La Réunion;974;411;Saint-Denis;09;9741109;Saint-Denis-1;44438;376;44814
+04;La Réunion;974;411;Saint-Denis;10;9741110;Saint-Denis-2;33431;357;33788
+04;La Réunion;974;411;Saint-Denis;11;9741111;Saint-Denis-3;39960;373;40333
+04;La Réunion;974;411;Saint-Denis;12;9741112;Saint-Denis-4;36936;411;37347
+04;La Réunion;974;412;Saint-Joseph;13;9741213;Saint-Joseph;28360;324;28684
+04;La Réunion;974;413;Saint-Leu;14;9741314;Saint-Leu;30110;413;30523
+04;La Réunion;974;414;Saint-Louis;15;9741415;Saint-Louis-1;29661;332;29993
+04;La Réunion;974;414;Saint-Louis;16;9741416;Saint-Louis-2;24274;290;24564
+04;La Réunion;974;415;Saint-Paul;17;9741517;Saint-Paul-1;33466;334;33800
+04;La Réunion;974;415;Saint-Paul;18;9741518;Saint-Paul-2;35081;412;35493
+04;La Réunion;974;415;Saint-Paul;19;9741519;Saint-Paul-3;36693;568;37261
+04;La Réunion;974;416;Saint-Pierre;20;9741620;Saint-Pierre-1;35094;403;35497
+04;La Réunion;974;416;Saint-Pierre;21;9741621;Saint-Pierre-2;37388;373;37761
+04;La Réunion;974;412;Saint-Joseph;22;9741222;Saint-Pierre-3;10447;234;10681
+04;La Réunion;974;416;Saint-Pierre;22;9741622;Saint-Pierre-3;11595;97;11692
+04;La Réunion;974;422;Le Tampon;24;9742224;Le Tampon-1;41259;350;41609
+04;La Réunion;974;422;Le Tampon;25;9742225;Le Tampon-2;40684;575;41259
