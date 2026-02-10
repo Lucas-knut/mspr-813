@@ -8,18 +8,36 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints
 *.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 
-# Data
-data/raw/*.csv
-data/raw/*.xlsx
-data/raw/*.parquet
-data/processed/*.parquet
+# Jupyter outputs (nettoyer les notebooks avant commit)
+# notebooks/*_files/  # Décommenter pour ignorer les assets générés
+
+# Data - Ignorer tous les fichiers de données volumineux
+# Raw data
+data/raw/*
+!data/raw/.gitkeep
+
+# Processed data
+data/processed/*
+!data/processed/.gitkeep
+
+# Output data
 data/output/*
+!data/output/.gitkeep
+
+# Exceptions: garder les petits fichiers de référence si < 1MB
+# Décommenter si vous voulez versionner un petit référentiel
+# !data/raw/referentiel_communes.csv
 
 # Outputs
 outputs/figures/*
 !outputs/figures/.gitkeep
 outputs/models/*
+!outputs/models/.gitkeep
+
+# Exceptions: garder les graphiques importants pour documentation
+# !outputs/figures/architecture_diagram.png
 
 # Environment
 .env
@@ -36,6 +54,15 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
 
 # Docker
 .dockerignore
