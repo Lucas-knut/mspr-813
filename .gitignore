@@ -14,8 +14,9 @@ __pycache__/
 # notebooks/*_files/  # Décommenter pour ignorer les assets générés
 
 # Data - Ignorer tous les fichiers de données volumineux
-# Raw data
+# Raw data (y compris sous-dossiers)
 data/raw/*
+data/raw/**/*
 !data/raw/.gitkeep
 
 # Processed data
