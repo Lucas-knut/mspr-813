@@ -2,13 +2,13 @@
 
 **Projet MSPR TPRE813 - EPSI 2026**
 
-## 🎯 Vue d'Ensemble
+## Vue d'Ensemble
 
 Ce document explique en détail l'organisation du projet, les choix d'architecture et les bonnes pratiques Big Data appliquées.
 
 ---
 
-## 📐 Principes d'Architecture
+## Principes d'Architecture
 
 ### 1. Séparation des Responsabilités (Separation of Concerns)
 
@@ -36,10 +36,10 @@ graph LR
 ```
 
 **Avantages** :
-- ✅ Reproductibilité : exécuter dans l'ordre garantit les mêmes résultats
-- ✅ Modularité : modification d'une étape n'impacte pas les autres
-- ✅ Debugging : isolation des erreurs par notebook
-- ✅ Documentation : chaque étape documente son travail
+- Reproductibilité : exécuter dans l'ordre garantit les mêmes résultats
+- Modularité : modification d'une étape n'impacte pas les autres
+- Debugging : isolation des erreurs par notebook
+- Documentation : chaque étape documente son travail
 
 ### 3. Scalabilité Intégrée
 
@@ -53,7 +53,7 @@ Grâce à :
 
 ---
 
-## 🗂️ Organisation des Dossiers
+## Organisation des Dossiers
 
 ### `/data/` - Gestion des Données
 
@@ -104,8 +104,8 @@ processed/
 | Taille fichier | 2.2 GB | ~400 MB | 5.5x |
 | Lecture complète | 45s | 8s | 5.6x |
 | Lecture colonne | 45s | 2s | 22x |
-| Type preserving | ❌ | ✅ | - |
-| Compression | ❌ | ✅ (auto) | - |
+| Type preserving | Non | Oui | - |
+| Compression | Non | Oui (auto) | - |
 
 #### `data/output/` - Résultats Exportés
 
@@ -126,13 +126,13 @@ output/
 
 | Notebook | Rôle | Input | Output | État |
 |----------|------|-------|--------|------|
-| `00_setup.ipynb` | Validation environnement | - | Logs validation | ✅ Terminé |
-| `01_data_download.ipynb` | Téléchargement datasets | URLs | data/raw/*.csv | ✅ Terminé |
-| `02_exploration.ipynb` | EDA - Analyse exploratoire | raw/ | Insights + doc | ✅ Terminé |
-| `03_etl.ipynb` | Pipeline ETL pandas | raw/ | processed/*.parquet | 🔜 À créer |
-| `04_feature_engineering.ipynb` | Création features | processed/ | features.parquet | 🔜 À créer |
-| `05_modeling.ipynb` | Entraînement ML | features.parquet | model.pkl | 🔜 À créer |
-| `06_evaluation.ipynb` | Évaluation + viz | model.pkl | output/ + figures/ | 🔜 À créer |
+| `00_setup.ipynb` | Validation environnement | - | Logs validation | Terminé |
+| `01_data_download.ipynb` | Téléchargement datasets | URLs | data/raw/*.csv | Terminé |
+| `02_exploration.ipynb` | EDA - Analyse exploratoire | raw/ | Insights + doc | Terminé |
+| `03_etl.ipynb` | Pipeline ETL pandas | raw/ | processed/*.parquet | À créer |
+| `04_feature_engineering.ipynb` | Création features | processed/ | features.parquet | À créer |
+| `05_modeling.ipynb` | Entraînement ML | features.parquet | model.pkl | À créer |
+| `06_evaluation.ipynb` | Évaluation + viz | model.pkl | output/ + figures/ | À créer |
 
 #### Bonnes Pratiques Notebooks
 
@@ -164,10 +164,10 @@ gc.collect()
 ```
 
 **Toujours inclure** :
-- ✅ Markdown explicatif au début
-- ✅ Assertions pour valider données
-- ✅ Prints de validation (count, columns, schema)
-- ✅ Gestion mémoire (gc.collect() si nécessaire)
+- Markdown explicatif au début
+- Assertions pour valider données
+- Prints de validation (count, columns, schema)
+- Gestion mémoire (gc.collect() si nécessaire)
 
 ---
 
@@ -196,25 +196,25 @@ outputs/
 
 ---
 
-## 🔧 Choix Techniques Justifiés
+## Choix Techniques Justifiés
 
 ### Pourquoi Pandas (et pas Spark) ?
 
 | Critère | Pandas | Spark | Décision |
 |---------|--------|-------|----------|
-| **Volume données** | < 10 GB RAM | Distribué (>100 GB) | ✅ Pandas (2.4 GB largement gérable) |
-| **Simplicité** | API intuitive | Complexe (JVM, config) | ✅ Pandas (développement rapide) |
-| **Performance** | Excellent <10GB | Overhead petits datasets | ✅ Pandas (optimal pour notre volume) |
-| **Écosystème** | Rich (sklearn, viz) | MLlib limité | ✅ Pandas (meilleure intégration ML) |
-| **Sujet MSPR** | **Mentionné** | Non requis | ✅ Pandas (selon consignes) |
+| **Volume données** | < 10 GB RAM | Distribué (>100 GB) | Pandas (2.4 GB largement gérable) |
+| **Simplicité** | API intuitive | Complexe (JVM, config) | Pandas (développement rapide) |
+| **Performance** | Excellent <10GB | Overhead petits datasets | Pandas (optimal pour notre volume) |
+| **Écosystème** | Rich (sklearn, viz) | MLlib limité | Pandas (meilleure intégration ML) |
+| **Sujet MSPR** | **Mentionné** | Non requis | Pandas (selon consignes) |
 
 → **Choix Pandas justifié** : "Données <10GB, sujet mentionne Python et pandas, architecture scalable avec code modulaire"
 
 ### Pourquoi Docker ?
 
-**Problème** : "Ça marche sur ma machine" ❌
+**Problème** : "Ca marche sur ma machine"
 
-**Solution Docker** : Environnement isolé et reproductible ✅
+**Solution Docker** : Environnement isolé et reproductible
 
 ```dockerfile
 # Dockerfile garantit :
@@ -225,26 +225,26 @@ outputs/
 ```
 
 **Avantages pour le projet** :
-- ✅ Collaboration : même environnement pour tous
-- ✅ Déploiement : conteneur prêt à l'emploi
-- ✅ Isolation : pas de conflits avec système hôte
-- ✅ Soutenance : démo reproductible sur n'importe quelle machine
+- Collaboration : même environnement pour tous
+- Déploiement : conteneur prêt à l'emploi
+- Isolation : pas de conflits avec système hôte
+- Soutenance : démo reproductible sur n'importe quelle machine
 
 ### Pourquoi Jupyter Notebooks ?
 
 **Avantages pour analyse Big Data** :
-- ✅ **Interactivité** : tester code cellule par cellule
-- ✅ **Documentation intégrée** : Markdown + Code + Résultats
-- ✅ **Visualisations inline** : graphiques directement dans notebook
-- ✅ **Itératif** : ajuster paramètres sans tout relancer
-- ✅ **Présentation** : notebooks exportables en HTML pour soutenance
+- **Interactivité** : tester code cellule par cellule
+- **Documentation intégrée** : Markdown + Code + Résultats
+- **Visualisations inline** : graphiques directement dans notebook
+- **Itératif** : ajuster paramètres sans tout relancer
+- **Présentation** : notebooks exportables en HTML pour soutenance
 
 **Contre-argument** : "Notebooks pas pour production"
 → **Réponse** : Notebooks = développement, scripts Python = production (si besoin)
 
 ---
 
-## 📊 Stratégie de Données : Phase 1 vs Phase 2
+## Stratégie de Données : Phase 1 vs Phase 2
 
 ### Justification de l'Approche Progressive
 
@@ -278,23 +278,23 @@ outputs/
 
 | Critère | Approche directe 35K communes | Approche progressive | Gagnant |
 |---------|-------------------------------|----------------------|---------|
-| Temps développement | 🔴 Long (tout d'un coup) | 🟢 Itératif | Progressive |
-| Gestion erreurs | 🔴 Complexe | 🟢 Isolées par phase | Progressive |
-| Validation scientifique | 🟡 Variables noyées | 🟢 Base solide puis enrichissement | Progressive |
-| Démo soutenance | 🟡 Une seule version | 🟢 "POC → Extension" (scalabilité démontrée) | Progressive |
+| Temps développement | Long (tout d'un coup) | Itératif | Progressive |
+| Gestion erreurs | Complexe | Isolées par phase | Progressive |
+| Validation scientifique | Variables noyées | Base solide puis enrichissement | Progressive |
+| Démo soutenance | Une seule version | "POC → Extension" (scalabilité démontrée) | Progressive |
 
 ---
 
-## 🧪 Bonnes Pratiques Appliquées
+## Bonnes Pratiques Appliquées
 
 ### 1. Immutabilité des Données Sources
 
 ```python
-# ❌ INTERDIT
+# INTERDIT
 df_raw = spark.read.csv("data/raw/elections.csv")
 df_raw.write.mode("overwrite").csv("data/raw/elections.csv")
 
-# ✅ CORRECT
+# CORRECT
 df_raw = spark.read.csv("data/raw/elections.csv")
 df_clean = df_raw.dropna()  # Transformation
 df_clean.write.parquet("data/processed/elections_clean.parquet")
@@ -306,12 +306,12 @@ df_clean.write.parquet("data/processed/elections_clean.parquet")
 # Charger données
 df = spark.read.parquet("processed/elections_clean.parquet")
 
-# ✅ Valider structure
+# Valider structure
 assert df.count() > 0, "Dataset vide"
 assert "code_insee" in df.columns, "Colonne clé manquante"
 assert df.filter(F.col("dept").isin(["75","92","93","94"])).count() > 0
 
-# ✅ Valider qualité
+# Valider qualité
 missing_pct = df.filter(F.col("revenus").isNull()).count() / df.count()
 assert missing_pct < 0.05, f"Trop de valeurs manquantes : {missing_pct:.1%}"
 ```
@@ -347,40 +347,40 @@ df_result = expensive_transformation(df)
 df_result.write.parquet("output.parquet")
 elapsed = time.time() - start
 
-print(f"⏱️ Traitement terminé en {elapsed:.1f}s")
-print(f"📊 {df_result.count()} lignes traitées")
-print(f"🚀 Débit : {df_result.count() / elapsed:.0f} lignes/sec")
+print(f"Traitement terminé en {elapsed:.1f}s")
+print(f"{df_result.count()} lignes traitées")
+print(f"Débit : {df_result.count() / elapsed:.0f} lignes/sec")
 ```
 
 ---
 
-## 🎓 Justification pour la Soutenance
+## Justification pour la Soutenance
 
 ### Points Clés à Mettre en Avant
 
 **1. Architecture Big Data Professionnelle**
-- ✅ Séparation raw/processed/output (bonnes pratiques industrie)
-- ✅ Format Parquet optimisé (pas du CSV naïf)
-- ✅ Pipeline modulaire et reproductible
+- Séparation raw/processed/output (bonnes pratiques industrie)
+- Format Parquet optimisé (pas du CSV naïf)
+- Pipeline modulaire et reproductible
 
 **2. Scalabilité Démontrée**
-- ✅ POC 150 communes → Extension validée 35K communes
-- ✅ Spark pensé dès le début (pas de refonte nécessaire)
-- ✅ Partitionnement intelligent par département
+- POC 150 communes → Extension validée 35K communes
+- Spark pensé dès le début (pas de refonte nécessaire)
+- Partitionnement intelligent par département
 
 **3. Rigueur Scientifique**
-- ✅ Variables socio-économiques de référence validées par recherche
-- ✅ Approche progressive : base solide → enrichissement
-- ✅ Validation systématique qualité données
+- Variables socio-économiques de référence validées par recherche
+- Approche progressive : base solide → enrichissement
+- Validation systématique qualité données
 
 **4. Reproductibilité Totale**
-- ✅ Docker : environnement identique partout
-- ✅ Notebooks numérotés : ordre d'exécution clair
-- ✅ Documentation : README + ARCHITECTURE + code commenté
+- Docker : environnement identique partout
+- Notebooks numérotés : ordre d'exécution clair
+- Documentation : README + ARCHITECTURE + code commenté
 
 ---
 
-## 📚 Références et Inspirations
+## Références et Inspirations
 
 **Architecture Big Data** :
 - Lambda Architecture (Nathan Marz)
@@ -396,7 +396,7 @@ print(f"🚀 Débit : {df_result.count() / elapsed:.0f} lignes/sec")
 
 ---
 
-## 🔄 Évolutions Futures Possibles
+## Évolutions Futures Possibles
 
 Si le projet devait être étendu en production :
 

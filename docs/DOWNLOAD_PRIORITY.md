@@ -1,8 +1,8 @@
-# 🎯 URLs Prioritaires - Téléchargement Rapide
+# URLs Prioritaires - Téléchargement Rapide
 
 ## Phase 1 - PRIORITAIRE (Modèle de base)
 
-### 1. Élections agrégées 1999-2024 ✨ CRITIQUE
+### 1. Élections agrégées 1999-2024 CRITIQUE
 ```
 https://www.data.gouv.fr/fr/datasets/r/ecbbe4b5-82b2-42a5-ada7-689e63f3f3b2
 Fichier: candidats_results.txt (2.1 GB)
@@ -78,7 +78,7 @@ Fichier: legislatives_2024_t1.csv (73.5 MB)
 
 ---
 
-## 📝 Instructions de téléchargement
+## Instructions de téléchargement
 
 ### Automatique (recommandé)
 Utiliser le notebook : `notebooks/01_data_download.ipynb`

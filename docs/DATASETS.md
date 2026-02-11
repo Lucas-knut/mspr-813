@@ -1,6 +1,6 @@
 # Sources de données pour le projet MSPR
 
-## 🗳️ Données Électorales
+## Données Électorales
 
 ### Résultats électoraux agrégés (RECOMMANDÉ)
 - **Toutes élections 1999-2024** : https://www.data.gouv.fr/datasets/donnees-des-elections-agregees
@@ -23,7 +23,7 @@
 
 ---
 
-## 💰 Données Économiques
+## Données Économiques
 
 ### Revenus par commune (PRIORITAIRE)
 - **Lien** : https://www.data.gouv.fr/datasets/revenu-des-francais-a-la-commune
@@ -56,7 +56,7 @@
 
 ---
 
-## 🎓 Données Éducation
+## Données Éducation
 
 ### Diplômes et Formation 2022 (PRIORITAIRE)
 - **Lien** : https://www.insee.fr/fr/statistiques/8581488
@@ -73,7 +73,7 @@
 
 ---
 
-## 👥 Données Démographiques
+## Données Démographiques
 
 ### Population historique (1876-2023) (RECOMMANDÉ)
 - **Lien** : https://www.data.gouv.fr/datasets/bases-de-donnees-et-fichiers-details-du-recensement-de-la-population
@@ -96,7 +96,7 @@
 
 ---
 
-## 🌍 Données Environnement
+## Données Environnement
 
 ### Catastrophes naturelles - GASPAR (1985-2022+)
 - **Lien** : https://www.data.gouv.fr/fr/datasets/base-nationale-de-gestion-assistee-des-procedures-administratives-relatives-aux-risques-gaspar/
@@ -111,20 +111,20 @@
 
 ---
 
-## 🚨 Sécurité & Criminalité
+## Sécurité & Criminalité
 
 - **Base communale crimes/délits** (depuis 2016) : https://www.data.gouv.fr/fr/datasets/bases-communale-et-departementale-des-principaux-indicateurs-des-crimes-et-delits-enregistres-par-la-police-et-la-gendarmerie-nationales/
 
 ---
 
-## 💼 Emploi
+## Emploi
 
 - **Taux de chômage communal** : https://www.data.gouv.fr/fr/datasets/taux-de-chomage-localise-par-zone-demploi/
 - **Demandeurs d'emploi par commune** : https://www.data.gouv.fr/fr/datasets/demandeurs-demploi-inscrits-a-pole-emploi/
 
 ---
 
-## 📊 Démographie & Économie (INSEE)
+## Démographie & Économie (INSEE)
 
 ### Démographie
 - **Population communale** : https://www.insee.fr/fr/statistiques/fichier/6683035/ensemble.zip
@@ -140,14 +140,14 @@
 
 ---
 
-## 🗺️ Référentiels géographiques
+## Référentiels géographiques
 
 - **Code officiel géographique (COG)** : https://www.insee.fr/fr/information/6800675
 - **Contours communes** (optionnel pour carto) : https://www.data.gouv.fr/fr/datasets/contours-des-communes-de-france-simplifie-avec-regions-et-departements-doutre-mer-rapproches/
 
 ---
 
-## 📝 Notes
+## Notes
 
 ### Périmètre : Petite Couronne
 Filtrer les données pour :
@@ -166,32 +166,32 @@ Filtrer les données pour :
 
 ---
 
-## 🎯 DATASETS PRIORITAIRES pour le Modèle ML
+## DATASETS PRIORITAIRES pour le Modèle ML
 
-### ⭐ Essentiels (Télécharger en priorité)
+### Essentiels (Télécharger en priorité)
 1. **Élections agrégées 1999-2024 (2.1 GB)** - Variable cible + historique complet
 2. **Revenus par commune (4.8 MB)** - Fort indicateur sociologique  
 3. **CSP des actifs (28.5 MB)** - Corrélation élevée avec orientation politique
 4. **Diplômes et formation 2022 (81 MB)** - Fort pouvoir prédictif
 5. **Population historique 1876-2023 (6.7 MB)** - Évolution démographique
 
-### ✅ Importants (Ajouter ensuite)
+### Importants (Ajouter ensuite)
 6. **Comptes communaux 2022 (50 MB)** - Richesse locale, dette, DGF
 7. **Crimes et délits communaux** - Indicateur sécurité/insécurité
 8. **Catastrophes naturelles GASPAR (34.5 MB)** - Contexte local
 
-### 🔄 Optionnels (Si temps disponible)
+### Optionnels (Si temps disponible)
 9. Naissances/Décès (48.8 MB) - Dynamisme démographique
 10. Secteur d'activité (23.5 MB) - Contexte économique local
 11. Risques GASPAR (8.4 MB) - Sensibilité environnementale
 
 ---
 
-## 🚀 Ordre de téléchargement recommandé
+## Ordre de téléchargement recommandé
 
 ### Phase 1 - Modèle de base (Sprint 1)
 ```
-1. Élections agrégées (2.1 GB) ✨ CRITIQUE
+1. Élections agrégées (2.1 GB) CRITIQUE
 2. Revenus commune (4.8 MB)
 3. Référentiel communes INSEE
 4. Population historique (6.7 MB)
@@ -217,7 +217,7 @@ Filtrer les données pour :
 
 ---
 
-## 📊 Volumétrie totale estimée
+## Volumétrie totale estimée
 
 - **Minimum viable** : ~2.1 GB (Phase 1)
 - **Recommandé** : ~2.3 GB (Phases 1+2)
@@ -225,7 +225,7 @@ Filtrer les données pour :
 
 ---
 
-## 🔑 Clés de jointure
+## Clés de jointure
 
 Toutes les données se croisent sur **Code INSEE commune** (5 chiffres) :
 - Format : `CODGEO`, `GEO`, `cod_commune`, ou `dep + icom`
