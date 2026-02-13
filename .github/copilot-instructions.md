@@ -32,23 +32,44 @@ data/
   silver/    # 🥈 Données nettoyées (Parquet) - Validées, typées
   gold/      # 🥇 Résultats ML (Parquet/JSON) - Business-ready
 
-config.py    # Configuration centralisée (chemins, paramètres)
+config.py    # Configuration centralisée pour scripts Python
 ```
 
 **Documentation complète** : `docs/DATA_ARCHITECTURE.md`
 
-### Import Obligatoire (Notebooks)
+### Configuration dans les Notebooks
+
+**Chaque notebook définit sa configuration inline** (pas d'import externe) :
 
 ```python
-# En début de notebook (après imports pandas/numpy)
-import sys
-sys.path.append('..')
+from pathlib import Path
+
+# Détection automatique de la racine du projet
+notebook_dir = Path.cwd()
+if notebook_dir.name == 'notebooks':
+    PROJECT_ROOT = notebook_dir.parent
+else:
+    PROJECT_ROOT = notebook_dir
+
+# Chemins des données - Medallion Architecture
+DATA_BRONZE = PROJECT_ROOT / 'data' / 'bronze'  # Données brutes
+DATA_SILVER = PROJECT_ROOT / 'data' / 'silver'  # Données nettoyées
+DATA_GOLD = PROJECT_ROOT / 'data' / 'gold'      # Données ML-ready
+
+# Paramètres métier
+DEPARTEMENTS_PETITE_COURONNE = ['75', '92', '93', '94']
+COMMUNES_PETITE_COURONNE_COUNT = 144
+```
+
+**Pour scripts Python** (non-notebooks), utiliser `config.py` :
+```python
 from config import DATA_BRONZE, DATA_SILVER, DATA_GOLD
 ```
 
 **RÈGLES** :
 - ❌ Ne JAMAIS écrire chemins en dur : `Path("/app/data/raw")` → INTERDIT
-- ✅ Toujours utiliser `config.py` : `DATA_BRONZE`, `DATA_SILVER`, `DATA_GOLD`
+- ✅ Notebooks : Configuration inline (copier/coller le bloc ci-dessus)
+- ✅ Scripts Python : Import depuis `config.py`
 - ✅ Bronze : Données immuables (read-only après téléchargement)
 - ✅ Silver : Peut être régénéré depuis Bronze (idempotence)
 - ✅ Gold : Tables finales ML, versionner modèles
