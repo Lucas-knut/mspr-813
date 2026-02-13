@@ -8,4 +8,5 @@ services:
       - ./data:/app/data
       - ./notebooks:/app/notebooks
       - ./outputs:/app/outputs
+      - ./scripts:/app/scripts
     restart: unless-stopped
