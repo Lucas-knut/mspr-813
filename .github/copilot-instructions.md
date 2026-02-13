@@ -15,22 +15,43 @@ Docker + Jupyter Lab. Parquet pour données traitées.
 ## Features/Indicateurs
 Sécurité, emploi, vie associative, population, entreprises, pauvreté, CSP, revenus, logements.
 
-## Étapes Projet
-1. `01_data_download.ipynb` : Téléchargement datasets
-2. `02_exploration.ipynb` : EDA + corrélations
-3. `03_etl.ipynb` : Nettoyage + transformation
-4. `04_features.ipynb` : Feature engineering
-5. `05_modeling.ipynb` : ML supervisé (train/test split, accuracy, précision, recall, F1)
-6. Visualisations : matplotlib/plotly/seaborn
+## Étapes Projet (Pipeline Notebooks)
+1. `01_data_download.ipynb` : Téléchargement → Bronze
+2. `02_exploration.ipynb` : EDA + corrélations (Bronze → Silver)
+3. `03_etl.ipynb` : Nettoyage + transformation (Bronze → Silver)
+4. `04_features.ipynb` : Feature engineering (Silver → Gold)
+5. `05_modeling.ipynb` : ML supervisé (Gold)
+6. `06_predictions.ipynb` : Prédictions finales (Gold)
+7. Visualisations : matplotlib/plotly/seaborn
 
-## Architecture Fichiers
+## Architecture Données - Medallion (Bronze/Silver/Gold)
+
 ```
 data/
-  raw/       # CSV/Excel bruts (gitignore)
-  processed/ # Parquet nettoyés (gitignore)
-  output/    # Résultats ML (gitignore)
-notebooks/   # Jupyter notebooks
+  bronze/    # 🥉 Données brutes (CSV/Excel) - Immuables, format source
+  silver/    # 🥈 Données nettoyées (Parquet) - Validées, typées
+  gold/      # 🥇 Résultats ML (Parquet/JSON) - Business-ready
+
+config.py    # Configuration centralisée (chemins, paramètres)
 ```
+
+**Documentation complète** : `docs/DATA_ARCHITECTURE.md`
+
+### Import Obligatoire (Notebooks)
+
+```python
+# En début de notebook (après imports pandas/numpy)
+import sys
+sys.path.append('..')
+from config import DATA_BRONZE, DATA_SILVER, DATA_GOLD
+```
+
+**RÈGLES** :
+- ❌ Ne JAMAIS écrire chemins en dur : `Path("/app/data/raw")` → INTERDIT
+- ✅ Toujours utiliser `config.py` : `DATA_BRONZE`, `DATA_SILVER`, `DATA_GOLD`
+- ✅ Bronze : Données immuables (read-only après téléchargement)
+- ✅ Silver : Peut être régénéré depuis Bronze (idempotence)
+- ✅ Gold : Tables finales ML, versionner modèles
 
 ## ML Approche
 - Apprentissage supervisé

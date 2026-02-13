@@ -18,27 +18,33 @@ Proof-of-Concept (POC) pour Electio-Analytics, start-up spécialisée dans le co
 - Format Parquet pour données optimisées
 - Visualisations : matplotlib, plotly, seaborn
 
-## Structure du Projet
+## Structure du Projet - Architecture Medallion
 
 ```
-data/
-  raw/       # Données sources (CSV/Excel)
-  processed/ # Données nettoyées (Parquet)
-  output/    # Résultats ML
+data/                # Architecture Bronze/Silver/Gold
+  bronze/            # 🥉 Données brutes sources (CSV/Excel) - Immuables
+  silver/            # 🥈 Données nettoyées (Parquet) - Validées
+  gold/              # 🥇 Résultats ML et agrégations - Business-ready
 
-notebooks/   # Pipeline de notebooks Jupyter
+config.py            # Configuration centralisée (chemins, paramètres)
+
+notebooks/           # Pipeline de notebooks Jupyter
   00_setup.ipynb              # Validation environnement
-  01_data_download.ipynb      # Téléchargement datasets
-  02_exploration.ipynb        # Analyse exploratoire
-  03_etl.ipynb                # Nettoyage et transformation
-  04_features.ipynb           # Feature engineering
-  05_modeling.ipynb           # Entraînement modèles ML
+  01_data_download.ipynb      # Téléchargement → Bronze
+  02_exploration.ipynb        # Analyse exploratoire Bronze → Silver
+  03_etl.ipynb                # ETL Bronze → Silver
+  04_features.ipynb           # Features Silver → Gold
+  05_modeling.ipynb           # Entraînement modèles ML (Gold)
+  06_predictions.ipynb        # Prédictions finales (Gold)
 
-docs/        # Documentation détaillée
+docs/                # Documentation détaillée
   CAHIER_DES_CHARGES.md       # Cahier des charges complet MSPR
-  ARCHITECTURE.md             # Architecture technique
+  ARCHITECTURE.md             # Architecture technique globale
+  DATA_ARCHITECTURE.md        # Architecture données (Medallion)
   DATASETS.md                 # Catalogue des datasets
 ```
+
+> **📖 Documentation architecture données** : [`docs/DATA_ARCHITECTURE.md`](docs/DATA_ARCHITECTURE.md)
 
 ## Démarrage
 

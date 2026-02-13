@@ -10,18 +10,21 @@ Ce document explique en détail l'organisation du projet, les choix d'architectu
 
 ## Principes d'Architecture
 
-### 1. Séparation des Responsabilités (Separation of Concerns)
+> **📖 Architecture des Données** : Ce projet adopte l'architecture **Medallion (Bronze/Silver/Gold)**. 
+> Voir le document détaillé : [`DATA_ARCHITECTURE.md`](DATA_ARCHITECTURE.md)
+
+### 1. Séparation des Responsabilités - Medallion Architecture
 
 ```
-Données Sources → Transformation → Stockage Optimisé → Modélisation → Résultats
-     (raw/)     →  (notebooks/)  →    (processed/)   →  (notebooks/) → (output/)
+🥉 Bronze    →   🥈 Silver    →    🥇 Gold
+(Sources)    → (Nettoyage)   → (ML/Agrégations)
+data/bronze/ → data/silver/  →  data/gold/
 ```
 
-Chaque couche a une **responsabilité unique** :
-- **raw/** : Stockage immuable (read-only après téléchargement)
-- **notebooks/** : Logique de traitement et analyse
-- **processed/** : Format optimisé pour performance
-- **output/** : Résultats finaux prêts à présenter
+**Architecture en 3 couches** (aussi appelée Bronze/Silver/Gold) :
+- **Bronze** : Données brutes immuables, formats sources (CSV/Excel)
+- **Silver** : Données validées, typées, format Parquet optimisé
+- **Gold** : Tables finales pour ML et visualisations
 
 ### 2. Architecture en Pipeline
 
@@ -43,7 +46,7 @@ graph LR
 
 ### 3. Scalabilité Intégrée
 
-**Petite Couronne (150 communes)** ← même code → **France entière (35K communes)**
+**Petite Couronne (144 communes)** ← même code → **France entière (35K communes)**
 
 Grâce à :
 - **Pandas optimisé** : lecture efficace avec chunks si nécessaire
@@ -55,21 +58,25 @@ Grâce à :
 
 ## Organisation des Dossiers
 
-### `/data/` - Gestion des Données
+### `/data/` - Architecture Medallion
 
-#### `data/raw/` - Sources Immuables
+> **Documentation complète** : [`docs/DATA_ARCHITECTURE.md`](DATA_ARCHITECTURE.md)
 
-**Règle d'or** : Jamais de modification des fichiers raw
+#### `data/bronze/` - 🥉 Couche Bronze (Sources Immuables)
+
+**Règle d'or** : Jamais de modification des fichiers Bronze après téléchargement
 
 ```
-raw/
+bronze/
 ├── elections_agregees_1999_2024.csv       # 2.2 GB - CSV d'origine
 ├── revenus_commune.csv                     # 4.8 MB
+├── referentiel_communes.csv                # 2.5 MB
 ├── population_historique_1968_2022/        # Dossier extrait du ZIP
-│   └── pop-16ans-dipl6822.xlsx
+│   └── pop-16ans-dipl6822.xlsx            # 43.6 MB
 ├── diplomes_formation_2022/
-│   └── base-cc-diplomes-formation-2022.csv
-└── ...
+│   └── base-cc-diplomes-formation-2022.xlsx  # 66 MB
+└── csp_actifs_2554/
+    └── pop-act2554-csp-cd-6822.xlsx       # 28.5 MB
 ```
 
 **Pourquoi garder les sources ?**
@@ -77,27 +84,51 @@ raw/
 - Audit : traçabilité de la provenance des données
 - Versioning : comprendre évolutions entre téléchargements
 
-#### `data/processed/` - Données Transformées
+#### `data/silver/` - 🥈 Couche Silver (Données Nettoyées)
 
-Format Parquet optimisé :
+Format Parquet optimisé, données validées et typées :
 
 ```
-processed/
-├── elections_clean.parquet/               # Partitionné par département
-│   ├── dept=75/
-│   ├── dept=92/
-│   ├── dept=93/
-│   └── dept=94/
-├── socio_eco_features.parquet/            # Features engineerées
-└── master_dataset.parquet/                # Dataset final jointuré
+silver/
+├── referentiel_petite_couronne.parquet    # 144 communes
+├── elections_petite_couronne.parquet      # Élections filtrées 75/92/93/94
+├── revenus_petite_couronne.parquet        # Revenus INSEE
+├── population_petite_couronne.parquet     # Démographie
+├── diplomes_petite_couronne.parquet       # Niveaux formation
+└── csp_petite_couronne.parquet            # Catégories socio-professionnelles
 ```
 
-**Avantages du partitionnement** :
-- Lecture ciblée : ne lire que dept=75 si besoin
-- Parallélisme : traitement simultané de plusieurs partitions
-- Scalabilité : même principe pour 35K communes (partition par région)
+**Transformations appliquées** :
+- ✅ Parsing correct (séparateurs, skiprows métadonnées INSEE)
+- ✅ Types corrects (codes INSEE en string)
+- ✅ Filtrage Petite Couronne (144 communes)
+- ✅ Format Parquet (compression snappy)
 
 **Pourquoi Parquet ?**
+- **Performance** : 10-100x plus rapide que CSV en lecture
+- **Compression** : Réduit 2.36 GB Bronze → ~50 MB Silver
+- **Types** : Préserve types de données (int, float, string, datetime)
+- **Columnar** : Lit seulement colonnes nécessaires
+
+#### `data/gold/` - 🥇 Couche Gold (ML-Ready)
+
+Tables finales pour Machine Learning et visualisations :
+
+```
+gold/
+├── dataset_ml_complet.parquet             # Features + target jointurées
+├── dataset_train.parquet                  # Training set (80%)
+├── dataset_test.parquet                   # Test set (20%)
+├── predictions_2027.parquet               # Prévisions électorales
+├── features_importance.parquet            # Importance variables ML
+└── metriques_modele.json                  # Scores performance
+```
+
+**Contenu Gold** :
+- Jointures (commune + élections + socio-éco)
+- Features engineering (ratios, tendances)
+- Résultats prédictions ML
+- Métriques et visualisations
 
 | Critère | CSV | Parquet | Ratio |
 |---------|-----|---------|-------|

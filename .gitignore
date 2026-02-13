@@ -13,19 +13,19 @@ __pycache__/
 # Jupyter outputs (nettoyer les notebooks avant commit)
 # notebooks/*_files/  # Décommenter pour ignorer les assets générés
 
-# Data - Ignorer tous les fichiers de données volumineux
-# Raw data (y compris sous-dossiers)
-data/raw/*
-data/raw/**/*
-!data/raw/.gitkeep
+# Data - Medallion Architecture (Bronze/Silver/Gold)
+# Bronze: Données brutes sources
+data/bronze/*
+data/bronze/**/*
+!data/bronze/.gitkeep
 
-# Processed data
-data/processed/*
-!data/processed/.gitkeep
+# Silver: Données nettoyées (Parquet)
+data/silver/*
+!data/silver/.gitkeep
 
-# Output data
-data/output/*
-!data/output/.gitkeep
+# Gold: Résultats ML et agrégations
+data/gold/*
+!data/gold/.gitkeep
 
 # Exceptions: garder les petits fichiers de référence si < 1MB
 # Décommenter si vous voulez versionner un petit référentiel
@@ -70,3 +70,6 @@ logs/
 
 # Keep empty directories
 !**/.gitkeep
+
+# Config Python compilé
+config.pyc
