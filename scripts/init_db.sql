@@ -7,6 +7,9 @@
 -- Extensions utiles
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
+-- Schéma Metabase (stockage des métadonnées Metabase : dashboards, questions, utilisateurs)
+CREATE SCHEMA IF NOT EXISTS metabase;
+
 -- =============================================================================
 -- SCHEMA silver
 -- =============================================================================
