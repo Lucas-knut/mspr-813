@@ -121,24 +121,22 @@ COMMENT ON TABLE silver.deces IS
 
 -- =============================================================================
 -- TABLE : revenus
--- Source : data/bronze/revenus_commune.csv
+-- Source : data/bronze/impots/ircom_communes_complet_revenus_{2002..2022}.xlsx
 -- Clé : (code_commune, annee)
--- Colonnes retenues : médiane revenu disponible, gini, taux pauvreté
+-- Colonnes retenues : IRCOM (foyers fiscaux, revenu fiscal de référence, impôt)
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS silver.revenus (
-    id                      SERIAL       NOT NULL,
-    code_commune            CHAR(5)      NOT NULL,
-    annee                   SMALLINT     NOT NULL,
-    -- Revenu disponible
-    mediane_revenu_disp     NUMERIC(10,2),  -- [DISP] D5 : médiane
-    q1_revenu_disp          NUMERIC(10,2),  -- [DISP] D1
-    q9_revenu_disp          NUMERIC(10,2),  -- [DISP] D9
-    gini                    NUMERIC(6,4),   -- [DISP] Gini
-    taux_pauvrete           NUMERIC(6,3),   -- [DISP] Taux pauvreté 60%
-    -- Revenu déclaré
-    mediane_revenu_dec      NUMERIC(10,2),  -- [DEC] médiane
+    id                          SERIAL       NOT NULL,
+    code_commune                CHAR(5)      NOT NULL,
+    annee                       SMALLINT     NOT NULL,
+    nb_foyers_fiscaux           INTEGER,
+    revenu_fiscal_ref           NUMERIC(14,2),  -- en milliers d'euros
+    impot_net                   NUMERIC(14,2),  -- en milliers d'euros
+    nb_foyers_imposes           INTEGER,
+    revenu_moyen_par_foyer      NUMERIC(10,2),  -- calculé : revenu_fiscal_ref / nb_foyers
+    taux_imposition             NUMERIC(6,4),   -- calculé : nb_foyers_imposes / nb_foyers
     -- Métadonnées
-    created_at              TIMESTAMP    DEFAULT NOW(),
+    created_at                  TIMESTAMP    DEFAULT NOW(),
     CONSTRAINT pk_revenus PRIMARY KEY (id),
     CONSTRAINT uq_revenus UNIQUE (code_commune, annee)
 );
@@ -147,7 +145,104 @@ CREATE INDEX IF NOT EXISTS idx_revenus_commune_annee
     ON silver.revenus (code_commune, annee);
 
 COMMENT ON TABLE silver.revenus IS
-    'Revenus et inégalités par commune, Petite Couronne';
+    'Revenus fiscaux IRCOM par commune, Petite Couronne';
+
+-- =============================================================================
+-- TABLE : population
+-- Source : data/bronze/population_historique/DS_RP_SERIE_HISTORIQUE_2022_data.csv
+-- Clé : (code_commune, annee)
+-- Mesures : POP, BRTH, DEATH du recensement INSEE
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS silver.population (
+    id              SERIAL       NOT NULL,
+    code_commune    CHAR(5)      NOT NULL,
+    annee           SMALLINT     NOT NULL,
+    population      INTEGER,
+    nb_naissances   INTEGER,
+    nb_deces        INTEGER,
+    -- Métadonnées
+    created_at      TIMESTAMP    DEFAULT NOW(),
+    CONSTRAINT pk_population PRIMARY KEY (id),
+    CONSTRAINT uq_population UNIQUE (code_commune, annee)
+);
+
+CREATE INDEX IF NOT EXISTS idx_population_commune_annee
+    ON silver.population (code_commune, annee);
+
+COMMENT ON TABLE silver.population IS
+    'Population, naissances et décès par commune (census INSEE), Petite Couronne';
+
+-- =============================================================================
+-- TABLE : emploi
+-- Source : data/bronze/emploi_chomage/DS_RP_EMPLOI_LR_COMP_2022_data.csv
+-- Clé : (code_commune, annee)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS silver.emploi (
+    id              SERIAL       NOT NULL,
+    code_commune    CHAR(5)      NOT NULL,
+    annee           SMALLINT     NOT NULL,
+    actifs          INTEGER,
+    chomeurs        INTEGER,
+    taux_chomage    NUMERIC(6,3),  -- calculé : chomeurs / actifs * 100
+    -- Métadonnées
+    created_at      TIMESTAMP    DEFAULT NOW(),
+    CONSTRAINT pk_emploi PRIMARY KEY (id),
+    CONSTRAINT uq_emploi UNIQUE (code_commune, annee)
+);
+
+CREATE INDEX IF NOT EXISTS idx_emploi_commune_annee
+    ON silver.emploi (code_commune, annee);
+
+COMMENT ON TABLE silver.emploi IS
+    'Emploi et chômage par commune, Petite Couronne';
+
+-- =============================================================================
+-- TABLE : insecurite
+-- Source : data/bronze/insecurite/donnee-dep-*.csv
+-- Clé : (code_dep, annee, indicateur)
+-- Granularité département (pas commune)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS silver.insecurite (
+    id                  SERIAL       NOT NULL,
+    code_dep            CHAR(3)      NOT NULL,
+    annee               SMALLINT     NOT NULL,
+    indicateur          VARCHAR(100) NOT NULL,
+    nombre              INTEGER,
+    taux_pour_mille     NUMERIC(10,7),
+    -- Métadonnées
+    created_at          TIMESTAMP    DEFAULT NOW(),
+    CONSTRAINT pk_insecurite PRIMARY KEY (id),
+    CONSTRAINT uq_insecurite UNIQUE (code_dep, annee, indicateur)
+);
+
+CREATE INDEX IF NOT EXISTS idx_insecurite_dep_annee
+    ON silver.insecurite (code_dep, annee);
+
+COMMENT ON TABLE silver.insecurite IS
+    'Insécurité par département et indicateur, Petite Couronne';
+
+-- =============================================================================
+-- TABLE : immigration
+-- Source : data/bronze/immigration/IM_119_immigres_par_departement_1968_2021.xlsx
+-- Clé : (code_dep, annee)
+-- Granularité département
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS silver.immigration (
+    id              SERIAL       NOT NULL,
+    code_dep        CHAR(3)      NOT NULL,
+    annee           SMALLINT     NOT NULL,
+    pct_immigres    NUMERIC(6,3),  -- part d'immigrés dans la population (%)
+    -- Métadonnées
+    created_at      TIMESTAMP    DEFAULT NOW(),
+    CONSTRAINT pk_immigration PRIMARY KEY (id),
+    CONSTRAINT uq_immigration UNIQUE (code_dep, annee)
+);
+
+CREATE INDEX IF NOT EXISTS idx_immigration_dep_annee
+    ON silver.immigration (code_dep, annee);
+
+COMMENT ON TABLE silver.immigration IS
+    'Part d''immigrés par département, séries historiques, Petite Couronne';
 
 -- =============================================================================
 -- TABLE : csp
@@ -230,11 +325,11 @@ SELECT
     r.code_insee,
     r.libelle,
     r.code_dep,
-    CASE r.code_dep
+    CASE TRIM(r.code_dep)
         WHEN '75' THEN 'Paris'
-        WHEN '092' THEN 'Hauts-de-Seine'
-        WHEN '093' THEN 'Seine-Saint-Denis'
-        WHEN '094' THEN 'Val-de-Marne'
+        WHEN '92' THEN 'Hauts-de-Seine'
+        WHEN '93' THEN 'Seine-Saint-Denis'
+        WHEN '94' THEN 'Val-de-Marne'
         ELSE r.code_dep
     END AS nom_departement
 FROM silver.referentiel_communes r;
