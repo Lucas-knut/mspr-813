@@ -12,6 +12,10 @@ matplotlib==3.8.2
 seaborn==0.13.0
 plotly==5.18.0
 
+# Database
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.23
+
 # Data Format
 pyarrow==14.0.1
 

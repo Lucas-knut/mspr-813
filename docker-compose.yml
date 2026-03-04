@@ -9,4 +9,49 @@ services:
       - ./notebooks:/app/notebooks
       - ./outputs:/app/outputs
       - ./scripts:/app/scripts
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=mspr813
+      - POSTGRES_USER=mspr_user
+      - POSTGRES_PASSWORD=mspr_password
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: mspr_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mspr813
+      POSTGRES_USER: mspr_user
+      POSTGRES_PASSWORD: mspr_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mspr_user -d mspr813"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: mspr_pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@epsi.fr
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:
