@@ -63,7 +63,6 @@ docker exec mspr_python python3 /app/scripts/download_robust.py
 |----------|------|
 | `notebooks/01_data_download.ipynb` | Téléchargement toutes les données sources (élections, COG, démographie, économie, éducation) |
 | `notebooks/02_exploration.ipynb` | Analyse exploratoire des données Bronze |
-| `notebooks/03_exploration_nouvelles_donnees.ipynb` | Exploration naissances, décès, CSP |
 
 ### Petite Couronne (POC — 144 communes, départements 75/92/93/94)
 

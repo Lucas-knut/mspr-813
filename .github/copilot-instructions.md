@@ -59,26 +59,24 @@ Host depuis le Mac : `localhost`.
 
 | Notebook | Rôle |
 |----------|------|
-| `01_data_download.ipynb` | Téléchargement données de base |
-| `01_data_download_extended.ipynb` | Téléchargement données complémentaires |
-| `02_exploration.ipynb` | EDA données Bronze |
-| `03_exploration_nouvelles_donnees.ipynb` | Exploration naissances, décès, CSP |
+| `notebooks/01_data_download.ipynb` | Téléchargement toutes les données sources |
+| `notebooks/02_exploration.ipynb` | EDA données Bronze |
 
-### Petite Couronne (POC)
+### Petite Couronne (POC — 144 communes, depts 75/92/93/94)
 
 | Ordre | Notebook | Schémas cibles |
 |-------|----------|----------------|
-| 1 | `04_etl_bronze_to_postgres.ipynb` | `silver.*` |
-| 2 | `05_feature_engineering.ipynb` | `gold.features_communes` |
-| 3 | `06_modeling.ipynb` | `gold.predictions_2025_2027` |
+| 1 | `notebooks/petite_couronne/01_etl_bronze_to_postgres.ipynb` | `silver.*` |
+| 2 | `notebooks/petite_couronne/02_feature_engineering.ipynb` | `gold.features_communes` |
+| 3 | `notebooks/petite_couronne/03_modeling.ipynb` | `gold.predictions_2025_2027` |
 
-### France métropolitaine
+### France métropolitaine (~35 000 communes)
 
 | Ordre | Notebook | Schémas cibles |
 |-------|----------|----------------|
-| 1 | `04b_etl_france.ipynb` | `silver_france.*` |
-| 2 | `05b_feature_engineering_france.ipynb` | `gold_france.features_communes` |
-| 3 | `06b_modeling_france.ipynb` | `gold_france.predictions_2025_2027` |
+| 1 | `notebooks/france/01_etl_bronze_to_postgres.ipynb` | `silver_france.*` |
+| 2 | `notebooks/france/02_feature_engineering.ipynb` | `gold_france.features_communes` |
+| 3 | `notebooks/france/03_modeling.ipynb` | `gold_france.predictions_2025_2027` |
 
 ---
 
