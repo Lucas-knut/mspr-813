@@ -61,8 +61,7 @@ docker exec mspr_python python3 /app/scripts/download_robust.py
 
 | Notebook | Rôle |
 |----------|------|
-| `notebooks/01_data_download.ipynb` | Téléchargement données de base |
-| `notebooks/01_data_download_extended.ipynb` | Téléchargement données complémentaires (comptes communes, séries historiques) |
+| `notebooks/01_data_download.ipynb` | Téléchargement toutes les données sources (élections, COG, démographie, économie, éducation) |
 | `notebooks/02_exploration.ipynb` | Analyse exploratoire des données Bronze |
 | `notebooks/03_exploration_nouvelles_donnees.ipynb` | Exploration naissances, décès, CSP |
 
