@@ -61,24 +61,24 @@ docker exec mspr_python python3 /app/scripts/download_robust.py
 
 | Notebook | Rôle |
 |----------|------|
-| `notebooks/01_data_download.ipynb` | Téléchargement toutes les données sources (élections, COG, démographie, économie, éducation) |
-| `notebooks/02_exploration.ipynb` | Analyse exploratoire des données Bronze |
+| `notebooks/communes/01_data_download.ipynb` | Téléchargement toutes les données sources (élections, COG, démographie, économie, éducation) |
+| `notebooks/communes/02_exploration.ipynb` | Analyse exploratoire des données Bronze |
 
 ### Petite Couronne (POC — 144 communes, départements 75/92/93/94)
 
 | Ordre | Notebook | Rôle |
 |-------|----------|------|
-| 1 | `notebooks/petite_couronne/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver.*` |
-| 2 | `notebooks/petite_couronne/02_feature_engineering.ipynb` | Features → `gold.features_communes` |
-| 3 | `notebooks/petite_couronne/03_modeling.ipynb` | ML + prédictions → `gold.predictions_2025_2027` |
+| 1 | `notebooks/communes/petite_couronne/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver.*` |
+| 2 | `notebooks/communes/petite_couronne/02_feature_engineering.ipynb` | Features → `gold.features_communes` |
+| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | ML + prédictions → `gold.predictions_2025_2027` |
 
 ### France métropolitaine (~35 000 communes)
 
 | Ordre | Notebook | Rôle |
 |-------|----------|------|
-| 1 | `notebooks/france/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver_france.*` |
-| 2 | `notebooks/france/02_feature_engineering.ipynb` | Features → `gold_france.features_communes` |
-| 3 | `notebooks/france/03_modeling.ipynb` | ML + prédictions → `gold_france.predictions_2025_2027` |
+| 1 | `notebooks/communes/france/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver_france.*` |
+| 2 | `notebooks/communes/france/02_feature_engineering.ipynb` | Features → `gold_france.features_communes` |
+| 3 | `notebooks/communes/france/03_modeling.ipynb` | ML + prédictions → `gold_france.predictions_2025_2027` |
 
 ---
 
