@@ -1,12 +1,15 @@
-# Plan d'extension — Petite Couronne → France Métropolitaine
+# Extension — Petite Couronne → France Métropolitaine
+
+> **Status : TERMINE.** Le pipeline France est entièrement implémenté et exécuté.
+> Ce document conserve les choix d'architecture pour référence.
 
 ## Contexte
 
 Extension du pipeline ML MSPR-813 de **144 communes** (départements 75, 92, 93, 94)
 vers **~35 000 communes** de France métropolitaine (départements 01-95 + 2A/2B).
 
-Les fichiers Bronze couvrent **déjà toute la France** — aucun re-téléchargement nécessaire.
-Il suffit de modifier les filtres ETL et de créer des schémas parallèles.
+Les fichiers Bronze couvrent toute la France — aucun re-téléchargement nécessaire.
+Deux schémas parallèles ont été créés dans PostgreSQL.
 
 ---
 
@@ -42,34 +45,15 @@ PostgreSQL (mspr813)
 
 ## Étapes d'implémentation
 
-### Étape 1 — Schémas SQL France `init_db_france.sql` ✅ À faire
+### Étape 1 — Schémas SQL France `init_db_france.sql` ✅ FAIT
 
 **Fichier** : `scripts/init_db_france.sql`
 
-Actions :
-- Créer les schémas `silver_france` et `gold_france`
-- Dupliquer la structure des 7 tables Silver
-- Dupliquer la structure des 2 tables Gold
-- Ajouter la colonne `typologie_territoire` dans `gold_france.features_communes`
-- Créer les index optimisés pour les requêtes sur 365M lignes
-
-Exécution :
-```bash
-docker exec -i mspr_postgres psql -U mspr_user -d mspr813 < scripts/init_db_france.sql
-```
-
-Validation :
-```sql
-SELECT schema_name FROM information_schema.schemata WHERE schema_name LIKE '%france%';
-SELECT table_name FROM information_schema.tables WHERE table_schema = 'silver_france';
-SELECT table_name FROM information_schema.tables WHERE table_schema = 'gold_france';
-```
-
 ---
 
-### Étape 2 — ETL Bronze → Silver France `04b_etl_france.ipynb`
+### Étape 2 — ETL Bronze → Silver France ✅ FAIT
 
-**Fichier** : `notebooks/04b_etl_france.ipynb` (copie de `04_etl_bronze_to_postgres.ipynb`)
+**Fichier** : `notebooks/france/04_etl_bronze_to_postgres.ipynb`
 
 Modifications clés :
 
@@ -119,9 +103,9 @@ Temps d'exécution estimé : **20-30 min**
 
 ---
 
-### Étape 3 — Feature Engineering `05b_feature_engineering_france.ipynb`
+### Étape 3 — Feature Engineering ✅ FAIT
 
-**Fichier** : `notebooks/05b_feature_engineering_france.ipynb` (copie de `05_feature_engineering.ipynb`)
+**Fichier** : `notebooks/france/05_feature_engineering.ipynb`
 
 Modifications clés :
 
@@ -166,9 +150,9 @@ Temps d'exécution estimé : **15-20 min**
 
 ---
 
-### Étape 4 — Modélisation ML `06b_modeling_france.ipynb`
+### Étape 4 — Modélisation ML ✅ FAIT
 
-**Fichier** : `notebooks/06b_modeling_france.ipynb` (copie de `06_modeling.ipynb`)
+**Fichier** : `notebooks/france/06_modeling.ipynb`
 
 Modifications clés :
 
@@ -266,11 +250,11 @@ Dashboards à créer après exécution du pipeline :
 | Fichier | Action | Étape |
 |---------|--------|-------|
 | `docs/PLAN_FRANCE.md` | Créé | - |
-| `scripts/init_db_france.sql` | **À créer** | Étape 1 |
-| `notebooks/04b_etl_france.ipynb` | **À créer** | Étape 2 |
-| `notebooks/05b_feature_engineering_france.ipynb` | **À créer** | Étape 3 |
-| `notebooks/06b_modeling_france.ipynb` | **À créer** | Étape 4 |
-| Dashboards Metabase | **À configurer** | Étape 5 |
+| `scripts/init_db_france.sql` | Créé | Étape 1 |
+| `notebooks/france/04_etl_bronze_to_postgres.ipynb` | Créé | Étape 2 |
+| `notebooks/france/05_feature_engineering.ipynb` | Créé | Étape 3 |
+| `notebooks/france/06_modeling.ipynb` | Créé | Étape 4 |
+| Dashboards Metabase | A configurer | Étape 5 |
 | `scripts/init_db.sql` | Non modifié | - |
 | `docker-compose.yml` | Non modifié | - |
 | `notebooks/04-06 originaux` | Non modifiés | - |
@@ -306,10 +290,4 @@ docker exec mspr_postgres psql -U mspr_user -d mspr813 \
                    pg_total_relation_size(quote_ident(table_schema)||'.'||quote_ident(table_name)) AS table_size
             FROM information_schema.tables) t
       GROUP BY schema_name ORDER BY sum(table_size) DESC;"
-
-# Lancer un notebook sans Jupyter (CLI)
-docker exec mspr_python jupyter nbconvert --to notebook \
-  --execute --inplace \
-  --ExecutePreprocessor.timeout=3600 \
-  /app/notebooks/04b_etl_france.ipynb
 ```
