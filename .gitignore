@@ -19,10 +19,6 @@ data/bronze/*
 data/bronze/**/*
 !data/bronze/.gitkeep
 
-# Silver: Données nettoyées (Parquet)
-data/silver/*
-!data/silver/.gitkeep
-
 # Gold: Résultats ML et agrégations
 data/gold/*
 !data/gold/.gitkeep
