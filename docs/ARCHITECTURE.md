@@ -2,447 +2,148 @@
 
 **Projet MSPR TPRE813 - EPSI 2026**
 
+---
+
 ## Vue d'Ensemble
 
-Ce document explique en détail l'organisation du projet, les choix d'architecture et les bonnes pratiques Big Data appliquées.
+Pipeline ML complet pour prédire les résultats électoraux 2025-2027 (Gauche / Centre / Droite / ExtremeDroite) sur **~35 000 communes de France métropolitaine**.
 
 ---
 
-## Principes d'Architecture
+## Infrastructure Docker
 
-> **📖 Architecture des Données** : Ce projet adopte l'architecture **Medallion (Bronze/Silver/Gold)**. 
-> Voir le document détaillé : [`DATA_ARCHITECTURE.md`](DATA_ARCHITECTURE.md)
+4 containers définis dans `docker-compose.yml` :
 
-### 1. Séparation des Responsabilités - Medallion Architecture
+| Container | Service | Port |
+|-----------|---------|------|
+| `mspr_python` | JupyterLab + Python 3.11 | 8888 |
+| `mspr_postgres` | PostgreSQL 15 | 5432 |
+| `mspr_pgadmin` | pgAdmin 4 | 5050 |
+| `mspr_metabase` | Metabase | 3000 |
 
+**Credentials PostgreSQL** :
 ```
-🥉 Bronze    →   🥈 Silver    →    🥇 Gold
-(Sources)    → (Nettoyage)   → (ML/Agrégations)
-data/bronze/ → data/silver/  →  data/gold/
+Host (depuis container) : postgres
+Host (depuis Mac)       : localhost
+Port                    : 5432
+Database                : mspr813
+User                    : mspr_user
+Password                : mspr_password
 ```
-
-**Architecture en 3 couches** (aussi appelée Bronze/Silver/Gold) :
-- **Bronze** : Données brutes immuables, formats sources (CSV/Excel)
-- **Silver** : Données validées, typées, format Parquet optimisé
-- **Gold** : Tables finales pour ML et visualisations
-
-### 2. Architecture en Pipeline
-
-```mermaid
-graph LR
-    A[00_setup] --> B[01_download]
-    B --> C[02_exploration]
-    C --> D[03_etl]
-    D --> E[04_features]
-    E --> F[05_modeling]
-    F --> G[06_evaluation]
-```
-
-**Avantages** :
-- Reproductibilité : exécuter dans l'ordre garantit les mêmes résultats
-- Modularité : modification d'une étape n'impacte pas les autres
-- Debugging : isolation des erreurs par notebook
-- Documentation : chaque étape documente son travail
-
-### 3. Scalabilité Intégrée
-
-**Petite Couronne (144 communes)** ← même code → **France entière (35K communes)**
-
-Grâce à :
-- **Pandas optimisé** : lecture efficace avec chunks si nécessaire
-- **Format Parquet** : lecture columnar optimisée
-- **Code modulaire** : fonctions réutilisables pour différents périmètres
-- **Gestion mémoire** : stratégies adaptées au volume de données
 
 ---
 
-## Organisation des Dossiers
+## Architecture Medallion (Bronze → Silver → Gold)
 
-### `/data/` - Architecture Medallion
+### Couche Bronze — Sources immuables
 
-> **Documentation complète** : [`docs/DATA_ARCHITECTURE.md`](DATA_ARCHITECTURE.md)
-
-#### `data/bronze/` - 🥉 Couche Bronze (Sources Immuables)
-
-**Règle d'or** : Jamais de modification des fichiers Bronze après téléchargement
+Fichiers bruts stockés dans `/app/data/bronze/` (dans le container `mspr_python`) :
 
 ```
 bronze/
-├── elections_agregees_1999_2024.csv       # 2.2 GB - CSV d'origine
-├── revenus_commune.csv                     # 4.8 MB
-├── referentiel_communes.csv                # 2.5 MB
-├── population_historique_1968_2022/        # Dossier extrait du ZIP
-│   └── pop-16ans-dipl6822.xlsx            # 43.6 MB
-├── diplomes_formation_2022/
-│   └── base-cc-diplomes-formation-2022.xlsx  # 66 MB
-└── csp_actifs_2554/
-    └── pop-act2554-csp-cd-6822.xlsx       # 28.5 MB
+├── elections_agregees_1999_2024.csv          (~2.35 GB, sep=;)
+├── revenus_commune.csv                        (sep=;)
+├── naissances_2008_2024/DS_ETAT_CIVIL_NAIS_COMMUNES_data.csv
+├── deces_2008_2024/DS_ETAT_CIVIL_DECES_COMMUNES_data.csv
+├── csp_actifs_2554/pop-act2554-csp-cd-6822.xlsx
+├── diplomes_formation_2022/base-cc-diplomes-formation-2022.xlsx
+└── referentiels_cog/referentiel_communes_2024.csv  (sep=,)
 ```
 
-**Pourquoi garder les sources ?**
-- Reproductibilité : retour au point de départ si besoin
-- Audit : traçabilité de la provenance des données
-- Versioning : comprendre évolutions entre téléchargements
+### Couche Silver — Données nettoyées dans PostgreSQL
 
-#### `data/silver/` - 🥈 Couche Silver (Données Nettoyées)
+Deux périmètres parallèles :
 
-Format Parquet optimisé, données validées et typées :
+| Schéma | Périmètre | Tables principales |
+|--------|-----------|-------------------|
+| `silver` | Petite Couronne (75/92/93/94) | `elections`, `revenus`, `csp`, `diplomes`, `demographie`, `referentiel_communes` |
+| `silver_france` | France métropolitaine (01-95 + 2A/2B) | `elections`, `revenus`, `naissances_deces`, `csp`, `diplomes`, `referentiel_communes` |
 
-```
-silver/
-├── referentiel_petite_couronne.parquet    # 144 communes
-├── elections_petite_couronne.parquet      # Élections filtrées 75/92/93/94
-├── revenus_petite_couronne.parquet        # Revenus INSEE
-├── population_petite_couronne.parquet     # Démographie
-├── diplomes_petite_couronne.parquet       # Niveaux formation
-└── csp_petite_couronne.parquet            # Catégories socio-professionnelles
-```
+**Règles de nettoyage** :
+- Codes INSEE toujours en string, 5 caractères (padding zéros)
+- Fichiers CSV : séparateur `;` (format INSEE), sauf `referentiel_communes_2024.csv` (`,`)
+- Fichiers Excel : engine `openpyxl`
+- Périmètre France métro : départements 01-95 + 2A/2B (hors DOM-TOM)
 
-**Transformations appliquées** :
-- ✅ Parsing correct (séparateurs, skiprows métadonnées INSEE)
-- ✅ Types corrects (codes INSEE en string)
-- ✅ Filtrage Petite Couronne (144 communes)
-- ✅ Format Parquet (compression snappy)
+### Couche Gold — Features ML et prédictions dans PostgreSQL
 
-**Pourquoi Parquet ?**
-- **Performance** : 10-100x plus rapide que CSV en lecture
-- **Compression** : Réduit 2.36 GB Bronze → ~50 MB Silver
-- **Types** : Préserve types de données (int, float, string, datetime)
-- **Columnar** : Lit seulement colonnes nécessaires
-
-#### `data/gold/` - 🥇 Couche Gold (ML-Ready)
-
-Tables finales pour Machine Learning et visualisations :
-
-```
-gold/
-├── dataset_ml_complet.parquet             # Features + target jointurées
-├── dataset_train.parquet                  # Training set (80%)
-├── dataset_test.parquet                   # Test set (20%)
-├── predictions_2027.parquet               # Prévisions électorales
-├── features_importance.parquet            # Importance variables ML
-└── metriques_modele.json                  # Scores performance
-```
-
-**Contenu Gold** :
-- Jointures (commune + élections + socio-éco)
-- Features engineering (ratios, tendances)
-- Résultats prédictions ML
-- Métriques et visualisations
-
-| Critère | CSV | Parquet | Ratio |
-|---------|-----|---------|-------|
-| Taille fichier | 2.2 GB | ~400 MB | 5.5x |
-| Lecture complète | 45s | 8s | 5.6x |
-| Lecture colonne | 45s | 2s | 22x |
-| Type preserving | Non | Oui | - |
-| Compression | Non | Oui (auto) | - |
-
-#### `data/output/` - Résultats Exportés
-
-```
-output/
-├── predictions_2027.csv                   # Prédictions format tableur
-├── model_metrics.json                     # Performances modèle
-└── feature_importance.json                # Variables importantes
-```
+| Schéma | Table | Contenu | Lignes |
+|--------|-------|---------|--------|
+| `gold` | `features_communes` | Features Petite Couronne × 5 années | 620 |
+| `gold` | `predictions_2025_2027` | Prédictions Petite Couronne | 372 |
+| `gold_france` | `features_communes` | Features France × 5 années (2002–2022) | 167 866 |
+| `gold_france` | `predictions_2025_2027` | Prédictions France 2025–2027 | 104 349 |
 
 ---
 
-### `/notebooks/` - Pipeline de Traitement
+## Pipeline de Notebooks
 
-#### Nomenclature et Workflow
-
-**Convention de nommage** : `NN_nom_descriptif.ipynb`
-
-| Notebook | Rôle | Input | Output | État |
-|----------|------|-------|--------|------|
-| `00_setup.ipynb` | Validation environnement | - | Logs validation | Terminé |
-| `01_data_download.ipynb` | Téléchargement datasets | URLs | data/raw/*.csv | Terminé |
-| `02_exploration.ipynb` | EDA - Analyse exploratoire | raw/ | Insights + doc | Terminé |
-| `03_etl.ipynb` | Pipeline ETL pandas | raw/ | processed/*.parquet | À créer |
-| `04_feature_engineering.ipynb` | Création features | processed/ | features.parquet | À créer |
-| `05_modeling.ipynb` | Entraînement ML | features.parquet | model.pkl | À créer |
-| `06_evaluation.ipynb` | Évaluation + viz | model.pkl | output/ + figures/ | À créer |
-
-#### Bonnes Pratiques Notebooks
-
-**Structure type d'un notebook** :
-
-```python
-# 1. IMPORTS
-import pandas as pd
-import numpy as np
-
-# 2. CONFIGURATION
-pd.set_option('display.max_columns', None)
-
-# 3. LOADING DATA
-df = pd.read_parquet("data/processed/...")
-
-# 4. TRANSFORMATION
-df_transformed = df[df['column'] > value].groupby(...)
-
-# 5. VALIDATION
-assert len(df_transformed) > 0
-
-# 6. SAVING
-df_transformed.to_parquet("data/processed/...", index=False)
-
-# 7. CLEANUP (optionnel)
-import gc
-gc.collect()
-```
-
-**Toujours inclure** :
-- Markdown explicatif au début
-- Assertions pour valider données
-- Prints de validation (count, columns, schema)
-- Gestion mémoire (gc.collect() si nécessaire)
+| Notebook | Rôle | Périmètre |
+|----------|------|-----------|
+| `04_etl_bronze_to_postgres.ipynb` | ETL Bronze → Silver | Petite Couronne |
+| `05_feature_engineering.ipynb` | Feature engineering → Gold | Petite Couronne |
+| `06_modeling.ipynb` | ML + prédictions | Petite Couronne |
+| `04b_etl_france.ipynb` | ETL Bronze → Silver | France métro |
+| `05b_feature_engineering_france.ipynb` | Feature engineering → Gold | France métro |
+| `06b_modeling_france.ipynb` | ML + prédictions | France métro |
 
 ---
 
-### `/outputs/` - Exports pour Soutenance
+## Modèle Machine Learning
 
-```
-outputs/
-└── figures/
-    ├── 01_eda/
-    │   ├── distribution_revenus.png
-    │   ├── correlation_matrix.png
-    │   └── missing_values.png
-    ├── 02_features/
-    │   ├── feature_importance.png
-    │   └── feature_distributions.png
-    └── 03_results/
-        ├── predictions_map.html           # Carte interactive
-        ├── model_comparison.png
-        └── temporal_evolution.png
-```
+**Variable cible** : orientation politique dominante (`Gauche` / `Centre` / `Droite` / `ExtremeDroite`)
 
-**Organisation par phase** pour faciliter la soutenance :
-- Navigation rapide vers figures pertinentes
-- Export HTML pour cartes interactives (Plotly/Folium)
-- Convention de nommage claire : `NN_description.png`
+**Features principales** :
+- Données électorales historiques (2002–2022)
+- Revenus médians, Gini, taux de pauvreté estimé
+- CSP (catégories socio-professionnelles)
+- Diplômes / niveau de formation
+- Naissances / décès (dynamique démographique)
+- `typologie_territoire` : `urbain` (≥10 000 hab) / `periurbain` (≥2 000) / `rural` (<2 000)
 
----
+**Résultats (périmètre France) :**
 
-## Choix Techniques Justifiés
+| Modèle | Accuracy (test 2022) |
+|--------|---------------------|
+| RandomForest | 78.5% |
+| **GradientBoosting** | **93.3%** ← retenu |
 
-### Pourquoi Pandas (et pas Spark) ?
+**Distribution prédictions 2025 :**
 
-| Critère | Pandas | Spark | Décision |
-|---------|--------|-------|----------|
-| **Volume données** | < 10 GB RAM | Distribué (>100 GB) | Pandas (2.4 GB largement gérable) |
-| **Simplicité** | API intuitive | Complexe (JVM, config) | Pandas (développement rapide) |
-| **Performance** | Excellent <10GB | Overhead petits datasets | Pandas (optimal pour notre volume) |
-| **Écosystème** | Rich (sklearn, viz) | MLlib limité | Pandas (meilleure intégration ML) |
-| **Sujet MSPR** | **Mentionné** | Non requis | Pandas (selon consignes) |
-
-→ **Choix Pandas justifié** : "Données <10GB, sujet mentionne Python et pandas, architecture scalable avec code modulaire"
-
-### Pourquoi Docker ?
-
-**Problème** : "Ca marche sur ma machine"
-
-**Solution Docker** : Environnement isolé et reproductible
-
-```dockerfile
-# Dockerfile garantit :
-- Python 3.11 exact
-- Pandas 2.1.4 précis
-- Openpyxl pour lecture Excel
-- Toutes dépendances figées
-```
-
-**Avantages pour le projet** :
-- Collaboration : même environnement pour tous
-- Déploiement : conteneur prêt à l'emploi
-- Isolation : pas de conflits avec système hôte
-- Soutenance : démo reproductible sur n'importe quelle machine
-
-### Pourquoi Jupyter Notebooks ?
-
-**Avantages pour analyse Big Data** :
-- **Interactivité** : tester code cellule par cellule
-- **Documentation intégrée** : Markdown + Code + Résultats
-- **Visualisations inline** : graphiques directement dans notebook
-- **Itératif** : ajuster paramètres sans tout relancer
-- **Présentation** : notebooks exportables en HTML pour soutenance
-
-**Contre-argument** : "Notebooks pas pour production"
-→ **Réponse** : Notebooks = développement, scripts Python = production (si besoin)
+| Orientation | Communes |
+|------------|---------|
+| ExtremeDroite | 23 328 |
+| Centre | 6 280 |
+| Gauche | 5 165 |
+| Droite | 10 |
 
 ---
 
-## Stratégie de Données : Phase 1 vs Phase 2
+## Gestion des Données Manquantes
 
-### Justification de l'Approche Progressive
-
-#### Phase 1 - POC Petite Couronne
-
-**Objectif** : Valider faisabilité technique et pertinence modèle
-
-**Datasets** :
-- Élections agrégées (variable cible)
-- Revenus + CSP + Diplômes (variables socio-éco de référence)
-- Population historique (contexte démographique)
-
-**Volume** : ~2.4 GB → Développement rapide
-
-**Livrable** : Modèle prédictif fonctionnel sur 150 communes
-
-#### Phase 2 - Extension France Entière
-
-**Objectif** : Démontrer scalabilité et enrichir avec contexte territorial
-
-**Datasets additionnels** :
-- Comptes communaux (diversité finances locales rural/urbain)
-- Catastrophes naturelles (exposition risques environnementaux)
-- Naissances/Décès (vieillissement fin)
-
-**Volume** : +140 MB → Extension testable
-
-**Livrable** : "Architecture validée sur 35K communes avec enrichissement territorial"
-
-### Pourquoi cette Séparation ?
-
-| Critère | Approche directe 35K communes | Approche progressive | Gagnant |
-|---------|-------------------------------|----------------------|---------|
-| Temps développement | Long (tout d'un coup) | Itératif | Progressive |
-| Gestion erreurs | Complexe | Isolées par phase | Progressive |
-| Validation scientifique | Variables noyées | Base solide puis enrichissement | Progressive |
-| Démo soutenance | Une seule version | "POC → Extension" (scalabilité démontrée) | Progressive |
+**Taux de pauvreté** (non disponible directement par commune INSEE) :
+- Estimé à partir du revenu médian disponible et du seuil à 60% (13 686 €/an, médiane nationale 22 810 €/an)
+- Niveau 1 (Gini + médiane) : 5 291 communes
+- Niveau 2 (médiane seule) : 25 951 communes
+- Niveau 3 (imputation médiane départementale puis nationale) : 3 602 communes
+- Couverture finale : **100%** sur `gold_france.features_communes`
 
 ---
 
-## Bonnes Pratiques Appliquées
+## Visualisation
 
-### 1. Immutabilité des Données Sources
-
-```python
-# INTERDIT
-df_raw = spark.read.csv("data/raw/elections.csv")
-df_raw.write.mode("overwrite").csv("data/raw/elections.csv")
-
-# CORRECT
-df_raw = spark.read.csv("data/raw/elections.csv")
-df_clean = df_raw.dropna()  # Transformation
-df_clean.write.parquet("data/processed/elections_clean.parquet")
-```
-
-### 2. Validation Systématique
-
-```python
-# Charger données
-df = spark.read.parquet("processed/elections_clean.parquet")
-
-# Valider structure
-assert df.count() > 0, "Dataset vide"
-assert "code_insee" in df.columns, "Colonne clé manquante"
-assert df.filter(F.col("dept").isin(["75","92","93","94"])).count() > 0
-
-# Valider qualité
-missing_pct = df.filter(F.col("revenus").isNull()).count() / df.count()
-assert missing_pct < 0.05, f"Trop de valeurs manquantes : {missing_pct:.1%}"
-```
-
-### 3. Documentation du Code
-
-```python
-def create_vote_evolution_feature(df: DataFrame) -> DataFrame:
-    """
-    Calcule l'évolution du vote entre élections pour identifier tendances.
-    
-    Args:
-        df: DataFrame élections avec colonnes [code_insee, annee, voix]
-        
-    Returns:
-        DataFrame avec colonne 'vote_evolution_pct' (variation en %)
-        
-    Example:
-        df_with_evolution = create_vote_evolution_feature(df_elections)
-    """
-    window = Window.partitionBy("code_insee").orderBy("annee")
-    return df.withColumn("vote_evolution_pct", 
-                         (F.col("voix") - F.lag("voix").over(window)) / F.lag("voix").over(window) * 100)
-```
-
-### 4. Performance Monitoring
-
-```python
-import time
-
-start = time.time()
-df_result = expensive_transformation(df)
-df_result.write.parquet("output.parquet")
-elapsed = time.time() - start
-
-print(f"Traitement terminé en {elapsed:.1f}s")
-print(f"{df_result.count()} lignes traitées")
-print(f"Débit : {df_result.count() / elapsed:.0f} lignes/sec")
-```
+Metabase (port 3000) connecté à PostgreSQL, 6 dashboards définis dans `docs/METABASE_QUESTIONS.md`.
 
 ---
 
-## Justification pour la Soutenance
+## Scripts utilitaires
 
-### Points Clés à Mettre en Avant
-
-**1. Architecture Big Data Professionnelle**
-- Séparation raw/processed/output (bonnes pratiques industrie)
-- Format Parquet optimisé (pas du CSV naïf)
-- Pipeline modulaire et reproductible
-
-**2. Scalabilité Démontrée**
-- POC 150 communes → Extension validée 35K communes
-- Spark pensé dès le début (pas de refonte nécessaire)
-- Partitionnement intelligent par département
-
-**3. Rigueur Scientifique**
-- Variables socio-économiques de référence validées par recherche
-- Approche progressive : base solide → enrichissement
-- Validation systématique qualité données
-
-**4. Reproductibilité Totale**
-- Docker : environnement identique partout
-- Notebooks numérotés : ordre d'exécution clair
-- Documentation : README + ARCHITECTURE + code commenté
+| Fichier | Rôle |
+|---------|------|
+| `scripts/init_db.sql` | Création schémas `silver` + `gold` (Petite Couronne) |
+| `scripts/init_db_france.sql` | Création schémas `silver_france` + `gold_france` |
+| `scripts/calc_pauvrete.py` | Calcul taux_pauvrete estimé dans `silver_france.revenus` |
 
 ---
 
-## Références et Inspirations
-
-**Architecture Big Data** :
-- Lambda Architecture (Nathan Marz)
-- Medallion Architecture (Databricks)
-
-**Data Engineering Best Practices** :
-- The Data Warehouse Toolkit (Ralph Kimball)
-- Designing Data-Intensive Applications (Martin Kleppmann)
-
-**PySpark Optimization** :
-- Spark: The Definitive Guide (Chambers & Zaharia)
-- High Performance Spark (Karau & Warren)
-
----
-
-## Évolutions Futures Possibles
-
-Si le projet devait être étendu en production :
-
-1. **Orchestration** : Airflow pour automatiser pipeline
-2. **CI/CD** : Tests automatisés + déploiement continu
-3. **Monitoring** : Logs structurés + métriques performance
-4. **API** : FastAPI pour exposer prédictions
-5. **Versioning données** : DVC (Data Version Control)
-6. **Feature Store** : Centraliser features calculées
-7. **MLOps** : MLflow pour tracking expérimentations
-
-→ **Mais hors scope MSPR** : focus sur Big Data foundation solide
-
----
-
-**Document créé le** : 10 février 2026  
-**Dernière mise à jour** : 10 février 2026  
-**Auteur** : Projet MSPR TPRE813 - EPSI 2026
+**Dernière mise à jour** : Mars 2026

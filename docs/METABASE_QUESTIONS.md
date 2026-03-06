@@ -42,6 +42,7 @@ Questions pertinentes à poser dans Metabase pour analyser les données élector
 - Grouper par : `bloc_dominant`
 - Résumer : Médiane de `mediane_revenu_disp`, Moyenne de `taux_pauvrete`
 - Type de graphique : Tableau ou barres
+- **Note** : `taux_pauvrete` est une valeur **estimée** (non issue de l'INSEE directement). Calculée à partir du revenu médian communal + coefficient de Gini (si disponible), calibrée sur la méthodologie Filosofi INSEE 2020-2022. Précision : ±5%. Couverture : 90% des communes (les 10% restants sont imputés par médiane départementale/nationale).
 
 ### Typologie territoire
 
