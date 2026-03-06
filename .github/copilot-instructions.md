@@ -1,97 +1,149 @@
 # MSPR-813 : ML Électoral
 
 ## Objectif
-Modèle ML supervisé pour prédire tendances électorales (1-3 ans).
+
+Modèle ML supervisé pour prédire les tendances électorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France métropolitaine, horizon 2025-2027.
+Startup fictive : **Electio-Analytics**.
+
+---
 
 ## Stack
-Python 3.11, pandas 2.1.4, scikit-learn, openpyxl, matplotlib, plotly, seaborn.
-Docker + Jupyter Lab. Parquet pour données traitées.
-**IMPORTANT : pandas uniquement, PAS Spark.**
 
-## Sources Données
-- data.gouv.fr : élections, sécurité, emploi, démographie, économie, pauvreté
-- INSEE : indicateurs socio-économiques
+- Python 3.11, pandas, scikit-learn, openpyxl, psycopg2
+- Docker + JupyterLab
+- PostgreSQL 15 (stockage Silver + Gold)
+- Metabase (visualisations)
+- **IMPORTANT : pandas uniquement, PAS Spark**
 
-## Features/Indicateurs
-Sécurité, emploi, vie associative, population, entreprises, pauvreté, CSP, revenus, logements.
+---
 
-## Étapes Projet (Pipeline Notebooks)
-1. `01_data_download.ipynb` : Téléchargement → Bronze
-2. `02_exploration.ipynb` : EDA + corrélations (Bronze → Silver)
-3. `03_etl.ipynb` : Nettoyage + transformation (Bronze → Silver)
-4. `04_features.ipynb` : Feature engineering (Silver → Gold)
-5. `05_modeling.ipynb` : ML supervisé (Gold)
-6. `06_predictions.ipynb` : Prédictions finales (Gold)
-7. Visualisations : matplotlib/plotly/seaborn
-
-## Architecture Données - Medallion (Bronze/Silver/Gold)
+## Architecture Medallion (Bronze → Silver → Gold)
 
 ```
-data/
-  bronze/    # 🥉 Données brutes (CSV/Excel) - Immuables, format source
-  silver/    # 🥈 Données nettoyées (Parquet) - Validées, typées
-  gold/      # 🥇 Résultats ML (Parquet/JSON) - Business-ready
+Bronze (CSV/Excel immuables)
+  data/bronze/
 
-config.py    # Configuration centralisée pour scripts Python
+Silver (données nettoyées — PostgreSQL)
+  schéma silver          → Petite Couronne (75/92/93/94)
+  schéma silver_france   → France métropolitaine (depts 01-95 + 2A/2B)
+
+Gold (features ML + prédictions — PostgreSQL)
+  schéma gold            → Petite Couronne
+  schéma gold_france     → France métropolitaine
 ```
 
-**Documentation complète** : `docs/DATA_ARCHITECTURE.md`
+**Pas de fichiers Parquet locaux.** Tout le Silver et le Gold est dans PostgreSQL.
 
-### Configuration dans les Notebooks
+---
 
-**Chaque notebook définit sa configuration inline** (pas d'import externe) :
+## Connexion PostgreSQL
 
 ```python
-from pathlib import Path
-
-# Détection automatique de la racine du projet
-notebook_dir = Path.cwd()
-if notebook_dir.name == 'notebooks':
-    PROJECT_ROOT = notebook_dir.parent
-else:
-    PROJECT_ROOT = notebook_dir
-
-# Chemins des données - Medallion Architecture
-DATA_BRONZE = PROJECT_ROOT / 'data' / 'bronze'  # Données brutes
-DATA_SILVER = PROJECT_ROOT / 'data' / 'silver'  # Données nettoyées
-DATA_GOLD = PROJECT_ROOT / 'data' / 'gold'      # Données ML-ready
-
-# Paramètres métier
-DEPARTEMENTS_PETITE_COURONNE = ['75', '92', '93', '94']
-COMMUNES_PETITE_COURONNE_COUNT = 144
+import psycopg2
+conn = psycopg2.connect(
+    host="postgres",   # depuis un container Docker
+    port=5432,
+    database="mspr813",
+    user="mspr_user",
+    password="mspr_password"
+)
 ```
 
-**Pour scripts Python** (non-notebooks), utiliser `config.py` :
+Host depuis le Mac : `localhost`.
+
+---
+
+## Pipeline Notebooks
+
+### Exploration / EDA
+
+| Notebook | Rôle |
+|----------|------|
+| `01_data_download.ipynb` | Téléchargement données de base |
+| `01_data_download_extended.ipynb` | Téléchargement données complémentaires |
+| `02_exploration.ipynb` | EDA données Bronze |
+| `03_exploration_nouvelles_donnees.ipynb` | Exploration naissances, décès, CSP |
+
+### Petite Couronne (POC)
+
+| Ordre | Notebook | Schémas cibles |
+|-------|----------|----------------|
+| 1 | `04_etl_bronze_to_postgres.ipynb` | `silver.*` |
+| 2 | `05_feature_engineering.ipynb` | `gold.features_communes` |
+| 3 | `06_modeling.ipynb` | `gold.predictions_2025_2027` |
+
+### France métropolitaine
+
+| Ordre | Notebook | Schémas cibles |
+|-------|----------|----------------|
+| 1 | `04b_etl_france.ipynb` | `silver_france.*` |
+| 2 | `05b_feature_engineering_france.ipynb` | `gold_france.features_communes` |
+| 3 | `06b_modeling_france.ipynb` | `gold_france.predictions_2025_2027` |
+
+---
+
+## Conventions de Code
+
+### Codes INSEE
+Toujours en **string, 5 caractères**, padding zéros :
 ```python
-from config import DATA_BRONZE, DATA_SILVER, DATA_GOLD
+df['code_insee'] = df['code_insee'].astype(str).str.zfill(5)
 ```
 
-**RÈGLES** :
-- ❌ Ne JAMAIS écrire chemins en dur : `Path("/app/data/raw")` → INTERDIT
-- ✅ Notebooks : Configuration inline (copier/coller le bloc ci-dessus)
-- ✅ Scripts Python : Import depuis `config.py`
-- ✅ Bronze : Données immuables (read-only après téléchargement)
-- ✅ Silver : Peut être régénéré depuis Bronze (idempotence)
-- ✅ Gold : Tables finales ML, versionner modèles
+### Lecture fichiers CSV
+Séparateur `;` (format INSEE), sauf `referentiel_communes_2024.csv` (`,`) :
+```python
+df = pd.read_csv("fichier.csv", sep=";", dtype=str)
+```
 
-## ML Approche
-- Apprentissage supervisé
-- Train/test split
-- Prédictions 1/2/3 ans
-- Métriques : accuracy, précision, recall, F1
+### Lecture fichiers Excel
+Toujours engine `openpyxl` :
+```python
+df = pd.read_excel("fichier.xlsx", engine="openpyxl")
+```
 
-## Règles Code
-- **Minimaliste** : ne pas en faire trop, rester sur le strict nécessaire
-- Code propre, commenté en français
-- Pipeline ETL automatisé et traçable
-- Nommage pertinent (tables/champs/variables)
-- **Scalable** : code extensible pour ajout futur de communes/départements
-- Pas d'icônes/emojis dans docs et commentaires
-- Respect RGPD si données personnelles
+### Périmètre France métropolitaine
+Départements 01-95 + 2A/2B. Exclure DOM-TOM et le code 20 (Corse fusionnée).
 
-## Livrables
-1. Données Parquet nettoyées
-2. Code commenté
-3. Modèle ML + métriques
-4. Visualisations claires
-5. Questions réponses : donnée la plus corrélée, définition apprentissage supervisé, calcul accuracy
+### Gestion des valeurs manquantes
+Imputation par médiane départementale, fallback médiane nationale.
+
+### Configuration dans les notebooks
+Inline, pas d'import externe :
+```python
+import psycopg2
+
+DB_CONFIG = {
+    "host": "postgres",
+    "port": 5432,
+    "database": "mspr813",
+    "user": "mspr_user",
+    "password": "mspr_password"
+}
+```
+
+### Exécuter un script Python dans Docker
+```bash
+docker cp script.py mspr_python:/tmp/script.py
+docker exec mspr_python python3 /tmp/script.py
+```
+Ne jamais utiliser les heredoc (pas de sortie).
+
+---
+
+## Modèle ML
+
+- **Variable cible** : `orientation` — 4 classes : `Gauche`, `Centre`, `Droite`, `ExtremeDroite`
+- **Modèle retenu** : GradientBoosting (accuracy 93.3% sur test 2022, France)
+- **Features principales** : élections historiques, revenus, gini, taux_pauvrete, CSP, diplômes, naissances/décès, `typologie_territoire`
+- **`typologie_territoire`** : `urbain` (≥10 000 hab) / `periurbain` (≥2 000) / `rural` (<2 000)
+
+---
+
+## Règles Générales
+
+- Code commenté en français
+- Nommage explicite (tables, colonnes, variables)
+- Pas d'emojis dans le code ni les commentaires
+- Pipeline ETL idempotent (réexécutable sans effets de bord)
+- Scalable : le même code sert pour Petite Couronne et France entière
