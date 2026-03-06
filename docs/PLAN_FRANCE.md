@@ -53,7 +53,7 @@ PostgreSQL (mspr813)
 
 ### Étape 2 — ETL Bronze → Silver France ✅ FAIT
 
-**Fichier** : `notebooks/france/04_etl_bronze_to_postgres.ipynb`
+**Fichier** : `notebooks/france/01_etl_bronze_to_postgres.ipynb`
 
 Modifications clés :
 
@@ -105,7 +105,7 @@ Temps d'exécution estimé : **20-30 min**
 
 ### Étape 3 — Feature Engineering ✅ FAIT
 
-**Fichier** : `notebooks/france/05_feature_engineering.ipynb`
+**Fichier** : `notebooks/france/02_feature_engineering.ipynb`
 
 Modifications clés :
 
@@ -152,7 +152,7 @@ Temps d'exécution estimé : **15-20 min**
 
 ### Étape 4 — Modélisation ML ✅ FAIT
 
-**Fichier** : `notebooks/france/06_modeling.ipynb`
+**Fichier** : `notebooks/france/03_modeling.ipynb`
 
 Modifications clés :
 
@@ -251,9 +251,9 @@ Dashboards à créer après exécution du pipeline :
 |---------|--------|-------|
 | `docs/PLAN_FRANCE.md` | Créé | - |
 | `scripts/init_db_france.sql` | Créé | Étape 1 |
-| `notebooks/france/04_etl_bronze_to_postgres.ipynb` | Créé | Étape 2 |
-| `notebooks/france/05_feature_engineering.ipynb` | Créé | Étape 3 |
-| `notebooks/france/06_modeling.ipynb` | Créé | Étape 4 |
+| `notebooks/france/01_etl_bronze_to_postgres.ipynb` | Créé | Étape 2 |
+| `notebooks/france/02_feature_engineering.ipynb` | Créé | Étape 3 |
+| `notebooks/france/03_modeling.ipynb` | Créé | Étape 4 |
 | Dashboards Metabase | A configurer | Étape 5 |
 | `scripts/init_db.sql` | Non modifié | - |
 | `docker-compose.yml` | Non modifié | - |

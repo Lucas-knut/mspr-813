@@ -80,9 +80,9 @@ Deux périmètres parallèles :
 
 | Notebook | Rôle | Périmètre |
 |----------|------|-----------|
-| `04_etl_bronze_to_postgres.ipynb` | ETL Bronze → Silver | Petite Couronne |
-| `05_feature_engineering.ipynb` | Feature engineering → Gold | Petite Couronne |
-| `06_modeling.ipynb` | ML + prédictions | Petite Couronne |
+| `01_etl_bronze_to_postgres.ipynb` | ETL Bronze → Silver | Petite Couronne |
+| `02_feature_engineering.ipynb` | Feature engineering → Gold | Petite Couronne |
+| `03_modeling.ipynb` | ML + prédictions | Petite Couronne |
 | `04b_etl_france.ipynb` | ETL Bronze → Silver | France métro |
 | `05b_feature_engineering_france.ipynb` | Feature engineering → Gold | France métro |
 | `06b_modeling_france.ipynb` | ML + prédictions | France métro |

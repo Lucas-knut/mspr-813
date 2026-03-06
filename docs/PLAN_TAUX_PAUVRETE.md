@@ -63,20 +63,20 @@ Imputation par médiane départementale puis médiane nationale (déjà gérée 
 
 | Fichier | Modification |
 |---------|-------------|
-| `notebooks/france/04_etl_bronze_to_postgres.ipynb` | Ajout fonction `calcul_taux_pauvrete()` après le mapping revenus |
-| `notebooks/france/05_feature_engineering.ipynb` | Aucune modification (imputation déjà en place) |
-| `notebooks/france/06_modeling.ipynb` | `mediane_revenu_disp`, `gini`, `taux_pauvrete` dans les features ML |
+| `notebooks/france/01_etl_bronze_to_postgres.ipynb` | Ajout fonction `calcul_taux_pauvrete()` après le mapping revenus |
+| `notebooks/france/02_feature_engineering.ipynb` | Aucune modification (imputation déjà en place) |
+| `notebooks/france/03_modeling.ipynb` | `mediane_revenu_disp`, `gini`, `taux_pauvrete` dans les features ML |
 | `docs/METABASE_QUESTIONS.md` | Note sur estimation de `taux_pauvrete` dans Q6 |
 
 ## Ordre d'exécution (reference — déjà exécuté)
 
-1. Modifier `notebooks/france/04_etl_bronze_to_postgres.ipynb`
-2. Exécuter `04_etl_bronze_to_postgres.ipynb` (section revenus uniquement, recalcul complet pour être sûr)
+1. Modifier `notebooks/france/01_etl_bronze_to_postgres.ipynb`
+2. Exécuter `01_etl_bronze_to_postgres.ipynb` (section revenus uniquement, recalcul complet pour être sûr)
 3. Vérifier `silver_france.revenus.taux_pauvrete` → ~31k valeurs, moyenne ~12-16%
-4. Exécuter `notebooks/france/05_feature_engineering.ipynb` → rebuild `gold_france.features_communes`
+4. Exécuter `notebooks/france/02_feature_engineering.ipynb` → rebuild `gold_france.features_communes`
 5. Vérifier `gold_france.features_communes.taux_pauvrete` → 100% couverture
-6. Modifier `notebooks/france/06_modeling.ipynb` (features revenus)
-7. Exécuter `notebooks/france/06_modeling.ipynb` → rebuild `gold_france.predictions_2025_2027`
+6. Modifier `notebooks/france/03_modeling.ipynb` (features revenus)
+7. Exécuter `notebooks/france/03_modeling.ipynb` → rebuild `gold_france.predictions_2025_2027`
 8. Validation finale en base
 
 ## Critères de validation
