@@ -140,6 +140,7 @@ Ne jamais utiliser les heredoc (pas de sortie).
 
 ## Règles Générales
 
+- Ne jamais créer de commit git sans que l'utilisateur le demande explicitement
 - Code commenté en français
 - Nommage explicite (tables, colonnes, variables)
 - Pas d'emojis dans le code ni les commentaires
