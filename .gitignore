@@ -27,15 +27,6 @@ data/gold/*
 # Décommenter si vous voulez versionner un petit référentiel
 # !data/raw/referentiel_communes.csv
 
-# Outputs
-outputs/figures/*
-!outputs/figures/.gitkeep
-outputs/models/*
-!outputs/models/.gitkeep
-
-# Exceptions: garder les graphiques importants pour documentation
-# !outputs/figures/architecture_diagram.png
-
 # Environment
 .env
 .venv
