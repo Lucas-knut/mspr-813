@@ -24,7 +24,7 @@ services:
     image: postgres:15-alpine
     container_name: mspr_postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: mspr813
       POSTGRES_USER: mspr_user
