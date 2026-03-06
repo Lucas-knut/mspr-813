@@ -61,26 +61,26 @@ docker exec mspr_python python3 /app/scripts/download_robust.py
 
 | Notebook | Rôle |
 |----------|------|
-| `01_data_download.ipynb` | Téléchargement données de base |
-| `01_data_download_extended.ipynb` | Téléchargement données complémentaires (comptes communes, séries historiques) |
-| `02_exploration.ipynb` | Analyse exploratoire des données Bronze |
-| `03_exploration_nouvelles_donnees.ipynb` | Exploration naissances, décès, CSP |
+| `notebooks/01_data_download.ipynb` | Téléchargement données de base |
+| `notebooks/01_data_download_extended.ipynb` | Téléchargement données complémentaires (comptes communes, séries historiques) |
+| `notebooks/02_exploration.ipynb` | Analyse exploratoire des données Bronze |
+| `notebooks/03_exploration_nouvelles_donnees.ipynb` | Exploration naissances, décès, CSP |
 
 ### Petite Couronne (POC — 144 communes, départements 75/92/93/94)
 
 | Ordre | Notebook | Rôle |
 |-------|----------|------|
-| 1 | `04_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver.*` |
-| 2 | `05_feature_engineering.ipynb` | Features → `gold.features_communes` |
-| 3 | `06_modeling.ipynb` | ML + prédictions → `gold.predictions_2025_2027` |
+| 1 | `notebooks/petite_couronne/04_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver.*` |
+| 2 | `notebooks/petite_couronne/05_feature_engineering.ipynb` | Features → `gold.features_communes` |
+| 3 | `notebooks/petite_couronne/06_modeling.ipynb` | ML + prédictions → `gold.predictions_2025_2027` |
 
 ### France métropolitaine (~35 000 communes)
 
 | Ordre | Notebook | Rôle |
 |-------|----------|------|
-| 1 | `04b_etl_france.ipynb` | ETL Bronze → `silver_france.*` |
-| 2 | `05b_feature_engineering_france.ipynb` | Features → `gold_france.features_communes` |
-| 3 | `06b_modeling_france.ipynb` | ML + prédictions → `gold_france.predictions_2025_2027` |
+| 1 | `notebooks/france/04_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver_france.*` |
+| 2 | `notebooks/france/05_feature_engineering.ipynb` | Features → `gold_france.features_communes` |
+| 3 | `notebooks/france/06_modeling.ipynb` | ML + prédictions → `gold_france.predictions_2025_2027` |
 
 ---
 
