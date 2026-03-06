@@ -2,6 +2,20 @@
 """
 Script de téléchargement robuste des données historiques INSEE et data.gouv.fr
 Avec retry automatique et User-Agent pour éviter les erreurs HTTP 500
+
+Ce script télécharge automatiquement :
+  - Naissances 2008-2024 (INSEE)
+  - Décès 2008-2024 (INSEE)
+  - CSP Actifs 1968-2022 (INSEE)
+  - Secteur d'activité 1968-2022 (INSEE)
+  - Diplômes 2022 (INSEE)
+
+FICHIERS À FOURNIR MANUELLEMENT (non disponibles via URL publique) :
+  - elections_agregees_1999_2024.csv   (~2.35 GB) → à placer dans data/bronze/
+  - revenus_commune.csv                           → à placer dans data/bronze/
+  - referentiel_communes_2024.csv                 → à placer dans data/bronze/referentiels_cog/
+
+Usage : docker exec mspr_python python3 /app/scripts/download_robust.py
 """
 
 from pathlib import Path
