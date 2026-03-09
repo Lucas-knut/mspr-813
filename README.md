@@ -134,3 +134,38 @@ Database                : mspr813
 User                    : mspr_user
 Password                : mspr_password
 ```
+
+---
+
+## Metabase — Configuration initiale
+
+### Prérequis
+
+Dans Metabase (Admin > Databases > Add database), ajouter PostgreSQL avec :
+
+- **Nom de la datasource : `MSPR 813`** (nom exact — le script en dépend)
+- Host : `postgres`, Port : `5432`, Database : `mspr813`
+- User : `mspr_user`, Password : `mspr_password`
+
+Puis synchroniser les schémas : Admin > Databases > MSPR 813 > Sync database schema now.
+
+### Création des questions et dashboards
+
+```bash
+python3 scripts/setup_metabase.py
+```
+
+Le script demande le mot de passe Metabase au lancement (jamais stocké). Il est idempotent pour les questions (skip si déjà existantes) et recrée les dashcards à chaque run.
+
+### Dashboards créés
+
+| Dashboard | Questions |
+|-----------|-----------|
+| Dashboard 1 — Vue nationale | Q1, Q2, Q11 |
+| Dashboard 2 — Analyse sociodémographique | Q4, Q5, Q6, Q8 |
+| Dashboard 3 — Typologie territoire | Q7, Q14, Q15 |
+| Dashboard 4 — Départements clés | Q9, Q10, Q16, Q17 |
+| Dashboard 5 — Prédictions 2027 | Q12, Q13, Q16 |
+| Dashboard 6 — Comparaison 2022 vs 2027 | Q18, Q19, Q20 |
+
+Voir `docs/METABASE_QUESTIONS.md` pour la définition complète des 20 questions.
