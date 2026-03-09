@@ -37,20 +37,12 @@ Dans pgAdmin ou via psql, exécuter dans l'ordre :
 \i scripts/init_db_france.sql
 ```
 
-### Données Bronze à fournir manuellement
+### Données Bronze
 
-Ces fichiers ne sont pas téléchargeables automatiquement, à placer dans `data/bronze/` :
+Toutes les données sont téléchargées automatiquement par le notebook :
 
-| Fichier | Emplacement |
-|---------|-------------|
-| `elections_agregees_1999_2024.csv` | `data/bronze/` |
-| `revenus_commune.csv` | `data/bronze/` |
-| `referentiel_communes_2024.csv` | `data/bronze/referentiels_cog/` |
-
-Les autres données Bronze (naissances, décès, CSP, diplômes…) peuvent être téléchargées via :
-
-```bash
-docker exec mspr_python python3 /app/scripts/download_robust.py
+```
+notebooks/communes/01_data_download.ipynb
 ```
 
 ---
