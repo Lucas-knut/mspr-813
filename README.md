@@ -141,13 +141,17 @@ Password                : mspr_password
 
 ### Prérequis
 
-Dans Metabase (Admin > Databases > Add database), ajouter PostgreSQL avec :
+Lors de la première connexion à Metabase (http://localhost:3000), l'assistant de
+configuration demande d'ajouter une base de données. Renseigner :
 
-- **Nom de la datasource : `MSPR 813`** (nom exact — le script en dépend)
+- **Nom : `MSPR 813`** (nom exact — le script `setup_metabase.py` en dépend)
+- Type : PostgreSQL
 - Host : `postgres`, Port : `5432`, Database : `mspr813`
 - User : `mspr_user`, Password : `mspr_password`
+- Schémas à exposer : `silver`, `silver_france`, `gold`, `gold_france`
 
-Puis synchroniser les schémas : Admin > Databases > MSPR 813 > Sync database schema now.
+Après connexion, synchroniser les schémas si nécessaire :
+Admin > Databases > MSPR 813 > Sync database schema now.
 
 ### Création des questions et dashboards
 
