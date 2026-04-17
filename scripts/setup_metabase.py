@@ -22,8 +22,8 @@ METABASE_URL = "http://localhost:3000"
 EMAIL = "lucas.steichen@ecoles-epsi.net"
 
 # Tables cibles
-TABLE_FEATURES   = "gold_france.features_communes"
-TABLE_PREDICTIONS = "gold_france.predictions_2025_2027"
+TABLE_FEATURES    = "gold_france.features_communes"
+TABLE_PREDICTIONS = "gold_france.predictions_2022"
 
 
 # ---------------------------------------------------------------------------
@@ -240,7 +240,7 @@ def build_all_cards(database_id, fields_fc, fields_pred):
     """
     Construit les payloads des 20 questions.
     fields_fc   : dict field_name -> field_id pour features_communes
-    fields_pred : dict field_name -> field_id pour predictions_2025_2027
+    fields_pred : dict field_name -> field_id pour predictions_2022
     """
 
     def fc(name):
@@ -252,7 +252,7 @@ def build_all_cards(database_id, fields_fc, fields_pred):
     def pr(name):
         fid = fields_pred.get(name)
         if fid is None:
-            print(f"    WARN : champ '{name}' introuvable dans predictions_2025_2027")
+            print(f"    WARN : champ '{name}' introuvable dans predictions_2022")
         return fid
 
     tid_fc   = fields_fc["__table_id__"]
@@ -415,119 +415,114 @@ def build_all_cards(database_id, fields_fc, fields_pred):
     ))
 
     # ------------------------------------------------------------------
-    # Q11 — Evolution predite 2025-2027
+    # Q11 — Predictions 2022 par bloc
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q11 - Evolution predite 2025-2027",
+        name="Q11 - Predictions 2022 par bloc",
         aggregations=[["count"]],
-        breakouts=[
-            ["field", pr("annee"),       {}],
-            ["field", pr("bloc_predit"), {}],
-        ],
+        breakouts=[["field", pr("bloc_predit"), {}]],
         display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q12 — Communes predites en 2027
+    # Q12 — Communes predites en 2022
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q12 - Communes predites en 2027",
+        name="Q12 - Communes predites en 2022",
         aggregations=[["count"]],
         breakouts=[
             ["field", pr("bloc_predit"),          {}],
             ["field", pr("typologie_territoire"), {}],
         ],
-        filters=["=", ["field", pr("annee"), {}], 2027],
         display="table",
     ))
 
     # ------------------------------------------------------------------
-    # Q13 — Probabilites moyennes par bloc en 2027
+    # Q13 — Probabilites moyennes par bloc (predit 2022)
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q13 - Probabilites moyennes par bloc en 2027",
+        name="Q13 - Probabilites moyennes par bloc (predit 2022)",
         aggregations=[
-            ["avg", ["field", pr("prob_gauche"),       {}]],
-            ["avg", ["field", pr("prob_centre"),       {}]],
-            ["avg", ["field", pr("prob_droite"),       {}]],
+            ["avg", ["field", pr("prob_gauche"),        {}]],
+            ["avg", ["field", pr("prob_centre"),        {}]],
+            ["avg", ["field", pr("prob_droite"),        {}]],
             ["avg", ["field", pr("prob_extremedroite"), {}]],
         ],
         breakouts=[],
-        filters=["=", ["field", pr("annee"), {}], 2027],
         display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q14 — Predictions 2027 par typologie
+    # Q14 — Predictions 2022 par typologie
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q14 - Predictions 2027 par typologie",
+        name="Q14 - Predictions 2022 par typologie",
         aggregations=[["count"]],
         breakouts=[
             ["field", pr("typologie_territoire"), {}],
             ["field", pr("bloc_predit"),          {}],
         ],
-        filters=["=", ["field", pr("annee"), {}], 2027],
         display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q15 — Probabilite ExtremeDroite par typologie (2027)
+    # Q15 — Probabilite ExtremeDroite par typologie (predit 2022)
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q15 - Probabilite ExtremeDroite par typologie (2027)",
+        name="Q15 - Probabilite ExtremeDroite par typologie (predit 2022)",
         aggregations=[["avg", ["field", pr("prob_extremedroite"), {}]]],
         breakouts=[["field", pr("typologie_territoire"), {}]],
-        filters=["=", ["field", pr("annee"), {}], 2027],
         display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q16 — Top 20 departements ExtremeDroite (2027)
+    # Q16 — Top 20 departements ExtremeDroite (predit 2022)
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q16 - Top 20 departements ExtremeDroite (2027)",
+        name="Q16 - Top 20 departements ExtremeDroite (predit 2022)",
         aggregations=[["count"]],
         breakouts=[["field", pr("code_dep"), {}]],
-        filters=["and",
-            ["=", ["field", pr("annee"),       {}], 2027],
-            ["=", ["field", pr("bloc_predit"), {}], "ExtremeDroite"],
-        ],
+        filters=["=", ["field", pr("bloc_predit"), {}], "ExtremeDroite"],
         order_by=[["desc", ["aggregation", 0]]],
         limit=20,
         display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q17 — Departements bascule ExtremeDroite -> Centre (2025->2027) SQL
+    # Q17 — Communes mal predites : predit vs reel 2022
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q17 - Bascule ExtremeDroite vers Centre (2025 -> 2027)",
+        name="Q17 - Communes mal predites : predit vs reel 2022",
         sql="""
-SELECT p25.code_dep, COUNT(*) AS nb_bascules
-FROM gold_france.predictions_2025_2027 p25
-JOIN gold_france.predictions_2025_2027 p27
-  ON p25.code_commune = p27.code_commune
-WHERE p25.annee = 2025 AND p25.bloc_predit = 'ExtremeDroite'
-  AND p27.annee = 2027 AND p27.bloc_predit = 'Centre'
-GROUP BY p25.code_dep
-ORDER BY nb_bascules DESC
-LIMIT 10;
+SELECT
+  p.code_commune,
+  p.libelle,
+  p.code_dep,
+  p.bloc_predit,
+  fc.bloc_dominant AS bloc_reel,
+  p.typologie_territoire
+FROM gold_france.predictions_2022 p
+JOIN gold_france.features_communes fc
+  ON p.code_commune = fc.code_commune
+WHERE fc.annee = 2022
+  AND p.bloc_predit <> fc.bloc_dominant
+ORDER BY p.code_dep, p.libelle
+LIMIT 100;
 """,
-        display="bar",
+        display="table",
     ))
 
     # ------------------------------------------------------------------
-    # Q18 — Evolution 2022 -> 2027 par departement (10 plus grands)
+    # Q18 — Comparaison reel 2022 vs predit 2022 par departement
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q18 - Evolution 2022 vs 2027 par departement (10 plus grands)",
+        name="Q18 - Comparaison reel vs predit 2022 par departement",
         sql="""
 SELECT 'Reel 2022' AS source, code_dep, bloc_dominant AS bloc, COUNT(*) AS nb
 FROM gold_france.features_communes
@@ -535,10 +530,9 @@ WHERE annee = 2022
   AND code_dep IN ('59','62','69','13','75','92','93','94','06','33')
 GROUP BY code_dep, bloc_dominant
 UNION ALL
-SELECT 'Predit 2027', code_dep, bloc_predit, COUNT(*)
-FROM gold_france.predictions_2025_2027
-WHERE annee = 2027
-  AND code_dep IN ('59','62','69','13','75','92','93','94','06','33')
+SELECT 'Predit 2022', p.code_dep, p.bloc_predit, COUNT(*)
+FROM gold_france.predictions_2022 p
+WHERE code_dep IN ('59','62','69','13','75','92','93','94','06','33')
 GROUP BY code_dep, bloc_predit
 ORDER BY code_dep, source, nb DESC;
 """,
@@ -546,46 +540,45 @@ ORDER BY code_dep, source, nb DESC;
     ))
 
     # ------------------------------------------------------------------
-    # Q19 — Devenir des communes ExtremeDroite 2022 en 2027
+    # Q19 — Accuracy par bloc : reel vs predit 2022
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q19 - Devenir des communes ExtremeDroite 2022 en 2027",
+        name="Q19 - Accuracy par bloc : reel vs predit 2022",
         sql="""
 SELECT
-  p27.bloc_predit,
+  fc.bloc_dominant AS bloc_reel,
+  p.bloc_predit,
   COUNT(*) AS nb_communes,
-  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY fc.bloc_dominant), 1) AS pct
 FROM gold_france.features_communes fc
-JOIN gold_france.predictions_2025_2027 p27
-  ON fc.code_commune = p27.code_commune
-WHERE fc.annee = 2022 AND fc.bloc_dominant = 'ExtremeDroite'
-  AND p27.annee = 2027
-GROUP BY p27.bloc_predit
-ORDER BY nb_communes DESC;
+JOIN gold_france.predictions_2022 p
+  ON fc.code_commune = p.code_commune
+WHERE fc.annee = 2022
+GROUP BY fc.bloc_dominant, p.bloc_predit
+ORDER BY fc.bloc_dominant, nb_communes DESC;
 """,
-        display="bar",
+        display="table",
     ))
 
     # ------------------------------------------------------------------
-    # Q20 — Probabilite ExtremeDroite en 2027 pour communes rurales Gauche 2022
+    # Q20 — Prob ExtremeDroite predit pour communes rurales Gauche reel 2022
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q20 - Prob ExtremeDroite 2027 pour communes rurales Gauche 2022",
+        name="Q20 - Prob ExtremeDroite predit pour communes rurales Gauche 2022",
         sql="""
 SELECT
   fc.typologie_territoire,
-  fc.bloc_dominant AS bloc_2022,
-  p27.bloc_predit  AS bloc_2027,
+  fc.bloc_dominant AS bloc_reel_2022,
+  p.bloc_predit    AS bloc_predit_2022,
   COUNT(*)         AS nb_communes,
-  ROUND(AVG(p27.prob_extremedroite), 3) AS prob_xd_moy
+  ROUND(AVG(p.prob_extremedroite), 3) AS prob_xd_moy
 FROM gold_france.features_communes fc
-JOIN gold_france.predictions_2025_2027 p27
-  ON fc.code_commune = p27.code_commune
+JOIN gold_france.predictions_2022 p
+  ON fc.code_commune = p.code_commune
 WHERE fc.annee = 2022
-  AND p27.annee = 2027
   AND fc.typologie_territoire = 'rural'
   AND fc.bloc_dominant = 'Gauche'
-GROUP BY fc.typologie_territoire, fc.bloc_dominant, p27.bloc_predit
+GROUP BY fc.typologie_territoire, fc.bloc_dominant, p.bloc_predit
 ORDER BY nb_communes DESC;
 """,
         display="table",
@@ -619,7 +612,7 @@ DASHBOARD_DEFINITIONS = [
         "name": "Dashboard 1 - Vue nationale",
         "questions": ["Q1 - Evolution temporelle des blocs",
                       "Q2 - Repartition blocs dominants par annee",
-                      "Q11 - Evolution predite 2025-2027"],
+                      "Q11 - Predictions 2022 par bloc"],
     },
     {
         "name": "Dashboard 2 - Analyse sociodemographique",
@@ -631,27 +624,26 @@ DASHBOARD_DEFINITIONS = [
     {
         "name": "Dashboard 3 - Typologie territoire",
         "questions": ["Q7 - Bloc dominant par typologie (2022)",
-                      "Q14 - Predictions 2027 par typologie",
-                      "Q15 - Probabilite ExtremeDroite par typologie (2027)"],
+                      "Q14 - Predictions 2022 par typologie",
+                      "Q15 - Probabilite ExtremeDroite par typologie (predit 2022)"],
     },
     {
         "name": "Dashboard 4 - Departements cles",
         "questions": ["Q9 - Top 10 departements Gauche (2022)",
                       "Q10 - Top 10 departements ExtremeDroite (2022)",
-                      "Q16 - Top 20 departements ExtremeDroite (2027)",
-                      "Q17 - Bascule ExtremeDroite vers Centre (2025 -> 2027)"],
+                      "Q16 - Top 20 departements ExtremeDroite (predit 2022)"],
     },
     {
-        "name": "Dashboard 5 - Predictions 2027",
-        "questions": ["Q12 - Communes predites en 2027",
-                      "Q13 - Probabilites moyennes par bloc en 2027",
-                      "Q16 - Top 20 departements ExtremeDroite (2027)"],
+        "name": "Dashboard 5 - Predictions 2022",
+        "questions": ["Q12 - Communes predites en 2022",
+                      "Q13 - Probabilites moyennes par bloc (predit 2022)",
+                      "Q16 - Top 20 departements ExtremeDroite (predit 2022)"],
     },
     {
-        "name": "Dashboard 6 - Comparaison 2022 vs 2027",
-        "questions": ["Q18 - Evolution 2022 vs 2027 par departement (10 plus grands)",
-                      "Q19 - Devenir des communes ExtremeDroite 2022 en 2027",
-                      "Q20 - Prob ExtremeDroite 2027 pour communes rurales Gauche 2022"],
+        "name": "Dashboard 6 - Comparaison reel vs predit 2022",
+        "questions": ["Q18 - Comparaison reel vs predit 2022 par departement",
+                      "Q19 - Accuracy par bloc : reel vs predit 2022",
+                      "Q20 - Prob ExtremeDroite predit pour communes rurales Gauche 2022"],
     },
 ]
 
@@ -671,21 +663,21 @@ def main():
 
     print("\n--- Tables ---")
     table_id_fc = get_table_id(token, db_id, schema="gold_france", table_name="features_communes")
-    table_id_pred = get_table_id(token, db_id, schema="gold_france", table_name="predictions_2025_2027")
+    table_id_pred = get_table_id(token, db_id, schema="gold_france", table_name="predictions_2022")
 
     if not table_id_fc or not table_id_pred:
         print("Tables introuvables. Verifier que PostgreSQL est synchronise dans Metabase.")
         print("Admin > Databases > mspr813 > Sync database schema now")
         sys.exit(1)
 
-    print(f"  features_communes      : id={table_id_fc}")
-    print(f"  predictions_2025_2027  : id={table_id_pred}")
+    print(f"  features_communes : id={table_id_fc}")
+    print(f"  predictions_2022  : id={table_id_pred}")
 
     print("\n--- Champs ---")
     fields_fc   = get_fields(token, table_id_fc)
     fields_pred = get_fields(token, table_id_pred)
-    print(f"  features_communes      : {len(fields_fc)-1} champs")
-    print(f"  predictions_2025_2027  : {len(fields_pred)-1} champs")
+    print(f"  features_communes : {len(fields_fc)-1} champs")
+    print(f"  predictions_2022  : {len(fields_pred)-1} champs")
 
     print("\n--- Questions ---")
     cards_existing = existing_cards(token)

@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Modèle ML supervisé pour prédire les tendances électorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France métropolitaine pour 2022, avec comparaison aux résultats réels 2022.
+Modèle ML supervisé pour prédire les tendances électorales (Gauche / Centre / Droite) sur ~35 000 communes de France métropolitaine pour 2022, avec comparaison aux résultats réels 2022.
 Startup fictive : **Electio-Analytics**.
 
 ---
@@ -131,7 +131,7 @@ Ne jamais utiliser les heredoc (pas de sortie).
 
 ## Modèle ML
 
-- **Variable cible** : `orientation` — 4 classes : `Gauche`, `Centre`, `Droite`, `ExtremeDroite`
+- **Variable cible** : `orientation` — 3 classes : `Gauche`, `Centre`, `Droite` (l'extrême droite est fusionnée dans `Droite`)
 - **Modèle retenu** : GradientBoosting (accuracy 93.3% sur test 2017, France)
 - **Strategie validation** : train 2002/2007/2012, test 2017, prediction 2022 comparee aux resultats reels 2022
 - **Features principales** : élections historiques, revenus, gini, taux_pauvrete, CSP, diplômes, naissances/décès, `typologie_territoire`
