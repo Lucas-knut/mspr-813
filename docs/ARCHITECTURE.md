@@ -74,7 +74,7 @@ Deux perimetres paralleles :
 | `gold` | `features_communes` | Features Petite Couronne x 5 annees (2002-2022) | 620 |
 | `gold` | `predictions_2022` | Predictions Petite Couronne pour 2022 | ~124 |
 | `gold_france` | `features_communes` | Features France x 5 annees (2002-2022) | 167 866 |
-| `gold_france` | `predictions_2022` | Predictions France pour 2022 | ~34 783 |
+| `gold_france` | `predictions_2022` | Predictions France pour 2022 | 34 791 |
 
 ---
 
@@ -146,7 +146,7 @@ Deux perimetres paralleles :
 
 ## Visualisation
 
-Metabase (port 3000) connecte a PostgreSQL, 6 dashboards definis dans `docs/METABASE_QUESTIONS.md`.
+Metabase (port 3000) connecte a PostgreSQL, 21 questions SQL natif reparties en 6 dashboards definis dans `docs/METABASE_QUESTIONS.md`.
 
 ---
 

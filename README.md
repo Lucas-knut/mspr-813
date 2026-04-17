@@ -20,9 +20,9 @@ Machine Learning pour predire les tendances electorales (Gauche / Centre / Droit
 docker-compose up -d
 ```
 
-Accès :
+Acces :
 - JupyterLab : http://localhost:8888
-- pgAdmin    : http://localhost:5050
+- pgAdmin    : http://localhost:5050  (admin@epsi.fr / admin)
 - Metabase   : http://localhost:3000
 
 ### Initialiser la base de données
@@ -78,10 +78,22 @@ notebooks/communes/01_data_download.ipynb
 
 **Strategie** : entrainement sur 2002/2007/2012, test sur 2017, prediction 2022 comparee aux resultats reels 2022.
 
-| Périmètre | Modèle retenu | Accuracy (test 2017) | Predictions |
+| Perimetre | Modele retenu | Accuracy (test 2017) | Predictions |
 |-----------|--------------|----------------------|-------------|
 | Petite Couronne | GradientBoosting | — | ~124 communes |
-| France métro | GradientBoosting | **93.3%** | ~34 783 communes |
+| France metro | GradientBoosting | **93.3%** | 34 791 communes |
+
+**Comparaison reel vs predit 2022 (France metropolitaine) :**
+
+| Bloc | % communes reel 2022 | % communes predit 2022 | Ecart |
+|------|---------------------|------------------------|-------|
+| Droite | 75.3% | 77.8% | +2.5 |
+| Centre | 14.6% | 20.6% | +6.0 |
+| Gauche | 10.1% | 1.7% | -8.4 |
+
+Note : le biais sur la Gauche est documente — les classes sont fortement desequilibrees
+(~75% des exemples d'entrainement sont Droite). La Gauche est concentree dans quelques
+grandes communes tres peuplees mais peu nombreuses.
 
 ---
 
@@ -150,11 +162,11 @@ Le script demande le mot de passe Metabase au lancement (jamais stocké). Il est
 
 | Dashboard | Questions |
 |-----------|-----------|
-| Dashboard 1 — Vue nationale | Q1, Q2, Q11 |
-| Dashboard 2 — Analyse sociodémographique | Q4, Q5, Q6, Q8 |
-| Dashboard 3 — Typologie territoire | Q7, Q14, Q15 |
-| Dashboard 4 — Départements clés | Q9, Q10, Q16, Q17 |
-| Dashboard 5 — Prédictions 2022 | Q12, Q13, Q16 |
-| Dashboard 6 — Comparaison réel vs prédit 2022 | Q18, Q19, Q20 |
+| Dashboard 1 — Vue nationale | Q1, Q2, Q3 |
+| Dashboard 2 — Analyse sociodemographique | Q4, Q5, Q6, Q8 |
+| Dashboard 3 — Typologie territoire | Q7, Q12, Q14 |
+| Dashboard 4 — Departements cles | Q9, Q10, Q15 |
+| Dashboard 5 — Predictions 2022 | Q11, Q13, Q14 |
+| Dashboard 6 — Comparaison reel vs predit 2022 | Q21, Q16, Q17, Q18, Q19, Q20 |
 
-Voir `docs/METABASE_QUESTIONS.md` pour la définition complète des 20 questions.
+Voir `docs/METABASE_QUESTIONS.md` pour la definition complete des 21 questions (SQL natif).
