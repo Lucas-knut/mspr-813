@@ -197,33 +197,8 @@ def set_dashboard_cards(token, dashboard_id, card_specs):
 # Definitions des questions
 # ---------------------------------------------------------------------------
 
-def make_gui_card(database_id, table_id, name, aggregations, breakouts, filters=None, order_by=None, limit=None, display="bar"):
-    """Construit un payload card de type query builder (MBQL)."""
-    query = {
-        "source-table": table_id,
-        "aggregation": aggregations,
-        "breakout": breakouts,
-    }
-    if filters:
-        query["filter"] = filters
-    if order_by:
-        query["order-by"] = order_by
-    if limit:
-        query["limit"] = limit
-
-    return {
-        "name": name,
-        "dataset_query": {
-            "type": "query",
-            "database": database_id,
-            "query": query,
-        },
-        "display": display,
-        "visualization_settings": {},
-    }
-
-
 def make_sql_card(database_id, name, sql, display="table"):
+    """Construit un payload card de type native SQL."""
     return {
         "name": name,
         "dataset_query": {
@@ -238,326 +213,338 @@ def make_sql_card(database_id, name, sql, display="table"):
 
 def build_all_cards(database_id, fields_fc, fields_pred):
     """
-    Construit les payloads des 20 questions.
-    fields_fc   : dict field_name -> field_id pour features_communes
-    fields_pred : dict field_name -> field_id pour predictions_2022
+    Construit les payloads des 20 questions, toutes en SQL natif.
+    Chaque requete retourne un tableau simple (categorie + valeur numerique)
+    pour que Metabase puisse afficher le graphique sans configuration manuelle.
     """
-
-    def fc(name):
-        fid = fields_fc.get(name)
-        if fid is None:
-            print(f"    WARN : champ '{name}' introuvable dans features_communes")
-        return fid
-
-    def pr(name):
-        fid = fields_pred.get(name)
-        if fid is None:
-            print(f"    WARN : champ '{name}' introuvable dans predictions_2022")
-        return fid
-
-    tid_fc   = fields_fc["__table_id__"]
-    tid_pred = fields_pred["__table_id__"]
-
     cards = []
 
     # ------------------------------------------------------------------
-    # Q1 — Evolution temporelle des blocs (features_communes)
+    # Q1 — Evolution temporelle des scores moyens par bloc (2002-2022)
+    # Ligne avec annee en X et pct moyen en Y, une serie par bloc.
+    # Format : annee | bloc | pct_moyen
     # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q1 - Evolution temporelle des blocs",
-        aggregations=[
-            ["avg", ["field", fc("pct_gauche"),  {}]],
-            ["avg", ["field", fc("pct_centre"),  {}]],
-            ["avg", ["field", fc("pct_droite"),  {}]],
-        ],
-        breakouts=[["field", fc("annee"), {}]],
+    cards.append(make_sql_card(database_id,
+        name="Q1 - Evolution du score moyen par bloc (2002-2022)",
+        sql="""
+SELECT annee::text AS annee, 'Gauche'  AS bloc, ROUND(AVG(pct_gauche)::numeric, 1) AS pct_moyen
+FROM gold_france.features_communes
+GROUP BY annee
+UNION ALL
+SELECT annee::text, 'Centre'  AS bloc, ROUND(AVG(pct_centre)::numeric, 1) AS pct_moyen
+FROM gold_france.features_communes
+GROUP BY annee
+UNION ALL
+SELECT annee::text, 'Droite'  AS bloc, ROUND(AVG(pct_droite)::numeric, 1) AS pct_moyen
+FROM gold_france.features_communes
+GROUP BY annee
+ORDER BY annee, bloc;
+""",
         display="line",
     ))
 
     # ------------------------------------------------------------------
-    # Q2 — Repartition des blocs dominants par annee
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q2 - Repartition blocs dominants par annee",
-        aggregations=[["count"]],
-        breakouts=[
-            ["field", fc("annee"),          {}],
-            ["field", fc("bloc_dominant"),  {}],
-        ],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q3 — Communes par bloc dominant en 2022
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q3 - Communes par bloc dominant en 2022",
-        aggregations=[["count"]],
-        breakouts=[["field", fc("bloc_dominant"), {}]],
-        filters=["=", ["field", fc("annee"), {}], 2022],
-        display="table",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q4 — CSP par bloc dominant (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q4 - CSP par bloc dominant (2022)",
-        aggregations=[
-            ["avg", ["field", fc("cadres_pct"),    {}]],
-            ["avg", ["field", fc("ouvriers_pct"),  {}]],
-            ["avg", ["field", fc("employes_pct"),  {}]],
-            ["avg", ["field", fc("artisans_pct"),  {}]],
-        ],
-        breakouts=[["field", fc("bloc_dominant"), {}]],
-        filters=["=", ["field", fc("annee"), {}], 2022],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q5 — Diplomes par bloc dominant (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q5 - Diplomes par bloc dominant (2022)",
-        aggregations=[
-            ["avg", ["field", fc("pct_bac_plus"),     {}]],
-            ["avg", ["field", fc("pct_sans_diplome"), {}]],
-        ],
-        breakouts=[["field", fc("bloc_dominant"), {}]],
-        filters=["=", ["field", fc("annee"), {}], 2022],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q6 — Revenus et pauvrete par bloc dominant (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q6 - Revenus et pauvrete par bloc dominant (2022)",
-        aggregations=[
-            ["median", ["field", fc("mediane_revenu_disp"), {}]],
-            ["avg",    ["field", fc("taux_pauvrete"),       {}]],
-        ],
-        breakouts=[["field", fc("bloc_dominant"), {}]],
-        filters=["=", ["field", fc("annee"), {}], 2022],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q7 — Bloc dominant par typologie (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q7 - Bloc dominant par typologie (2022)",
-        aggregations=[["count"]],
-        breakouts=[
-            ["field", fc("typologie_territoire"), {}],
-            ["field", fc("bloc_dominant"),        {}],
-        ],
-        filters=["=", ["field", fc("annee"), {}], 2022],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q8 — Caracteristiques socio-economiques par typologie (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q8 - Caracteristiques socio-economiques par typologie (2022)",
-        aggregations=[
-            ["avg", ["field", fc("pct_bac_plus"),         {}]],
-            ["avg", ["field", fc("cadres_pct"),            {}]],
-            ["avg", ["field", fc("mediane_revenu_disp"),  {}]],
-        ],
-        breakouts=[["field", fc("typologie_territoire"), {}]],
-        filters=["=", ["field", fc("annee"), {}], 2022],
-        display="table",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q9 — Top 10 departements Gauche (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q9 - Top 10 departements Gauche (2022)",
-        aggregations=[["count"]],
-        breakouts=[["field", fc("code_dep"), {}]],
-        filters=["and",
-            ["=", ["field", fc("annee"),          {}], 2022],
-            ["=", ["field", fc("bloc_dominant"),  {}], "Gauche"],
-        ],
-        order_by=[["desc", ["aggregation", 0]]],
-        limit=10,
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q10 — Top 10 departements Droite (2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_fc,
-        name="Q10 - Top 10 departements Droite (2022)",
-        aggregations=[["count"]],
-        breakouts=[["field", fc("code_dep"), {}]],
-        filters=["and",
-            ["=", ["field", fc("annee"),          {}], 2022],
-            ["=", ["field", fc("bloc_dominant"),  {}], "Droite"],
-        ],
-        order_by=[["desc", ["aggregation", 0]]],
-        limit=10,
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q11 — Predictions 2022 par bloc
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_pred,
-        name="Q11 - Predictions 2022 par bloc",
-        aggregations=[["count"]],
-        breakouts=[["field", pr("bloc_predit"), {}]],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q12 — Communes predites en 2022
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_pred,
-        name="Q12 - Communes predites en 2022",
-        aggregations=[["count"]],
-        breakouts=[
-            ["field", pr("bloc_predit"),          {}],
-            ["field", pr("typologie_territoire"), {}],
-        ],
-        display="table",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q13 — Probabilites moyennes par bloc (predit 2022)
-    # Requete SQL native : pivot des 3 probabilites en lignes (bloc, prob_moyenne)
-    # pour obtenir un bar chart lisible avec axe X = bloc.
-    # ------------------------------------------------------------------
-    cards.append(make_sql_card(
-        database_id,
-        name="Q13 - Probabilites moyennes par bloc (predit 2022)",
-        sql=(
-            "SELECT 'Gauche'  AS bloc, ROUND(AVG(prob_gauche)::numeric, 4) AS prob_moyenne "
-            "FROM gold_france.predictions_2022\n"
-            "UNION ALL\n"
-            "SELECT 'Centre'  AS bloc, ROUND(AVG(prob_centre)::numeric, 4) AS prob_moyenne "
-            "FROM gold_france.predictions_2022\n"
-            "UNION ALL\n"
-            "SELECT 'Droite'  AS bloc, ROUND(AVG(prob_droite)::numeric, 4) AS prob_moyenne "
-            "FROM gold_france.predictions_2022\n"
-            "ORDER BY bloc"
-        ),
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q14 — Predictions 2022 par typologie
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_pred,
-        name="Q14 - Predictions 2022 par typologie",
-        aggregations=[["count"]],
-        breakouts=[
-            ["field", pr("typologie_territoire"), {}],
-            ["field", pr("bloc_predit"),          {}],
-        ],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q15 — Probabilite Droite par typologie (predit 2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_pred,
-        name="Q15 - Probabilite Droite par typologie (predit 2022)",
-        aggregations=[["avg", ["field", pr("prob_droite"), {}]]],
-        breakouts=[["field", pr("typologie_territoire"), {}]],
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q16 — Top 20 departements Droite (predit 2022)
-    # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_pred,
-        name="Q16 - Top 20 departements Droite (predit 2022)",
-        aggregations=[["count"]],
-        breakouts=[["field", pr("code_dep"), {}]],
-        filters=["=", ["field", pr("bloc_predit"), {}], "Droite"],
-        order_by=[["desc", ["aggregation", 0]]],
-        limit=20,
-        display="bar",
-    ))
-
-    # ------------------------------------------------------------------
-    # Q17 — Communes mal predites : predit vs reel 2022
+    # Q2 — Nombre de communes par bloc dominant et par annee
+    # Bar chart empile : annee en X, nb_communes en Y, serie = bloc
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q17 - Communes mal predites : predit vs reel 2022",
+        name="Q2 - Communes par bloc dominant et par annee",
         sql="""
 SELECT
-  p.code_commune,
-  p.libelle,
-  p.code_dep,
-  p.bloc_predit,
-  fc.bloc_dominant AS bloc_reel,
-  p.typologie_territoire
-FROM gold_france.predictions_2022 p
-JOIN gold_france.features_communes fc
-  ON p.code_commune = fc.code_commune
-WHERE fc.annee = 2022
-  AND p.bloc_predit <> fc.bloc_dominant
-ORDER BY p.code_dep, p.libelle
-LIMIT 100;
+    annee::text AS annee,
+    bloc_dominant AS bloc,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY annee), 1) AS pourcentage
+FROM gold_france.features_communes
+GROUP BY annee, bloc_dominant
+ORDER BY annee, bloc_dominant;
 """,
-        display="table",
+        display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q18 — Comparaison reel 2022 vs predit 2022 par departement
+    # Q3 — Repartition des communes par bloc dominant en 2022 (reel)
+    # Pie chart : bloc en categorie, nb_communes et pct en valeurs
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q18 - Comparaison reel vs predit 2022 par departement",
+        name="Q3 - Repartition des communes par bloc dominant en 2022 (reel)",
         sql="""
-SELECT 'Reel 2022' AS source, code_dep, bloc_dominant AS bloc, COUNT(*) AS nb
+SELECT
+    bloc_dominant AS bloc,
+    COUNT(*) AS nb_communes
 FROM gold_france.features_communes
 WHERE annee = 2022
-  AND code_dep IN ('59','62','69','13','75','92','93','94','06','33')
-GROUP BY code_dep, bloc_dominant
-UNION ALL
-SELECT 'Predit 2022', p.code_dep, p.bloc_predit, COUNT(*)
-FROM gold_france.predictions_2022 p
-WHERE code_dep IN ('59','62','69','13','75','92','93','94','06','33')
-GROUP BY code_dep, bloc_predit
-ORDER BY code_dep, source, nb DESC;
+GROUP BY bloc_dominant
+ORDER BY nb_communes DESC;
+""",
+        display="pie",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q4 — Profil CSP moyen par bloc dominant en 2022
+    # Tableau : bloc en ligne, CSP en colonnes
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q4 - Profil CSP moyen par bloc dominant en 2022",
+        sql="""
+SELECT
+    bloc_dominant AS bloc,
+    ROUND(AVG(cadres_pct)::numeric,   1) AS pct_cadres_prof_intellectuelles,
+    ROUND(AVG(ouvriers_pct)::numeric, 1) AS pct_ouvriers,
+    ROUND(AVG(employes_pct)::numeric, 1) AS pct_employes,
+    ROUND(AVG(artisans_pct)::numeric, 1) AS pct_artisans_commercants
+FROM gold_france.features_communes
+WHERE annee = 2022
+GROUP BY bloc_dominant
+ORDER BY bloc_dominant;
 """,
         display="table",
     ))
 
     # ------------------------------------------------------------------
-    # Q19 — Accuracy par bloc : reel vs predit 2022
+    # Q5 — Niveau de diplome moyen par bloc dominant en 2022
+    # Bar chart : bloc en X, pct bac+ et sans diplome en Y
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q19 - Accuracy par bloc : reel vs predit 2022",
+        name="Q5 - Niveau de diplome par bloc dominant en 2022",
+        sql="""
+SELECT bloc_dominant AS bloc, '% diplomes bac+' AS indicateur, ROUND(AVG(pct_bac_plus)::numeric, 1) AS pourcentage_habitants
+FROM gold_france.features_communes WHERE annee = 2022 GROUP BY bloc_dominant
+UNION ALL
+SELECT bloc_dominant, '% sans diplome', ROUND(AVG(pct_sans_diplome)::numeric, 1)
+FROM gold_france.features_communes WHERE annee = 2022 GROUP BY bloc_dominant
+ORDER BY bloc, indicateur;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q6 — Revenu median et taux de pauvrete par bloc dominant en 2022
+    # Tableau : les echelles sont trop differentes pour un graphique mixte
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q6 - Revenu et pauvrete par bloc dominant en 2022",
         sql="""
 SELECT
-  fc.bloc_dominant AS bloc_reel,
-  p.bloc_predit,
-  COUNT(*) AS nb_communes,
-  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY fc.bloc_dominant), 1) AS pct
+    bloc_dominant AS bloc,
+    ROUND(AVG(mediane_revenu_disp)::numeric, 0) AS revenu_median_disponible_eur,
+    ROUND(AVG(taux_pauvrete)::numeric,       1) AS taux_pauvrete_pct_population,
+    ROUND(AVG(gini)::numeric,                3) AS indice_gini_inegalites_0_a_1
+FROM gold_france.features_communes
+WHERE annee = 2022
+GROUP BY bloc_dominant
+ORDER BY bloc_dominant;
+""",
+        display="table",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q7 — Nombre de communes par bloc et par type de territoire en 2022
+    # Bar chart groupe : type de territoire en X, nb_communes en Y, serie = bloc
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q7 - Communes par bloc et type de territoire en 2022",
+        sql="""
+SELECT
+    typologie_territoire AS type_territoire,
+    bloc_dominant AS bloc,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY typologie_territoire), 1) AS pourcentage_dans_territoire
+FROM gold_france.features_communes
+WHERE annee = 2022
+GROUP BY typologie_territoire, bloc_dominant
+ORDER BY type_territoire, bloc;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q8 — Profil socio-eco moyen par type de territoire en 2022
+    # Tableau de synthese
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q8 - Profil socio-economique par type de territoire en 2022",
+        sql="""
+SELECT
+    typologie_territoire                             AS type_territoire,
+    COUNT(*)                                         AS nb_communes,
+    ROUND(AVG(pct_bac_plus)::numeric,          1)   AS pct_habitants_diplomes_bac_plus,
+    ROUND(AVG(cadres_pct)::numeric,            1)   AS pct_cadres_prof_intellectuelles,
+    ROUND(AVG(mediane_revenu_disp)::numeric,   0)   AS revenu_median_disponible_eur,
+    ROUND(AVG(taux_pauvrete)::numeric,         1)   AS taux_pauvrete_pct_population
+FROM gold_france.features_communes
+WHERE annee = 2022
+GROUP BY typologie_territoire
+ORDER BY nb_communes DESC;
+""",
+        display="table",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q9 — Top 15 departements avec le plus de communes Gauche en 2022
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q9 - Top 15 departements avec le plus de communes Gauche en 2022",
+        sql="""
+SELECT
+    code_dep AS departement,
+    COUNT(*) AS nb_communes_gauche
+FROM gold_france.features_communes
+WHERE annee = 2022
+  AND bloc_dominant = 'Gauche'
+GROUP BY code_dep
+ORDER BY nb_communes_gauche DESC
+LIMIT 15;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q10 — Top 15 departements avec le plus de communes Droite en 2022
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q10 - Top 15 departements avec le plus de communes Droite en 2022",
+        sql="""
+SELECT
+    code_dep AS departement,
+    COUNT(*) AS nb_communes_droite
+FROM gold_france.features_communes
+WHERE annee = 2022
+  AND bloc_dominant = 'Droite'
+GROUP BY code_dep
+ORDER BY nb_communes_droite DESC
+LIMIT 15;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q11 — Repartition des communes predites par bloc en 2022
+    # Pie chart : resultat du modele ML
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q11 - Repartition des predictions 2022 par bloc (modele ML)",
+        sql="""
+SELECT
+    bloc_predit AS bloc,
+    COUNT(*) AS nb_communes
+FROM gold_france.predictions_2022
+GROUP BY bloc_predit
+ORDER BY nb_communes DESC;
+""",
+        display="pie",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q12 — Predictions 2022 par bloc et par type de territoire
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q12 - Predictions 2022 par bloc et type de territoire",
+        sql="""
+SELECT
+    typologie_territoire AS type_territoire,
+    bloc_predit AS bloc,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY typologie_territoire), 1) AS pourcentage_dans_territoire
+FROM gold_france.predictions_2022
+GROUP BY typologie_territoire, bloc_predit
+ORDER BY type_territoire, bloc;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q13 — Probabilite moyenne d'appartenance a chaque bloc (modele ML)
+    # Pivot : une ligne par bloc avec la probabilite moyenne
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q13 - Probabilite moyenne par bloc selon le modele ML",
+        sql="""
+SELECT 'Gauche' AS bloc, ROUND(AVG(prob_gauche) * 100, 1) AS probabilite_moyenne_pct
+FROM gold_france.predictions_2022
+UNION ALL
+SELECT 'Centre' AS bloc, ROUND(AVG(prob_centre) * 100, 1) AS probabilite_moyenne_pct
+FROM gold_france.predictions_2022
+UNION ALL
+SELECT 'Droite' AS bloc, ROUND(AVG(prob_droite) * 100, 1) AS probabilite_moyenne_pct
+FROM gold_france.predictions_2022
+ORDER BY probabilite_moyenne_pct DESC;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q14 — Probabilite moyenne par bloc et par type de territoire
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q14 - Probabilite moyenne par bloc et type de territoire (ML)",
+        sql="""
+SELECT
+    typologie_territoire                      AS type_territoire,
+    ROUND(AVG(prob_gauche) * 100, 1)          AS prob_gauche_pct,
+    ROUND(AVG(prob_centre) * 100, 1)          AS prob_centre_pct,
+    ROUND(AVG(prob_droite) * 100, 1)          AS prob_droite_pct
+FROM gold_france.predictions_2022
+GROUP BY typologie_territoire
+ORDER BY type_territoire;
+""",
+        display="table",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q15 — Top 15 departements avec la probabilite Droite la plus elevee
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q15 - Top 15 departements par probabilite Droite moyenne (ML)",
+        sql="""
+SELECT
+    code_dep AS departement,
+    ROUND(AVG(prob_droite) * 100, 1) AS probabilite_droite_moyenne_pct
+FROM gold_france.predictions_2022
+GROUP BY code_dep
+ORDER BY probabilite_droite_moyenne_pct DESC
+LIMIT 15;
+""",
+        display="bar",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q16 — Comparaison reel vs predit 2022 : repartition globale
+    # Tableau cote a cote reel / predit
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q16 - Comparaison globale reel 2022 vs predit 2022",
+        sql="""
+SELECT
+    r.bloc,
+    r.pct AS pourcentage_reel_2022,
+    p.pct AS pourcentage_predit_2022,
+    r.pct - p.pct AS ecart_reel_moins_predit
+FROM (
+    SELECT bloc_dominant AS bloc, ROUND(COUNT(*)*100.0/SUM(COUNT(*)) OVER(),1) AS pct
+    FROM gold_france.features_communes WHERE annee=2022 GROUP BY bloc_dominant
+) r
+JOIN (
+    SELECT bloc_predit AS bloc, ROUND(COUNT(*)*100.0/SUM(COUNT(*)) OVER(),1) AS pct
+    FROM gold_france.predictions_2022 GROUP BY bloc_predit
+) p ON r.bloc = p.bloc
+ORDER BY r.pct DESC;
+""",
+        display="table",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q17 — Matrice de confusion reel vs predit 2022
+    # Tableau : pour chaque bloc reel, combien de communes predites dans chaque bloc
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q17 - Matrice de confusion reel vs predit 2022",
+        sql="""
+SELECT
+    fc.bloc_dominant  AS bloc_reel,
+    p.bloc_predit     AS bloc_predit,
+    COUNT(*)          AS nb_communes,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY fc.bloc_dominant), 1) AS pct_du_bloc_reel
 FROM gold_france.features_communes fc
 JOIN gold_france.predictions_2022 p
-  ON fc.code_commune = p.code_commune
+    ON fc.code_commune = p.code_commune
 WHERE fc.annee = 2022
 GROUP BY fc.bloc_dominant, p.bloc_predit
 ORDER BY fc.bloc_dominant, nb_communes DESC;
@@ -566,27 +553,100 @@ ORDER BY fc.bloc_dominant, nb_communes DESC;
     ))
 
     # ------------------------------------------------------------------
-    # Q20 — Prob Droite predit pour communes rurales Gauche reel 2022
+    # Q18 — Accuracy globale et par bloc du modele ML
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q20 - Prob Droite predit pour communes rurales Gauche 2022",
+        name="Q18 - Accuracy du modele ML par bloc (reel vs predit 2022)",
         sql="""
 SELECT
-  fc.typologie_territoire,
-  fc.bloc_dominant AS bloc_reel_2022,
-  p.bloc_predit    AS bloc_predit_2022,
-  COUNT(*)         AS nb_communes,
-  ROUND(AVG(p.prob_droite), 3) AS prob_droite_moy
+    fc.bloc_dominant AS bloc_reel,
+    COUNT(*)         AS nb_communes_reel,
+    SUM(CASE WHEN p.bloc_predit = fc.bloc_dominant THEN 1 ELSE 0 END) AS nb_bien_predites,
+    ROUND(
+        SUM(CASE WHEN p.bloc_predit = fc.bloc_dominant THEN 1 ELSE 0 END) * 100.0 / COUNT(*),
+        1
+    ) AS accuracy_pct
 FROM gold_france.features_communes fc
 JOIN gold_france.predictions_2022 p
-  ON fc.code_commune = p.code_commune
+    ON fc.code_commune = p.code_commune
 WHERE fc.annee = 2022
-  AND fc.typologie_territoire = 'rural'
-  AND fc.bloc_dominant = 'Gauche'
-GROUP BY fc.typologie_territoire, fc.bloc_dominant, p.bloc_predit
-ORDER BY nb_communes DESC;
+GROUP BY fc.bloc_dominant
+ORDER BY fc.bloc_dominant;
 """,
         display="table",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q19 — Communes mal predites : liste avec reel et predit
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q19 - Communes mal predites par le modele en 2022",
+        sql="""
+SELECT
+    p.code_commune,
+    p.libelle,
+    p.code_dep,
+    p.typologie_territoire AS territoire,
+    fc.bloc_dominant       AS bloc_reel,
+    p.bloc_predit          AS bloc_predit,
+    ROUND(p.prob_gauche * 100, 1) AS prob_gauche_pct,
+    ROUND(p.prob_centre * 100, 1) AS prob_centre_pct,
+    ROUND(p.prob_droite * 100, 1) AS prob_droite_pct
+FROM gold_france.predictions_2022 p
+JOIN gold_france.features_communes fc
+    ON p.code_commune = fc.code_commune
+WHERE fc.annee = 2022
+  AND p.bloc_predit <> fc.bloc_dominant
+ORDER BY p.code_dep, p.libelle
+LIMIT 200;
+""",
+        display="table",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q20 — Scores electoraux historiques pour les communes rurales de Gauche
+    # Contexte : comprendre pourquoi le modele a du mal a predire ces communes
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q20 - Historique electoral des communes rurales de Gauche",
+        sql="""
+SELECT annee::text AS annee, 'Score Gauche'  AS indicateur, ROUND(AVG(pct_gauche)::numeric, 1) AS score_moyen_pct
+FROM gold_france.features_communes WHERE bloc_dominant='Gauche' AND typologie_territoire='rural' GROUP BY annee
+UNION ALL
+SELECT annee::text, 'Score Centre', ROUND(AVG(pct_centre)::numeric, 1)
+FROM gold_france.features_communes WHERE bloc_dominant='Gauche' AND typologie_territoire='rural' GROUP BY annee
+UNION ALL
+SELECT annee::text, 'Score Droite', ROUND(AVG(pct_droite)::numeric, 1)
+FROM gold_france.features_communes WHERE bloc_dominant='Gauche' AND typologie_territoire='rural' GROUP BY annee
+ORDER BY annee, indicateur;
+""",
+        display="line",
+    ))
+
+    # ------------------------------------------------------------------
+    # Q21 — Bar chart reel vs predit 2022 par bloc (graphique)
+    # Pivot pour avoir source en X et une serie par bloc
+    # ------------------------------------------------------------------
+    cards.append(make_sql_card(database_id,
+        name="Q21 - Reel vs predit 2022 par bloc (graphique)",
+        sql="""
+SELECT
+    'Reel 2022' AS source,
+    bloc_dominant AS bloc,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pourcentage_communes
+FROM gold_france.features_communes
+WHERE annee = 2022
+GROUP BY bloc_dominant
+UNION ALL
+SELECT
+    'Predit 2022',
+    bloc_predit,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1)
+FROM gold_france.predictions_2022
+GROUP BY bloc_predit
+ORDER BY source DESC, pourcentage_communes DESC;
+""",
+        display="bar",
     ))
 
     return cards
@@ -615,40 +675,55 @@ def get_fields(token, table_id):
 DASHBOARD_DEFINITIONS = [
     {
         "name": "Dashboard 1 - Vue nationale",
-        "questions": ["Q1 - Evolution temporelle des blocs",
-                      "Q2 - Repartition blocs dominants par annee",
-                      "Q11 - Predictions 2022 par bloc"],
+        "questions": [
+            "Q1 - Evolution du score moyen par bloc (2002-2022)",
+            "Q2 - Communes par bloc dominant et par annee",
+            "Q3 - Repartition des communes par bloc dominant en 2022 (reel)",
+        ],
     },
     {
         "name": "Dashboard 2 - Analyse sociodemographique",
-        "questions": ["Q4 - CSP par bloc dominant (2022)",
-                      "Q5 - Diplomes par bloc dominant (2022)",
-                      "Q6 - Revenus et pauvrete par bloc dominant (2022)",
-                      "Q8 - Caracteristiques socio-economiques par typologie (2022)"],
+        "questions": [
+            "Q4 - Profil CSP moyen par bloc dominant en 2022",
+            "Q5 - Niveau de diplome par bloc dominant en 2022",
+            "Q6 - Revenu et pauvrete par bloc dominant en 2022",
+            "Q8 - Profil socio-economique par type de territoire en 2022",
+        ],
     },
     {
         "name": "Dashboard 3 - Typologie territoire",
-        "questions": ["Q7 - Bloc dominant par typologie (2022)",
-                      "Q14 - Predictions 2022 par typologie",
-                      "Q15 - Probabilite Droite par typologie (predit 2022)"],
+        "questions": [
+            "Q7 - Communes par bloc et type de territoire en 2022",
+            "Q12 - Predictions 2022 par bloc et type de territoire",
+            "Q14 - Probabilite moyenne par bloc et type de territoire (ML)",
+        ],
     },
     {
         "name": "Dashboard 4 - Departements cles",
-        "questions": ["Q9 - Top 10 departements Gauche (2022)",
-                      "Q10 - Top 10 departements Droite (2022)",
-                      "Q16 - Top 20 departements Droite (predit 2022)"],
+        "questions": [
+            "Q9 - Top 15 departements avec le plus de communes Gauche en 2022",
+            "Q10 - Top 15 departements avec le plus de communes Droite en 2022",
+            "Q15 - Top 15 departements par probabilite Droite moyenne (ML)",
+        ],
     },
     {
         "name": "Dashboard 5 - Predictions 2022",
-        "questions": ["Q12 - Communes predites en 2022",
-                      "Q13 - Probabilites moyennes par bloc (predit 2022)",
-                      "Q16 - Top 20 departements Droite (predit 2022)"],
+        "questions": [
+            "Q11 - Repartition des predictions 2022 par bloc (modele ML)",
+            "Q13 - Probabilite moyenne par bloc selon le modele ML",
+            "Q14 - Probabilite moyenne par bloc et type de territoire (ML)",
+        ],
     },
     {
         "name": "Dashboard 6 - Comparaison reel vs predit 2022",
-        "questions": ["Q18 - Comparaison reel vs predit 2022 par departement",
-                      "Q19 - Accuracy par bloc : reel vs predit 2022",
-                      "Q20 - Prob Droite predit pour communes rurales Gauche 2022"],
+        "questions": [
+            "Q21 - Reel vs predit 2022 par bloc (graphique)",
+            "Q16 - Comparaison globale reel 2022 vs predit 2022",
+            "Q17 - Matrice de confusion reel vs predit 2022",
+            "Q18 - Accuracy du modele ML par bloc (reel vs predit 2022)",
+            "Q19 - Communes mal predites par le modele en 2022",
+            "Q20 - Historique electoral des communes rurales de Gauche",
+        ],
     },
 ]
 
@@ -666,27 +741,10 @@ def main():
     print("\n--- Datasource ---")
     db_id = get_database_id(token, db_name="MSPR 813")
 
-    print("\n--- Tables ---")
-    table_id_fc = get_table_id(token, db_id, schema="gold_france", table_name="features_communes")
-    table_id_pred = get_table_id(token, db_id, schema="gold_france", table_name="predictions_2022")
-
-    if not table_id_fc or not table_id_pred:
-        print("Tables introuvables. Verifier que PostgreSQL est synchronise dans Metabase.")
-        print("Admin > Databases > mspr813 > Sync database schema now")
-        sys.exit(1)
-
-    print(f"  features_communes : id={table_id_fc}")
-    print(f"  predictions_2022  : id={table_id_pred}")
-
-    print("\n--- Champs ---")
-    fields_fc   = get_fields(token, table_id_fc)
-    fields_pred = get_fields(token, table_id_pred)
-    print(f"  features_communes : {len(fields_fc)-1} champs")
-    print(f"  predictions_2022  : {len(fields_pred)-1} champs")
-
     print("\n--- Questions ---")
     cards_existing = existing_cards(token)
-    card_payloads = build_all_cards(db_id, fields_fc, fields_pred)
+    # Toutes les questions sont en SQL natif, pas besoin des field ids
+    card_payloads = build_all_cards(db_id, {}, {})
 
     card_ids = {}
     for payload in card_payloads:
