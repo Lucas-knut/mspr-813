@@ -48,6 +48,9 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@epsi.fr
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
+    volumes:
+      - ./pgadmin_servers.json:/pgadmin4/servers.json:ro
     depends_on:
       postgres:
         condition: service_healthy

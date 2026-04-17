@@ -162,9 +162,9 @@ Modifications clés :
 3. **Features enrichies** (ajout typologie) :
 ```python
 FEATURES = [
-    # Lag + tendances (×8)
-    'pct_gauche_lag1', 'pct_centre_lag1', 'pct_droite_lag1', 'pct_extremedroite_lag1',
-    'pct_gauche_trend', 'pct_centre_trend', 'pct_droite_trend', 'pct_extremedroite_trend',
+    # Lag + tendances (×6)
+    'pct_gauche_lag1', 'pct_centre_lag1', 'pct_droite_lag1',
+    'pct_gauche_trend', 'pct_centre_trend', 'pct_droite_trend',
     # CSP (×4)
     'cadres_pct', 'ouvriers_pct', 'employes_pct', 'artisans_pct',
     # Diplomes (×2)
@@ -229,8 +229,8 @@ Dashboards à créer après exécution du pipeline :
    - Histogrammes distribution blocs côte-à-côte
 
 2. **Dashboard France par typologie**
-   - Blocs prédits 2027 par type de territoire (urbain / périurbain / rural)
-   - Évolution Gauche/Droite/Centre/ExtremeDroite 2002-2027 par typologie
+   - Blocs prédits 2022 par type de territoire (urbain / périurbain / rural)
+   - Évolution Gauche/Droite/Centre 2002-2022 par typologie
    - Bar chart distribution blocs × département
 
 3. **Dashboard départemental (interactif)**

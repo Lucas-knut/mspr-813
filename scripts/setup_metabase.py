@@ -267,10 +267,9 @@ def build_all_cards(database_id, fields_fc, fields_pred):
         database_id, tid_fc,
         name="Q1 - Evolution temporelle des blocs",
         aggregations=[
-            ["avg", ["field", fc("pct_gauche"),       {}]],
-            ["avg", ["field", fc("pct_centre"),       {}]],
-            ["avg", ["field", fc("pct_droite"),       {}]],
-            ["avg", ["field", fc("pct_extremedroite"), {}]],
+            ["avg", ["field", fc("pct_gauche"),  {}]],
+            ["avg", ["field", fc("pct_centre"),  {}]],
+            ["avg", ["field", fc("pct_droite"),  {}]],
         ],
         breakouts=[["field", fc("annee"), {}]],
         display="line",
@@ -398,16 +397,16 @@ def build_all_cards(database_id, fields_fc, fields_pred):
     ))
 
     # ------------------------------------------------------------------
-    # Q10 — Top 10 departements ExtremeDroite (2022)
+    # Q10 — Top 10 departements Droite (2022)
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_fc,
-        name="Q10 - Top 10 departements ExtremeDroite (2022)",
+        name="Q10 - Top 10 departements Droite (2022)",
         aggregations=[["count"]],
         breakouts=[["field", fc("code_dep"), {}]],
         filters=["and",
             ["=", ["field", fc("annee"),          {}], 2022],
-            ["=", ["field", fc("bloc_dominant"),  {}], "ExtremeDroite"],
+            ["=", ["field", fc("bloc_dominant"),  {}], "Droite"],
         ],
         order_by=[["desc", ["aggregation", 0]]],
         limit=10,
@@ -446,10 +445,9 @@ def build_all_cards(database_id, fields_fc, fields_pred):
         database_id, tid_pred,
         name="Q13 - Probabilites moyennes par bloc (predit 2022)",
         aggregations=[
-            ["avg", ["field", pr("prob_gauche"),        {}]],
-            ["avg", ["field", pr("prob_centre"),        {}]],
-            ["avg", ["field", pr("prob_droite"),        {}]],
-            ["avg", ["field", pr("prob_extremedroite"), {}]],
+            ["avg", ["field", pr("prob_gauche"), {}]],
+            ["avg", ["field", pr("prob_centre"), {}]],
+            ["avg", ["field", pr("prob_droite"), {}]],
         ],
         breakouts=[],
         display="bar",
@@ -470,25 +468,25 @@ def build_all_cards(database_id, fields_fc, fields_pred):
     ))
 
     # ------------------------------------------------------------------
-    # Q15 — Probabilite ExtremeDroite par typologie (predit 2022)
+    # Q15 — Probabilite Droite par typologie (predit 2022)
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q15 - Probabilite ExtremeDroite par typologie (predit 2022)",
-        aggregations=[["avg", ["field", pr("prob_extremedroite"), {}]]],
+        name="Q15 - Probabilite Droite par typologie (predit 2022)",
+        aggregations=[["avg", ["field", pr("prob_droite"), {}]]],
         breakouts=[["field", pr("typologie_territoire"), {}]],
         display="bar",
     ))
 
     # ------------------------------------------------------------------
-    # Q16 — Top 20 departements ExtremeDroite (predit 2022)
+    # Q16 — Top 20 departements Droite (predit 2022)
     # ------------------------------------------------------------------
     cards.append(make_gui_card(
         database_id, tid_pred,
-        name="Q16 - Top 20 departements ExtremeDroite (predit 2022)",
+        name="Q16 - Top 20 departements Droite (predit 2022)",
         aggregations=[["count"]],
         breakouts=[["field", pr("code_dep"), {}]],
-        filters=["=", ["field", pr("bloc_predit"), {}], "ExtremeDroite"],
+        filters=["=", ["field", pr("bloc_predit"), {}], "Droite"],
         order_by=[["desc", ["aggregation", 0]]],
         limit=20,
         display="bar",
@@ -561,17 +559,17 @@ ORDER BY fc.bloc_dominant, nb_communes DESC;
     ))
 
     # ------------------------------------------------------------------
-    # Q20 — Prob ExtremeDroite predit pour communes rurales Gauche reel 2022
+    # Q20 — Prob Droite predit pour communes rurales Gauche reel 2022
     # ------------------------------------------------------------------
     cards.append(make_sql_card(database_id,
-        name="Q20 - Prob ExtremeDroite predit pour communes rurales Gauche 2022",
+        name="Q20 - Prob Droite predit pour communes rurales Gauche 2022",
         sql="""
 SELECT
   fc.typologie_territoire,
   fc.bloc_dominant AS bloc_reel_2022,
   p.bloc_predit    AS bloc_predit_2022,
   COUNT(*)         AS nb_communes,
-  ROUND(AVG(p.prob_extremedroite), 3) AS prob_xd_moy
+  ROUND(AVG(p.prob_droite), 3) AS prob_droite_moy
 FROM gold_france.features_communes fc
 JOIN gold_france.predictions_2022 p
   ON fc.code_commune = p.code_commune
@@ -625,25 +623,25 @@ DASHBOARD_DEFINITIONS = [
         "name": "Dashboard 3 - Typologie territoire",
         "questions": ["Q7 - Bloc dominant par typologie (2022)",
                       "Q14 - Predictions 2022 par typologie",
-                      "Q15 - Probabilite ExtremeDroite par typologie (predit 2022)"],
+                      "Q15 - Probabilite Droite par typologie (predit 2022)"],
     },
     {
         "name": "Dashboard 4 - Departements cles",
         "questions": ["Q9 - Top 10 departements Gauche (2022)",
-                      "Q10 - Top 10 departements ExtremeDroite (2022)",
-                      "Q16 - Top 20 departements ExtremeDroite (predit 2022)"],
+                      "Q10 - Top 10 departements Droite (2022)",
+                      "Q16 - Top 20 departements Droite (predit 2022)"],
     },
     {
         "name": "Dashboard 5 - Predictions 2022",
         "questions": ["Q12 - Communes predites en 2022",
                       "Q13 - Probabilites moyennes par bloc (predit 2022)",
-                      "Q16 - Top 20 departements ExtremeDroite (predit 2022)"],
+                      "Q16 - Top 20 departements Droite (predit 2022)"],
     },
     {
         "name": "Dashboard 6 - Comparaison reel vs predit 2022",
         "questions": ["Q18 - Comparaison reel vs predit 2022 par departement",
                       "Q19 - Accuracy par bloc : reel vs predit 2022",
-                      "Q20 - Prob ExtremeDroite predit pour communes rurales Gauche 2022"],
+                      "Q20 - Prob Droite predit pour communes rurales Gauche 2022"],
     },
 ]
 

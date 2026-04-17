@@ -6,7 +6,7 @@
 
 ## Vue d'Ensemble
 
-Pipeline ML complet pour predire les resultats electoraux 2022 (Gauche / Centre / Droite / ExtremeDroite) sur **~35 000 communes de France metropolitaine**, avec comparaison aux resultats reels 2022 pour validation du modele.
+Pipeline ML complet pour predire les resultats electoraux 2022 (Gauche / Centre / Droite) sur **~35 000 communes de France metropolitaine**, avec comparaison aux resultats reels 2022 pour validation du modele. L'extreme droite est fusionnee dans le bloc `Droite`.
 
 **Approche** : entrainement sur les elections 2002/2007/2012, test sur 2017, prediction sur 2022 — les resultats reels 2022 permettent de mesurer la performance reelle du modele.
 
@@ -107,7 +107,7 @@ Deux perimetres paralleles :
 
 ## Modele Machine Learning
 
-**Variable cible** : orientation politique dominante (`Gauche` / `Centre` / `Droite` / `ExtremeDroite`)
+**Variable cible** : orientation politique dominante (`Gauche` / `Centre` / `Droite`) — l'extreme droite (FN, RN, etc.) est fusionnee dans `Droite`
 
 **Strategie de validation** :
 - Entrainement : elections 2002, 2007, 2012

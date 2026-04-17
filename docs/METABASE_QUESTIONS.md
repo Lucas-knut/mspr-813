@@ -9,7 +9,7 @@ Questions pertinentes à poser dans Metabase pour analyser les données élector
 ### Vue d'ensemble électorale
 
 **Q1 — Évolution temporelle des blocs**
-- Résumer : Moyenne de `pct_gauche`, `pct_centre`, `pct_droite`, `pct_extremedroite`
+- Résumer : Moyenne de `pct_gauche`, `pct_centre`, `pct_droite`
 - Grouper par : `annee`
 - Type de graphique : Lignes
 
@@ -67,8 +67,8 @@ Questions pertinentes à poser dans Metabase pour analyser les données élector
 - Trier : Décroissant, limiter à 10
 - Type de graphique : Barres
 
-**Q10 — Top 10 départements ExtremeDroite (2022)**
-- Filtrer : `annee = 2022`, `bloc_dominant = 'ExtremeDroite'`
+**Q10 — Top 10 départements Droite (2022)**
+- Filtrer : `annee = 2022`, `bloc_dominant = 'Droite'`
 - Grouper par : `code_dep`
 - Résumer : Nombre de lignes
 - Trier : Décroissant, limiter à 10
@@ -90,7 +90,7 @@ Questions pertinentes à poser dans Metabase pour analyser les données élector
 - Type de graphique : Tableau
 
 **Q13 — Probabilites moyennes par bloc (predit 2022)**
-- Resumer : Moyenne de `prob_gauche`, `prob_centre`, `prob_droite`, `prob_extremedroite`
+- Resumer : Moyenne de `prob_gauche`, `prob_centre`, `prob_droite`
 - Type de graphique : Barres
 
 ### Analyse par typologie
@@ -100,15 +100,15 @@ Questions pertinentes à poser dans Metabase pour analyser les données élector
 - Resumer : Nombre de lignes
 - Type de graphique : Barres empilees
 
-**Q15 — Probabilite ExtremeDroite par typologie (predit 2022)**
+**Q15 — Probabilite Droite par typologie (predit 2022)**
 - Grouper par : `typologie_territoire`
-- Resumer : Moyenne de `prob_extremedroite`
+- Resumer : Moyenne de `prob_droite`
 - Type de graphique : Barres
 
 ### Analyse departementale predictive
 
-**Q16 — Top 20 departements ExtremeDroite (predit 2022)**
-- Filtrer : `bloc_predit = 'ExtremeDroite'`
+**Q16 — Top 20 departements Droite (predit 2022)**
+- Filtrer : `bloc_predit = 'Droite'`
 - Grouper par : `code_dep`
 - Resumer : Nombre de lignes
 - Trier : Decroissant, limiter a 20
@@ -166,14 +166,14 @@ GROUP BY fc.bloc_dominant, p.bloc_predit
 ORDER BY fc.bloc_dominant, nb_communes DESC;
 ```
 
-**Q20 — Probabilite ExtremeDroite predit pour communes rurales Gauche reel 2022** *(SQL natif)*
+**Q20 — Probabilite Droite predit pour communes rurales Gauche reel 2022** *(SQL natif)*
 ```sql
 SELECT
   fc.typologie_territoire,
   fc.bloc_dominant AS bloc_reel_2022,
   p.bloc_predit    AS bloc_predit_2022,
   COUNT(*)         AS nb_communes,
-  ROUND(AVG(p.prob_extremedroite), 3) AS prob_xd_moy
+  ROUND(AVG(p.prob_droite), 3) AS prob_droite_moy
 FROM gold_france.features_communes fc
 JOIN gold_france.predictions_2022 p
   ON fc.code_commune = p.code_commune

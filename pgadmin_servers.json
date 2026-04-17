@@ -1,0 +1,15 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "MSPR 813",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "mspr813",
+            "Username": "mspr_user",
+            "Password": "mspr_password",
+            "SSLMode": "prefer",
+            "Favorite": true
+        }
+    }
+}

@@ -76,7 +76,7 @@ Imputation par médiane départementale puis médiane nationale (déjà gérée 
 4. Exécuter `notebooks/communes/france/02_feature_engineering.ipynb` → rebuild `gold_france.features_communes`
 5. Vérifier `gold_france.features_communes.taux_pauvrete` → 100% couverture
 6. Modifier `notebooks/communes/france/03_modeling.ipynb` (features revenus)
-7. Exécuter `notebooks/communes/france/03_modeling.ipynb` → rebuild `gold_france.predictions_2025_2027`
+7. Exécuter `notebooks/communes/france/03_modeling.ipynb` → rebuild `gold_france.predictions_2022`
 8. Validation finale en base
 
 ## Critères de validation

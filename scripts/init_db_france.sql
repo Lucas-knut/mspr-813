@@ -207,7 +207,6 @@ CREATE TABLE IF NOT EXISTS gold_france.features_communes (
     pct_gauche              NUMERIC(6,3),
     pct_centre              NUMERIC(6,3),
     pct_droite              NUMERIC(6,3),
-    pct_extremedroite       NUMERIC(6,3),
     pct_divers              NUMERIC(6,3),
     bloc_dominant           VARCHAR(20),
 
@@ -267,7 +266,6 @@ CREATE TABLE IF NOT EXISTS gold_france.predictions_2022 (
     prob_gauche             NUMERIC(6,4),
     prob_centre             NUMERIC(6,4),
     prob_droite             NUMERIC(6,4),
-    prob_extremedroite      NUMERIC(6,4),
     modele                  VARCHAR(30),
     typologie_territoire    VARCHAR(20),
     created_at              TIMESTAMP    DEFAULT NOW(),

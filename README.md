@@ -1,7 +1,7 @@
 # MSPR Big Data - Prédiction Électorale
 
 **Projet EPSI - BLOC 3 RNCP35584**
-Machine Learning pour predire les tendances electorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France metropolitaine pour 2022, avec comparaison aux resultats reels 2022.
+Machine Learning pour predire les tendances electorales (Gauche / Centre / Droite) sur ~35 000 communes de France metropolitaine pour 2022, avec comparaison aux resultats reels 2022. L'extreme droite (FN, RN, etc.) est fusionnee dans le bloc Droite.
 
 ---
 
