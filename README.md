@@ -1,85 +1,167 @@
 # MSPR Big Data - Prédiction Électorale
 
-**Projet EPSI - BLOC 3 RNCP35584**  
-Machine Learning pour prédire les tendances électorales à partir d'indicateurs socio-économiques
+**Projet EPSI - BLOC 3 RNCP35584**
+Machine Learning pour prédire les tendances électorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France métropolitaine, horizon 2025-2027.
 
-## Objectif
-
-Développer un modèle de Machine Learning supervisé capable de prédire les résultats électoraux sur un horizon de 1 à 3 ans en analysant des variables socio-économiques : sécurité, emploi, démographie, pauvreté, activité économique, logements.
-
-## Contexte
-
-Proof-of-Concept (POC) pour Electio-Analytics, start-up spécialisée dans le conseil stratégique pour campagnes électorales. Le projet utilise exclusivement des données publiques (data.gouv.fr, INSEE) pour créer un avantage concurrentiel via l'analyse prédictive.
+---
 
 ## Stack Technique
 
-- Python 3.11, pandas 2.1.4, scikit-learn
-- Docker + Jupyter Lab
-- Format Parquet pour données optimisées
-- Visualisations : matplotlib, plotly, seaborn
+- Python 3.11, pandas, scikit-learn
+- PostgreSQL 15 (stockage Silver + Gold)
+- Docker + JupyterLab
+- Metabase (visualisations)
 
-## Structure du Projet - Architecture Medallion
-
-```
-data/                # Architecture Bronze/Silver/Gold
-  bronze/            # 🥉 Données brutes sources (CSV/Excel) - Immuables
-  silver/            # 🥈 Données nettoyées (Parquet) - Validées
-  gold/              # 🥇 Résultats ML et agrégations - Business-ready
-
-config.py            # Configuration centralisée (chemins, paramètres)
-
-notebooks/           # Pipeline de notebooks Jupyter
-  00_setup.ipynb              # Validation environnement
-  01_data_download.ipynb      # Téléchargement → Bronze
-  02_exploration.ipynb        # Analyse exploratoire Bronze → Silver
-  03_etl.ipynb                # ETL Bronze → Silver
-  04_features.ipynb           # Features Silver → Gold
-  05_modeling.ipynb           # Entraînement modèles ML (Gold)
-  06_predictions.ipynb        # Prédictions finales (Gold)
-
-docs/                # Documentation détaillée
-  CAHIER_DES_CHARGES.md       # Cahier des charges complet MSPR
-  ARCHITECTURE.md             # Architecture technique globale
-  DATA_ARCHITECTURE.md        # Architecture données (Medallion)
-  DATASETS.md                 # Catalogue des datasets
-```
-
-> **📖 Documentation architecture données** : [`docs/DATA_ARCHITECTURE.md`](docs/DATA_ARCHITECTURE.md)
+---
 
 ## Démarrage
 
 ```bash
-# Lancer l'environnement Docker
 docker-compose up -d
-
-# Accéder à Jupyter Lab
-# http://localhost:8888
 ```
 
-## Pipeline d'Exécution
+Accès :
+- JupyterLab : http://localhost:8888
+- pgAdmin    : http://localhost:5050
+- Metabase   : http://localhost:3000
 
-Exécuter les notebooks dans l'ordre numérique :
-1. `00_setup.ipynb` - Validation environnement
-2. `01_data_download.ipynb` - Téléchargement données
-3. `02_exploration.ipynb` - EDA et corrélations
-4. `03_etl.ipynb` - Nettoyage et transformation
-5. `04_features.ipynb` - Feature engineering
-6. `05_modeling.ipynb` - ML supervisé + métriques
+### Initialiser la base de données
 
-## Livrables
+Dans pgAdmin ou via psql, exécuter dans l'ordre :
 
-1. Données Parquet nettoyées et optimisées
-2. Code commenté et reproductible
-3. Modèle ML avec métriques (accuracy, précision, recall, F1)
-4. Visualisations claires
-5. Dossier de synthèse avec MCD et résultats
+```sql
+-- Schémas Petite Couronne
+\i scripts/init_db.sql
+
+-- Schémas France métropolitaine
+\i scripts/init_db_france.sql
+```
+
+### Données Bronze
+
+Toutes les données sont téléchargées automatiquement par le notebook :
+
+```
+notebooks/communes/01_data_download.ipynb
+```
+
+---
+
+## Pipeline d'exécution
+
+### Exploration / EDA (optionnel)
+
+| Notebook | Rôle |
+|----------|------|
+| `notebooks/communes/01_data_download.ipynb` | Téléchargement toutes les données sources (élections, COG, démographie, économie, éducation) |
+| `notebooks/communes/02_exploration.ipynb` | Analyse exploratoire des données Bronze |
+
+### Petite Couronne (POC — 144 communes, départements 75/92/93/94)
+
+| Ordre | Notebook | Rôle |
+|-------|----------|------|
+| 1 | `notebooks/communes/petite_couronne/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver.*` |
+| 2 | `notebooks/communes/petite_couronne/02_feature_engineering.ipynb` | Features → `gold.features_communes` |
+| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | ML + prédictions → `gold.predictions_2025_2027` |
+
+### France métropolitaine (~35 000 communes)
+
+| Ordre | Notebook | Rôle |
+|-------|----------|------|
+| 1 | `notebooks/communes/france/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver_france.*` |
+| 2 | `notebooks/communes/france/02_feature_engineering.ipynb` | Features → `gold_france.features_communes` |
+| 3 | `notebooks/communes/france/03_modeling.ipynb` | ML + prédictions → `gold_france.predictions_2025_2027` |
+
+---
+
+## Résultats
+
+| Périmètre | Modèle retenu | Accuracy | Prédictions |
+|-----------|--------------|----------|-------------|
+| Petite Couronne | GradientBoosting | — | 372 lignes (124 communes × 3 ans) |
+| France métro | GradientBoosting | **93.3%** | 104 349 lignes (~34 783 communes × 3 ans) |
+
+Distribution prédictions 2025 (France) :
+
+| Orientation | Communes |
+|------------|---------|
+| ExtremeDroite | 23 328 |
+| Centre | 6 280 |
+| Gauche | 5 165 |
+| Droite | 10 |
+
+---
+
+## Architecture Medallion
+
+```
+Bronze (CSV/Excel)  →  Silver (PostgreSQL)  →  Gold (PostgreSQL)
+  data/bronze/            silver.*                gold.*
+                          silver_france.*         gold_france.*
+```
+
+Voir `docs/ARCHITECTURE.md` pour le détail.
+
+---
 
 ## Documentation
 
-- [CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md) - Cahier des charges complet
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) - Architecture et choix techniques
-- [DATASETS.md](docs/DATASETS.md) - Liste exhaustive des datasets
+| Fichier | Contenu |
+|---------|---------|
+| `docs/ARCHITECTURE.md` | Architecture technique, Docker, schémas PostgreSQL, ML |
+| `docs/CAHIER_DES_CHARGES.md` | Cahier des charges MSPR |
+| `docs/PLAN_FRANCE.md` | Plan détaillé extension France métropolitaine |
+| `docs/PLAN_TAUX_PAUVRETE.md` | Méthodologie calcul taux de pauvreté estimé |
+| `docs/METABASE_QUESTIONS.md` | Définition des dashboards Metabase |
 
-## Équipe
+---
 
-Projet MSPR TPRE813 - EPSI 2026
+## Credentials PostgreSQL
+
+```
+Host (depuis container) : postgres
+Host (depuis Mac)       : localhost
+Port                    : 5432
+Database                : mspr813
+User                    : mspr_user
+Password                : mspr_password
+```
+
+---
+
+## Metabase — Configuration initiale
+
+### Prérequis
+
+Lors de la première connexion à Metabase (http://localhost:3000), l'assistant de
+configuration demande d'ajouter une base de données. Renseigner :
+
+- **Nom : `MSPR 813`** (nom exact — le script `setup_metabase.py` en dépend)
+- Type : PostgreSQL
+- Host : `postgres`, Port : `5432`, Database : `mspr813`
+- User : `mspr_user`, Password : `mspr_password`
+- Schémas à exposer : `silver`, `silver_france`, `gold`, `gold_france`
+
+Après connexion, synchroniser les schémas si nécessaire :
+Admin > Databases > MSPR 813 > Sync database schema now.
+
+### Création des questions et dashboards
+
+```bash
+python3 scripts/setup_metabase.py
+```
+
+Le script demande le mot de passe Metabase au lancement (jamais stocké). Il est idempotent pour les questions (skip si déjà existantes) et recrée les dashcards à chaque run.
+
+### Dashboards créés
+
+| Dashboard | Questions |
+|-----------|-----------|
+| Dashboard 1 — Vue nationale | Q1, Q2, Q11 |
+| Dashboard 2 — Analyse sociodémographique | Q4, Q5, Q6, Q8 |
+| Dashboard 3 — Typologie territoire | Q7, Q14, Q15 |
+| Dashboard 4 — Départements clés | Q9, Q10, Q16, Q17 |
+| Dashboard 5 — Prédictions 2027 | Q12, Q13, Q16 |
+| Dashboard 6 — Comparaison 2022 vs 2027 | Q18, Q19, Q20 |
+
+Voir `docs/METABASE_QUESTIONS.md` pour la définition complète des 20 questions.

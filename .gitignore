@@ -19,10 +19,6 @@ data/bronze/*
 data/bronze/**/*
 !data/bronze/.gitkeep
 
-# Silver: Données nettoyées (Parquet)
-data/silver/*
-!data/silver/.gitkeep
-
 # Gold: Résultats ML et agrégations
 data/gold/*
 !data/gold/.gitkeep
@@ -30,15 +26,6 @@ data/gold/*
 # Exceptions: garder les petits fichiers de référence si < 1MB
 # Décommenter si vous voulez versionner un petit référentiel
 # !data/raw/referentiel_communes.csv
-
-# Outputs
-outputs/figures/*
-!outputs/figures/.gitkeep
-outputs/models/*
-!outputs/models/.gitkeep
-
-# Exceptions: garder les graphiques importants pour documentation
-# !outputs/figures/architecture_diagram.png
 
 # Environment
 .env
