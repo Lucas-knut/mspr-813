@@ -6,13 +6,15 @@
 
 ## Vue d'Ensemble
 
-Pipeline ML complet pour prédire les résultats électoraux 2025-2027 (Gauche / Centre / Droite / ExtremeDroite) sur **~35 000 communes de France métropolitaine**.
+Pipeline ML complet pour predire les resultats electoraux 2022 (Gauche / Centre / Droite / ExtremeDroite) sur **~35 000 communes de France metropolitaine**, avec comparaison aux resultats reels 2022 pour validation du modele.
+
+**Approche** : entrainement sur les elections 2002/2007/2012, test sur 2017, prediction sur 2022 — les resultats reels 2022 permettent de mesurer la performance reelle du modele.
 
 ---
 
 ## Infrastructure Docker
 
-4 containers définis dans `docker-compose.yml` :
+4 containers definis dans `docker-compose.yml` :
 
 | Container | Service | Port |
 |-----------|---------|------|
@@ -33,11 +35,11 @@ Password                : mspr_password
 
 ---
 
-## Architecture Medallion (Bronze → Silver → Gold)
+## Architecture Medallion (Bronze -> Silver -> Gold)
 
 ### Couche Bronze — Sources immuables
 
-Fichiers bruts stockés dans `/app/data/bronze/` (dans le container `mspr_python`) :
+Fichiers bruts stockes dans `/app/data/bronze/` (dans le container `mspr_python`) :
 
 ```
 bronze/
@@ -50,100 +52,113 @@ bronze/
 └── referentiels_cog/referentiel_communes_2024.csv  (sep=,)
 ```
 
-### Couche Silver — Données nettoyées dans PostgreSQL
+### Couche Silver — Donnees nettoyees dans PostgreSQL
 
-Deux périmètres parallèles :
+Deux perimetres paralleles :
 
-| Schéma | Périmètre | Tables principales |
+| Schema | Perimetre | Tables principales |
 |--------|-----------|-------------------|
 | `silver` | Petite Couronne (75/92/93/94) | `elections`, `revenus`, `csp`, `diplomes`, `demographie`, `referentiel_communes` |
-| `silver_france` | France métropolitaine (01-95 + 2A/2B) | `elections`, `revenus`, `naissances_deces`, `csp`, `diplomes`, `referentiel_communes` |
+| `silver_france` | France metropolitaine (01-95 + 2A/2B) | `elections`, `revenus`, `naissances_deces`, `csp`, `diplomes`, `referentiel_communes` |
 
-**Règles de nettoyage** :
-- Codes INSEE toujours en string, 5 caractères (padding zéros)
-- Fichiers CSV : séparateur `;` (format INSEE), sauf `referentiel_communes_2024.csv` (`,`)
+**Regles de nettoyage** :
+- Codes INSEE toujours en string, 5 caracteres (padding zeros)
+- Fichiers CSV : separateur `;` (format INSEE), sauf `referentiel_communes_2024.csv` (`,`)
 - Fichiers Excel : engine `openpyxl`
-- Périmètre France métro : départements 01-95 + 2A/2B (hors DOM-TOM)
+- Perimetre France metro : departements 01-95 + 2A/2B (hors DOM-TOM)
 
-### Couche Gold — Features ML et prédictions dans PostgreSQL
+### Couche Gold — Features ML et predictions dans PostgreSQL
 
-| Schéma | Table | Contenu | Lignes |
+| Schema | Table | Contenu | Lignes |
 |--------|-------|---------|--------|
-| `gold` | `features_communes` | Features Petite Couronne × 5 années | 620 |
-| `gold` | `predictions_2025_2027` | Prédictions Petite Couronne | 372 |
-| `gold_france` | `features_communes` | Features France × 5 années (2002–2022) | 167 866 |
-| `gold_france` | `predictions_2025_2027` | Prédictions France 2025–2027 | 104 349 |
+| `gold` | `features_communes` | Features Petite Couronne x 5 annees (2002-2022) | 620 |
+| `gold` | `predictions_2022` | Predictions Petite Couronne pour 2022 | ~124 |
+| `gold_france` | `features_communes` | Features France x 5 annees (2002-2022) | 167 866 |
+| `gold_france` | `predictions_2022` | Predictions France pour 2022 | ~34 783 |
 
 ---
 
 ## Pipeline de Notebooks
 
-| Notebook | Rôle | Périmètre |
-|----------|------|-----------|
-| `01_etl_bronze_to_postgres.ipynb` | ETL Bronze → Silver | Petite Couronne |
-| `02_feature_engineering.ipynb` | Feature engineering → Gold | Petite Couronne |
-| `03_modeling.ipynb` | ML + prédictions | Petite Couronne |
-| `04b_etl_france.ipynb` | ETL Bronze → Silver | France métro |
-| `05b_feature_engineering_france.ipynb` | Feature engineering → Gold | France métro |
-| `06b_modeling_france.ipynb` | ML + prédictions | France métro |
+### Exploration / EDA
+
+| Notebook | Role |
+|----------|------|
+| `notebooks/communes/01_data_download.ipynb` | Telechargement des donnees sources |
+| `notebooks/communes/02_exploration.ipynb` | EDA donnees Bronze |
+
+### Petite Couronne (POC — 144 communes, depts 75/92/93/94)
+
+| Ordre | Notebook | Schemas cibles |
+|-------|----------|----------------|
+| 1 | `notebooks/communes/petite_couronne/01_etl_bronze_to_postgres.ipynb` | `silver.*` |
+| 2 | `notebooks/communes/petite_couronne/02_feature_engineering.ipynb` | `gold.features_communes` |
+| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | `gold.predictions_2022` |
+
+### France metropolitaine (~35 000 communes)
+
+| Ordre | Notebook | Schemas cibles |
+|-------|----------|----------------|
+| 1 | `notebooks/communes/france/01_etl_bronze_to_postgres.ipynb` | `silver_france.*` |
+| 2 | `notebooks/communes/france/02_feature_engineering.ipynb` | `gold_france.features_communes` |
+| 3 | `notebooks/communes/france/03_modeling.ipynb` | `gold_france.predictions_2022` |
 
 ---
 
-## Modèle Machine Learning
+## Modele Machine Learning
 
 **Variable cible** : orientation politique dominante (`Gauche` / `Centre` / `Droite` / `ExtremeDroite`)
 
+**Strategie de validation** :
+- Entrainement : elections 2002, 2007, 2012
+- Test : elections 2017 (mesure de performance)
+- Prediction : 2022 (comparaison avec resultats reels connus)
+
 **Features principales** :
-- Données électorales historiques (2002–2022)
-- Revenus médians, Gini, taux de pauvreté estimé
-- CSP (catégories socio-professionnelles)
-- Diplômes / niveau de formation
-- Naissances / décès (dynamique démographique)
-- `typologie_territoire` : `urbain` (≥10 000 hab) / `periurbain` (≥2 000) / `rural` (<2 000)
+- Donnees electorales historiques (annees precedentes)
+- Revenus medians, Gini, taux de pauvrete estime
+- CSP (categories socio-professionnelles)
+- Diplomes / niveau de formation
+- Naissances / deces (dynamique demographique)
+- `typologie_territoire` : `urbain` (>=10 000 hab) / `periurbain` (>=2 000) / `rural` (<2 000)
 
-**Résultats (périmètre France) :**
+**Resultats (perimetre France) :**
 
-| Modèle | Accuracy (test 2022) |
+| Modele | Accuracy (test 2017) |
 |--------|---------------------|
-| RandomForest | 78.5% |
-| **GradientBoosting** | **93.3%** ← retenu |
+| RandomForest | ~78% |
+| **GradientBoosting** | **93.3%** retenu |
 
-**Distribution prédictions 2025 :**
-
-| Orientation | Communes |
-|------------|---------|
-| ExtremeDroite | 23 328 |
-| Centre | 6 280 |
-| Gauche | 5 165 |
-| Droite | 10 |
+**Comparaison predictions 2022 vs resultats reels 2022** disponible dans Metabase (dashboards "Comparaison reel vs predit 2022").
 
 ---
 
-## Gestion des Données Manquantes
+## Gestion des Donnees Manquantes
 
-**Taux de pauvreté** (non disponible directement par commune INSEE) :
-- Estimé à partir du revenu médian disponible et du seuil à 60% (13 686 €/an, médiane nationale 22 810 €/an)
-- Niveau 1 (Gini + médiane) : 5 291 communes
-- Niveau 2 (médiane seule) : 25 951 communes
-- Niveau 3 (imputation médiane départementale puis nationale) : 3 602 communes
+**Taux de pauvrete** (non disponible directement par commune INSEE) :
+- Estime a partir du revenu median disponible et du seuil a 60% (13 686 EUR/an, mediane nationale 22 810 EUR/an)
+- Niveau 1 (Gini + mediane) : 5 291 communes
+- Niveau 2 (mediane seule) : 25 951 communes
+- Niveau 3 (imputation mediane departementale puis nationale) : 3 602 communes
 - Couverture finale : **100%** sur `gold_france.features_communes`
 
 ---
 
 ## Visualisation
 
-Metabase (port 3000) connecté à PostgreSQL, 6 dashboards définis dans `docs/METABASE_QUESTIONS.md`.
+Metabase (port 3000) connecte a PostgreSQL, 6 dashboards definis dans `docs/METABASE_QUESTIONS.md`.
 
 ---
 
 ## Scripts utilitaires
 
-| Fichier | Rôle |
+| Fichier | Role |
 |---------|------|
-| `scripts/init_db.sql` | Création schémas `silver` + `gold` (Petite Couronne) |
-| `scripts/init_db_france.sql` | Création schémas `silver_france` + `gold_france` |
-| `scripts/calc_pauvrete.py` | Calcul taux_pauvrete estimé dans `silver_france.revenus` |
+| `scripts/init_db.sql` | Creation schemas `silver` + `gold` (Petite Couronne) |
+| `scripts/init_db_france.sql` | Creation schemas `silver_france` + `gold_france` |
+| `scripts/calc_pauvrete.py` | Calcul taux_pauvrete estime dans `silver_france.revenus` |
+| `scripts/setup_metabase.py` | Creation questions et dashboards dans Metabase |
 
 ---
 
-**Dernière mise à jour** : Mars 2026
+**Derniere mise a jour** : Avril 2026

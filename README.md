@@ -1,7 +1,7 @@
 # MSPR Big Data - Prédiction Électorale
 
 **Projet EPSI - BLOC 3 RNCP35584**
-Machine Learning pour prédire les tendances électorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France métropolitaine, horizon 2025-2027.
+Machine Learning pour predire les tendances electorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France metropolitaine pour 2022, avec comparaison aux resultats reels 2022.
 
 ---
 
@@ -62,7 +62,7 @@ notebooks/communes/01_data_download.ipynb
 |-------|----------|------|
 | 1 | `notebooks/communes/petite_couronne/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver.*` |
 | 2 | `notebooks/communes/petite_couronne/02_feature_engineering.ipynb` | Features → `gold.features_communes` |
-| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | ML + prédictions → `gold.predictions_2025_2027` |
+| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | ML + prédictions → `gold.predictions_2022` |
 
 ### France métropolitaine (~35 000 communes)
 
@@ -70,25 +70,18 @@ notebooks/communes/01_data_download.ipynb
 |-------|----------|------|
 | 1 | `notebooks/communes/france/01_etl_bronze_to_postgres.ipynb` | ETL Bronze → `silver_france.*` |
 | 2 | `notebooks/communes/france/02_feature_engineering.ipynb` | Features → `gold_france.features_communes` |
-| 3 | `notebooks/communes/france/03_modeling.ipynb` | ML + prédictions → `gold_france.predictions_2025_2027` |
+| 3 | `notebooks/communes/france/03_modeling.ipynb` | ML + prédictions → `gold_france.predictions_2022` |
 
 ---
 
 ## Résultats
 
-| Périmètre | Modèle retenu | Accuracy | Prédictions |
-|-----------|--------------|----------|-------------|
-| Petite Couronne | GradientBoosting | — | 372 lignes (124 communes × 3 ans) |
-| France métro | GradientBoosting | **93.3%** | 104 349 lignes (~34 783 communes × 3 ans) |
+**Strategie** : entrainement sur 2002/2007/2012, test sur 2017, prediction 2022 comparee aux resultats reels 2022.
 
-Distribution prédictions 2025 (France) :
-
-| Orientation | Communes |
-|------------|---------|
-| ExtremeDroite | 23 328 |
-| Centre | 6 280 |
-| Gauche | 5 165 |
-| Droite | 10 |
+| Périmètre | Modèle retenu | Accuracy (test 2017) | Predictions |
+|-----------|--------------|----------------------|-------------|
+| Petite Couronne | GradientBoosting | — | ~124 communes |
+| France métro | GradientBoosting | **93.3%** | ~34 783 communes |
 
 ---
 
@@ -161,7 +154,7 @@ Le script demande le mot de passe Metabase au lancement (jamais stocké). Il est
 | Dashboard 2 — Analyse sociodémographique | Q4, Q5, Q6, Q8 |
 | Dashboard 3 — Typologie territoire | Q7, Q14, Q15 |
 | Dashboard 4 — Départements clés | Q9, Q10, Q16, Q17 |
-| Dashboard 5 — Prédictions 2027 | Q12, Q13, Q16 |
-| Dashboard 6 — Comparaison 2022 vs 2027 | Q18, Q19, Q20 |
+| Dashboard 5 — Prédictions 2022 | Q12, Q13, Q16 |
+| Dashboard 6 — Comparaison réel vs prédit 2022 | Q18, Q19, Q20 |
 
 Voir `docs/METABASE_QUESTIONS.md` pour la définition complète des 20 questions.

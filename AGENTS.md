@@ -2,7 +2,7 @@
 
 ## Objectif
 
-Modèle ML supervisé pour prédire les tendances électorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France métropolitaine, horizon 2025-2027.
+Modèle ML supervisé pour prédire les tendances électorales (Gauche / Centre / Droite / ExtremeDroite) sur ~35 000 communes de France métropolitaine pour 2022, avec comparaison aux résultats réels 2022.
 Startup fictive : **Electio-Analytics**.
 
 ---
@@ -68,7 +68,7 @@ Host depuis le Mac : `localhost`.
 |-------|----------|----------------|
 | 1 | `notebooks/communes/petite_couronne/01_etl_bronze_to_postgres.ipynb` | `silver.*` |
 | 2 | `notebooks/communes/petite_couronne/02_feature_engineering.ipynb` | `gold.features_communes` |
-| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | `gold.predictions_2025_2027` |
+| 3 | `notebooks/communes/petite_couronne/03_modeling.ipynb` | `gold.predictions_2022` |
 
 ### France métropolitaine (~35 000 communes)
 
@@ -76,7 +76,7 @@ Host depuis le Mac : `localhost`.
 |-------|----------|----------------|
 | 1 | `notebooks/communes/france/01_etl_bronze_to_postgres.ipynb` | `silver_france.*` |
 | 2 | `notebooks/communes/france/02_feature_engineering.ipynb` | `gold_france.features_communes` |
-| 3 | `notebooks/communes/france/03_modeling.ipynb` | `gold_france.predictions_2025_2027` |
+| 3 | `notebooks/communes/france/03_modeling.ipynb` | `gold_france.predictions_2022` |
 
 ---
 
@@ -132,7 +132,8 @@ Ne jamais utiliser les heredoc (pas de sortie).
 ## Modèle ML
 
 - **Variable cible** : `orientation` — 4 classes : `Gauche`, `Centre`, `Droite`, `ExtremeDroite`
-- **Modèle retenu** : GradientBoosting (accuracy 93.3% sur test 2022, France)
+- **Modèle retenu** : GradientBoosting (accuracy 93.3% sur test 2017, France)
+- **Strategie validation** : train 2002/2007/2012, test 2017, prediction 2022 comparee aux resultats reels 2022
 - **Features principales** : élections historiques, revenus, gini, taux_pauvrete, CSP, diplômes, naissances/décès, `typologie_territoire`
 - **`typologie_territoire`** : `urbain` (≥10 000 hab) / `periurbain` (≥2 000) / `rural` (<2 000)
 

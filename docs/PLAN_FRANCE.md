@@ -38,7 +38,7 @@ PostgreSQL (mspr813)
 | `silver.csp` | 143 lignes | ~35k lignes | ×245 |
 | `silver.diplomes` | 123 lignes | ~30k lignes | ×244 |
 | `gold.features_communes` | 620 lignes (124×5) | ~150k lignes (30k×5) | ×242 |
-| `gold.predictions_2025_2027` | 372 lignes (124×3) | ~90k lignes (30k×3) | ×242 |
+| `gold.predictions_2022` | ~124 lignes | ~34 783 lignes | ×280 |
 | Volume PostgreSQL | ~500 MB | ~12-15 GB | ×24-30 |
 
 ---
@@ -157,7 +157,7 @@ Temps d'exécution estimé : **15-20 min**
 Modifications clés :
 
 1. **Schéma source** : `gold_france.features_communes`
-2. **Schéma cible** : `gold_france.predictions_2025_2027`
+2. **Schéma cible** : `gold_france.predictions_2022`
 
 3. **Features enrichies** (ajout typologie) :
 ```python
@@ -212,9 +212,9 @@ for typo in ['urbain', 'periurbain', 'rural']:
 ```
 
 Résultats attendus :
-- Accuracy globale test 2022 : **55-65%** (vs 64.5% Petite Couronne)
+    - Accuracy globale test 2017 : **93.3%**
 - `typologie_territoire` dans le top 5 des feature importances
-- Distribution prédictions 2027 : Gauche ~50-60%, Droite ~20-30%, Centre ~10-15%, ExtremeDroite ~5-10%
+- Les predictions 2022 sont comparables aux resultats reels 2022 (validation jury)
 
 Temps d'exécution estimé : **10-20 min**
 

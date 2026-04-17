@@ -76,124 +76,123 @@ Questions pertinentes à poser dans Metabase pour analyser les données élector
 
 ---
 
-## Table `gold_france.predictions_2025_2027` (prédictions futures)
+## Table `gold_france.predictions_2022` (predictions modele pour 2022)
 
-### Vue d'ensemble prédictive
+### Vue d'ensemble predictive
 
-**Q11 — Évolution prédite 2025–2027**
-- Résumer : Nombre de lignes
-- Grouper par : `annee`, `bloc_predit`
-- Type de graphique : Barres empilées ou lignes
+**Q11 — Predictions 2022 par bloc**
+- Resumer : Nombre de lignes
+- Grouper par : `bloc_predit`
+- Type de graphique : Barres
 
-**Q12 — Communes prédites en 2027**
-- Filtrer : `annee = 2027`
+**Q12 — Communes predites en 2022**
 - Colonnes : `code_commune`, `libelle`, `code_dep`, `bloc_predit`, `typologie_territoire`
 - Type de graphique : Tableau
 
-**Q13 — Probabilités moyennes par bloc en 2027**
-- Filtrer : `annee = 2027`
-- Résumer : Moyenne de `prob_gauche`, `prob_centre`, `prob_droite`, `prob_extremedroite`
+**Q13 — Probabilites moyennes par bloc (predit 2022)**
+- Resumer : Moyenne de `prob_gauche`, `prob_centre`, `prob_droite`, `prob_extremedroite`
 - Type de graphique : Barres
 
 ### Analyse par typologie
 
-**Q14 — Prédictions 2027 par typologie**
-- Filtrer : `annee = 2027`
+**Q14 — Predictions 2022 par typologie**
 - Grouper par : `typologie_territoire`, `bloc_predit`
-- Résumer : Nombre de lignes
-- Type de graphique : Barres empilées
+- Resumer : Nombre de lignes
+- Type de graphique : Barres empilees
 
-**Q15 — Probabilité ExtremeDroite par typologie (2027)**
-- Filtrer : `annee = 2027`
+**Q15 — Probabilite ExtremeDroite par typologie (predit 2022)**
 - Grouper par : `typologie_territoire`
-- Résumer : Moyenne de `prob_extremedroite`
+- Resumer : Moyenne de `prob_extremedroite`
 - Type de graphique : Barres
 
-### Analyse départementale prédictive
+### Analyse departementale predictive
 
-**Q16 — Top 20 départements ExtremeDroite (2027)**
-- Filtrer : `annee = 2027`, `bloc_predit = 'ExtremeDroite'`
+**Q16 — Top 20 departements ExtremeDroite (predit 2022)**
+- Filtrer : `bloc_predit = 'ExtremeDroite'`
 - Grouper par : `code_dep`
-- Résumer : Nombre de lignes
-- Trier : Décroissant, limiter à 20
+- Resumer : Nombre de lignes
+- Trier : Decroissant, limiter a 20
 - Type de graphique : Barres
 
-**Q17 — Départements bascule ExtremeDroite → Centre (2025→2027)** *(SQL natif)*
+**Q17 — Communes mal predites : predit vs reel 2022** *(SQL natif)*
 ```sql
-SELECT p25.code_dep, COUNT(*) AS nb_bascules
-FROM gold_france.predictions_2025_2027 p25
-JOIN gold_france.predictions_2025_2027 p27
-  ON p25.code_commune = p27.code_commune
-WHERE p25.annee = 2025 AND p25.bloc_predit = 'ExtremeDroite'
-  AND p27.annee = 2027 AND p27.bloc_predit = 'Centre'
-GROUP BY p25.code_dep
-ORDER BY nb_bascules DESC
-LIMIT 10;
+SELECT
+  p.code_commune,
+  p.libelle,
+  p.code_dep,
+  p.bloc_predit,
+  fc.bloc_dominant AS bloc_reel,
+  p.typologie_territoire
+FROM gold_france.predictions_2022 p
+JOIN gold_france.features_communes fc
+  ON p.code_commune = fc.code_commune
+WHERE fc.annee = 2022
+  AND p.bloc_predit <> fc.bloc_dominant
+ORDER BY p.code_dep, p.libelle
+LIMIT 100;
 ```
 
 ---
 
-## Questions croisées `features_communes` ⇄ `predictions_2025_2027`
+## Questions croisees `features_communes` et `predictions_2022`
 
-**Q18 — Évolution 2022 → 2027 par département (10 plus grands)** *(SQL natif)*
+**Q18 — Comparaison reel 2022 vs predit 2022 par departement** *(SQL natif)*
 ```sql
-SELECT 'Réel 2022' AS source, code_dep, bloc_dominant AS bloc, COUNT(*) AS nb
+SELECT 'Reel 2022' AS source, code_dep, bloc_dominant AS bloc, COUNT(*) AS nb
 FROM gold_france.features_communes
 WHERE annee = 2022
   AND code_dep IN ('59','62','69','13','75','92','93','94','06','33')
 GROUP BY code_dep, bloc_dominant
 UNION ALL
-SELECT 'Prédit 2027', code_dep, bloc_predit, COUNT(*)
-FROM gold_france.predictions_2025_2027
-WHERE annee = 2027
-  AND code_dep IN ('59','62','69','13','75','92','93','94','06','33')
+SELECT 'Predit 2022', p.code_dep, p.bloc_predit, COUNT(*)
+FROM gold_france.predictions_2022 p
+WHERE code_dep IN ('59','62','69','13','75','92','93','94','06','33')
 GROUP BY code_dep, bloc_predit
 ORDER BY code_dep, source, nb DESC;
 ```
 
-**Q19 — Devenir des communes ExtremeDroite 2022 en 2027** *(SQL natif)*
+**Q19 — Accuracy par bloc : reel vs predit 2022** *(SQL natif)*
 ```sql
 SELECT
-  p27.bloc_predit,
+  fc.bloc_dominant AS bloc_reel,
+  p.bloc_predit,
   COUNT(*) AS nb_communes,
-  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 1) AS pct
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY fc.bloc_dominant), 1) AS pct
 FROM gold_france.features_communes fc
-JOIN gold_france.predictions_2025_2027 p27
-  ON fc.code_commune = p27.code_commune
-WHERE fc.annee = 2022 AND fc.bloc_dominant = 'ExtremeDroite'
-  AND p27.annee = 2027
-GROUP BY p27.bloc_predit
-ORDER BY nb_communes DESC;
+JOIN gold_france.predictions_2022 p
+  ON fc.code_commune = p.code_commune
+WHERE fc.annee = 2022
+GROUP BY fc.bloc_dominant, p.bloc_predit
+ORDER BY fc.bloc_dominant, nb_communes DESC;
 ```
 
-**Q20 — Probabilité ExtremeDroite en 2027 pour les communes rurales Gauche en 2022** *(SQL natif)*
+**Q20 — Probabilite ExtremeDroite predit pour communes rurales Gauche reel 2022** *(SQL natif)*
 ```sql
 SELECT
   fc.typologie_territoire,
-  fc.bloc_dominant AS bloc_2022,
-  p27.bloc_predit  AS bloc_2027,
+  fc.bloc_dominant AS bloc_reel_2022,
+  p.bloc_predit    AS bloc_predit_2022,
   COUNT(*)         AS nb_communes,
-  ROUND(AVG(p27.prob_extremedroite), 3) AS prob_xd_moy
+  ROUND(AVG(p.prob_extremedroite), 3) AS prob_xd_moy
 FROM gold_france.features_communes fc
-JOIN gold_france.predictions_2025_2027 p27
-  ON fc.code_commune = p27.code_commune
+JOIN gold_france.predictions_2022 p
+  ON fc.code_commune = p.code_commune
 WHERE fc.annee = 2022
-  AND p27.annee = 2027
   AND fc.typologie_territoire = 'rural'
   AND fc.bloc_dominant = 'Gauche'
-GROUP BY fc.typologie_territoire, fc.bloc_dominant, p27.bloc_predit
+GROUP BY fc.typologie_territoire, fc.bloc_dominant, p.bloc_predit
 ORDER BY nb_communes DESC;
 ```
 
 ---
 
-## Dashboards recommandés
+## Dashboards recommandes
 
 ### Dashboard 1 — Vue nationale
 Questions : Q1, Q2, Q11
 Filtre global : `annee`
 
-### Dashboard 2 — Analyse sociodémographique
+### Dashboard 2 — Analyse sociodemographique
 Questions : Q4, Q5, Q6, Q8
 Filtre : `annee = 2022`
 
@@ -201,14 +200,13 @@ Filtre : `annee = 2022`
 Questions : Q7, Q14, Q15
 Filtres : `annee`, `typologie_territoire`
 
-### Dashboard 4 — Départements clés
-Questions : Q9, Q10, Q16, Q17
-Filtre : `code_dep` (sélection multiple)
+### Dashboard 4 — Departements cles
+Questions : Q9, Q10, Q16
+Filtre : `code_dep` (selection multiple)
 
-### Dashboard 5 — Prédictions 2027
+### Dashboard 5 — Predictions 2022
 Questions : Q12, Q13, Q16
-Fixé sur `annee = 2027`
 
-### Dashboard 6 — Comparaison 2022 vs 2027
+### Dashboard 6 — Comparaison reel vs predit 2022
 Questions : Q18, Q19, Q20
-Aucun filtre (requêtes SQL fixes)
+Aucun filtre (requetes SQL fixes)

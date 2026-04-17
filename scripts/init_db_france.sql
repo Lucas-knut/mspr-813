@@ -256,9 +256,9 @@ COMMENT ON COLUMN gold_france.features_communes.typologie_territoire IS
     'Typologie territoire calculée depuis densité : urbain (>=1500 hab/km2), periurbain (>=50), rural (<50)';
 
 -- =============================================================================
--- TABLE : predictions_2025_2027
+-- TABLE : predictions_2022
 -- =============================================================================
-CREATE TABLE IF NOT EXISTS gold_france.predictions_2025_2027 (
+CREATE TABLE IF NOT EXISTS gold_france.predictions_2022 (
     code_commune            CHAR(5)      NOT NULL,
     libelle                 VARCHAR(100),
     code_dep                CHAR(3),
@@ -275,18 +275,18 @@ CREATE TABLE IF NOT EXISTS gold_france.predictions_2025_2027 (
 );
 
 CREATE INDEX IF NOT EXISTS idx_fr_pred_commune
-    ON gold_france.predictions_2025_2027 (code_commune);
+    ON gold_france.predictions_2022 (code_commune);
 CREATE INDEX IF NOT EXISTS idx_fr_pred_annee
-    ON gold_france.predictions_2025_2027 (annee);
+    ON gold_france.predictions_2022 (annee);
 CREATE INDEX IF NOT EXISTS idx_fr_pred_dep
-    ON gold_france.predictions_2025_2027 (code_dep);
+    ON gold_france.predictions_2022 (code_dep);
 CREATE INDEX IF NOT EXISTS idx_fr_pred_bloc
-    ON gold_france.predictions_2025_2027 (bloc_predit);
+    ON gold_france.predictions_2022 (bloc_predit);
 CREATE INDEX IF NOT EXISTS idx_fr_pred_typo
-    ON gold_france.predictions_2025_2027 (typologie_territoire);
+    ON gold_france.predictions_2022 (typologie_territoire);
 
-COMMENT ON TABLE gold_france.predictions_2025_2027 IS
-    'Prédictions blocs dominants 2025-2027 par commune — France métropolitaine (~90k lignes)';
+COMMENT ON TABLE gold_france.predictions_2022 IS
+    'Predictions bloc dominant 2022 par commune — France metropolitaine (~34 783 communes)';
 
 -- =============================================================================
 -- Validation finale
@@ -307,7 +307,7 @@ BEGIN
     RAISE NOTICE '=== init_db_france.sql terminé ===';
     RAISE NOTICE 'silver_france : % tables créées', nb_tables_silver;
     RAISE NOTICE 'gold_france   : % tables créées', nb_tables_gold;
-    RAISE NOTICE 'Prêt pour ETL Bronze -> silver_france (notebook 04b_etl_france.ipynb)';
+    RAISE NOTICE 'Pret pour ETL Bronze -> silver_france (notebook france/01_etl_bronze_to_postgres.ipynb)';
 END $$;
 
 -- =============================================================================
