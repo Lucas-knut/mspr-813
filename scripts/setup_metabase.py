@@ -440,16 +440,23 @@ def build_all_cards(database_id, fields_fc, fields_pred):
 
     # ------------------------------------------------------------------
     # Q13 — Probabilites moyennes par bloc (predit 2022)
+    # Requete SQL native : pivot des 3 probabilites en lignes (bloc, prob_moyenne)
+    # pour obtenir un bar chart lisible avec axe X = bloc.
     # ------------------------------------------------------------------
-    cards.append(make_gui_card(
-        database_id, tid_pred,
+    cards.append(make_sql_card(
+        database_id,
         name="Q13 - Probabilites moyennes par bloc (predit 2022)",
-        aggregations=[
-            ["avg", ["field", pr("prob_gauche"), {}]],
-            ["avg", ["field", pr("prob_centre"), {}]],
-            ["avg", ["field", pr("prob_droite"), {}]],
-        ],
-        breakouts=[],
+        sql=(
+            "SELECT 'Gauche'  AS bloc, ROUND(AVG(prob_gauche)::numeric, 4) AS prob_moyenne "
+            "FROM gold_france.predictions_2022\n"
+            "UNION ALL\n"
+            "SELECT 'Centre'  AS bloc, ROUND(AVG(prob_centre)::numeric, 4) AS prob_moyenne "
+            "FROM gold_france.predictions_2022\n"
+            "UNION ALL\n"
+            "SELECT 'Droite'  AS bloc, ROUND(AVG(prob_droite)::numeric, 4) AS prob_moyenne "
+            "FROM gold_france.predictions_2022\n"
+            "ORDER BY bloc"
+        ),
         display="bar",
     ))
 
